@@ -1,0 +1,14 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "contributorsPerLine": 7,
+  "skipCi": "true",
+  "projectName": "azUrlShortener",
+  "projectOwner": "FBoucher",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "contributors": [
+  ]
+}
