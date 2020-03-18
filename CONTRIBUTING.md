@@ -15,7 +15,7 @@ might want to ask the contributor if they'd like some help.
 
 ## Documentation/etc need updating?
 
-Go right ahead!  Just submit a pull request when you're done.
+Go right ahead! Just submit a pull request when you're done.
 
 
 ## Pull Requests
@@ -24,9 +24,9 @@ We love pull requests from everyone.
 
 Fork, then clone the repo:
 
-    git clone git@github.com:your-username/Outspoken.git
+    git clone git@github.com:your-username/AzUrlShortener.git
 
-Push to your fork and [submit a pull request](https://github.com/fboucher/Outspoken/compare/) against the `dev` branch.
+Push to your fork and [submit a pull request](https://github.com/fboucher/AzUrlShortener/compare/) against the `dev` branch.
 
 At this point you're waiting on us. We like to at least comment on pull requests
 within three days (and, typically, one day). We may suggest

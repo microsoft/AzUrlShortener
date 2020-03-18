@@ -4,6 +4,7 @@ An simple and easy budget friendly Url Shortener for anyone. It runs in Azure (M
 
 > If you don't own an Azure subscription already, you can create your **free** account today. It comes with 200$ credit, so you can experience almost everything without spending a dime. [Create your free Azure account today](https://azure.microsoft.com/en-us/free?WT.mc_id=azurlshortener-github-frbouche)
 
+
 ## To deploy
 
 To deploy YOUR version of **Azure Url Shortener** you could fork this repo, but if you are looking for the easy way just click on the "Deploy to Azure".
@@ -30,6 +31,82 @@ Once all the resources are created you will end-up with:
 ![ArmResult][ArmResult]
 
 
+### Post deployment configuration
+
+Add a custom domain to your Azure Function. (coming soon)
+(or check [Microsoft docs](https://docs.microsoft.com/en-ca/azure/app-service/app-service-web-tutorial-custom-domain?WT.mc_id=azurlshortener-github-frbouche))
+
+
+---
+
+
+## How to use it
+
+Until there is a *Admin* web page you can call the Azure Function doing simple HTTP calls (ex: using Postman).
+To find the URLs of you two functions go to the Azure Portal (portal.azure.com), and open the Azure Function inside the resource created previously.
+
+![getURL][getURL]
+
+Expend the Functions section from the left menu, and click on the Function **UrlRedirect** (1). Then click on the **</> Get function URL** (2) button. And finally, click the **Copy** button to get the URL of your function with the security token. Repeat for the function **UrlShortener**.
+
+### Generate a Shot URL
+
+In your favorite API testing tool (ex: Postman), use the URL from the **UrlShortener** Azure Function. Set the request to POST. In the body of the request, add a JSON document containing two properties. See the examples bellow: 
+
+```json
+{
+    "url": "http://www.frankysnotes.com/2020/03/reading-notes-416.html",
+    "vanity": ""
+}
+```
+
+This will create a short generic URL.
+
+```json
+{
+    "url": "http://www.frankysnotes.com/2020/03/reading-notes-416.html",
+    "vanity": "rn-416"
+}
+```
+
+If the passed vanity doesn't already exist, this will create a short using the vanity.
+
+The response will be:
+
+```json
+{
+    "ShortUrl": "http://localhost:7071/2r",
+    "LongUrl": "http://www.frankysnotes.com/2020/03/reading-notes-416.html"
+}
+```
+
+### Try the redirect
+
+Once the domain will be attach, it will act a little bit different.  To try/ test it use the **UrlRedirect** Url following this pattern. `http://localhost/api/UrlRedirect/{shortUrl}`
+
+```
+http://localhost:7071/api/UrlRedirect/z10test
+```
+
+
+> Note: To run it the Azure Function locally, you will need to create a `local.settings.json` file at the root of the project. Here what the file should look like.
+> ```
+> {
+>   "IsEncrypted": false,
+>   "Values": {
+>     "AzureWebJobsStorage": "CONNSTR_TO_shortenertools",
+>     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+>     "FUNCTIONS_V2_COMPATIBILITY_MODE":"true",
+>     "UlsDataStorage":"CONNSTR_TO_urldata"
+>   }
+> }
+> ```
+> 
+
+
+---
+
+
 ## Contributing
 
 If you find a bug or would like to add a feature, check out those resources:
@@ -43,3 +120,4 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 [createARM]: medias/createARM.png
 [ArmResult]: medias/ArmResult.png
+[getURL]: medias/getURL.png
