@@ -1,0 +1,10 @@
+
+
+az group create -n aaaShortDemo -l eastus
+
+# validate with Parameter file
+az group deployment validate -g aaaShortDemo  --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.json"  --verbose 
+
+# deploy it
+az group deployment create  -g aaaShortDemo -n cloud5minsv1 --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.json"  --verbose 
+
