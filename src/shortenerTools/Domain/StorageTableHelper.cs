@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos.Table;
 
@@ -35,6 +36,25 @@ namespace Cloud5mins.domain
              TableResult result = await GetUrlsTable().ExecuteAsync(selOperation);
              ShortUrlEntity eShortUrl = result.Result as ShortUrlEntity;
              return eShortUrl;
+        }
+
+        public async Task<List<ShortUrlEntity>> GetAllShortUrlEntities()
+        {
+            var tblUrls = GetUrlsTable();
+            TableContinuationToken token = null;
+            var lstShortUrl = new List<ShortUrlEntity>();
+            do
+            {
+                // Retreiving all entities that are NOT the NextId entity 
+                // (it's the only one in the partion "KEY")
+                TableQuery<ShortUrlEntity> rangeQuery = new TableQuery<ShortUrlEntity>().Where(
+                    filter: TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.NotEqual, "KEY"));
+
+                var queryResult = await tblUrls.ExecuteQuerySegmentedAsync(rangeQuery, token);
+                lstShortUrl.AddRange(queryResult.Results as List<ShortUrlEntity>);
+                token = queryResult.ContinuationToken;
+            } while (token != null);
+            return lstShortUrl;
         }
 
         public  async Task<bool> IfShortUrlEntityExist(ShortUrlEntity row)
