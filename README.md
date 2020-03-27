@@ -49,54 +49,21 @@ Add a custom domain to your Azure Function. (coming soon)
 
 ## How to use it
 
-Until there is a *Admin* web page you can call the Azure Function doing simple HTTP calls (ex: using Postman).
+The is many different way to manage your short Urls, from a direct HTTP call to a fancy website. 
+[Here](src/adminTools/README.md), you will find the list of all available interfaces with the instructions to deploy and use them.
+
+[See the complete list of admin interfaces here](src/adminTools/README.md)
+
+### How to get the Azure Function URLs?
+
 To find the URLs of you two functions go to the Azure Portal (portal.azure.com), and open the Azure Function inside the resource created previously.
 
 ![getURL][getURL]
 
 Expend the Functions section from the left menu, and click on the Function **UrlRedirect** (1). Then click on the **</> Get function URL** (2) button. And finally, click the **Copy** button to get the URL of your function with the security token. Repeat for the function **UrlShortener**.
 
-### Generate a Shot URL
 
-In your favorite API testing tool (ex: Postman), use the URL from the **UrlShortener** Azure Function. Set the request to POST. In the body of the request, add a JSON document containing two properties. See the examples bellow: 
-
-```json
-{
-    "url": "http://www.frankysnotes.com/2020/03/reading-notes-416.html",
-    "vanity": ""
-}
-```
-
-This will create a short generic URL.
-
-```json
-{
-    "url": "http://www.frankysnotes.com/2020/03/reading-notes-416.html",
-    "vanity": "rn-416"
-}
-```
-
-If the passed vanity doesn't already exist, this will create a short using the vanity.
-
-The response will be:
-
-```json
-{
-    "ShortUrl": "http://localhost:7071/2r",
-    "LongUrl": "http://www.frankysnotes.com/2020/03/reading-notes-416.html"
-}
-```
-
-### Try the redirect
-
-Once the domain will be attach, it will act a little bit different.  To try/ test it use the **UrlRedirect** Url following this pattern. `http://localhost/api/UrlRedirect/{shortUrl}`
-
-```
-http://localhost:7071/api/UrlRedirect/z10test
-```
-
-
-> Note: To run it the Azure Function locally, you will need to create a `local.settings.json` file at the root of the project. Here what the file should look like.
+> **Note:** To run it the Azure Function locally, you will need to create a `local.settings.json` file at the root of the project. Here what the file should look like.
 > ```
 > {
 >   "IsEncrypted": false,

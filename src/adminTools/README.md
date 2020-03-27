@@ -30,7 +30,7 @@ To do that simply create a pull request for your new interface. Here some guidan
 
 ### Things to include in you Pull Request
 
-1- Add a section to **List of available Admin interfaces**. Make sure you add a short description, language used and a screen shot of your interface.
+1- Add a section to **[List of available Admin interfaces](#list-of-available-admin-interfaces)**. Make sure you add a short description, language used and a screen shot of your interface.
 
 2- Create a new folder in the adminTools subfolder with the following structure.
 
