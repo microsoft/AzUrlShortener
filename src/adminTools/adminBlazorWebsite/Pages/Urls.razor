@@ -1,7 +1,5 @@
 @page "/Urls"
 @using adminBlazorWebsite.Data
-
-
 @inject UrlShortenerService UrlService
 
 @if (UrlList == null)
@@ -36,6 +34,6 @@ else
     ShortUrlList UrlList;
     protected override async Task OnParametersSetAsync()
     {
-        UrlList = await UrlService.GetUrlListUrl();
+        UrlList = await UrlService.GetUrlList();
     }
 }
