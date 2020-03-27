@@ -1,0 +1,41 @@
+@page "/Urls"
+@using adminBlazorWebsite.Data
+
+
+@inject UrlShortenerService UrlService
+
+@if (UrlList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>RowKey</th>
+                <th>Url</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var url in UrlList.UrlList)
+            {
+                <tr>
+                    <td>@url.RowKey</td>
+                    <td>@url.Url</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code
+{
+    ShortUrlList UrlList;
+    protected override async Task OnParametersSetAsync()
+    {
+        UrlList = await UrlService.GetUrlListUrl();
+    }
+}
