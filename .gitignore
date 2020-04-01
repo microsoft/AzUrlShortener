@@ -268,3 +268,5 @@ __pycache__/
 
 **/appsettings.[Dd]evelopment.json
 
+
+src/adminTools/adminBlazorWebsite/appsettings.Development.json
