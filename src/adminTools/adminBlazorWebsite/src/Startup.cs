@@ -39,7 +39,6 @@ namespace adminBlazorWebsite
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-            services.AddSingleton<WeatherForecastService>();
             services.Configure<AppSettings>(_config.GetSection("AppSettings")); 
             services.AddSingleton<UrlShortenerService>();
         }

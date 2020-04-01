@@ -38,9 +38,30 @@ namespace adminBlazorWebsite.Data
 
             using (var client = new HttpClient())
             using (var request = new HttpRequestMessage(HttpMethod.Get, url))
-            //using (var httpContent = CreateHttpContent())
             {
-                //request.Content = httpContent;
+                using (var response = await client
+                    .SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken)
+                    .ConfigureAwait(false))
+                {
+                    var resultList = response.Content.ReadAsStringAsync().Result;
+                    return JsonConvert.DeserializeObject<ShortUrlList>(resultList);
+                }
+            }
+        }
+
+
+
+        public async Task<ShortUrlList> CreateShortUrl(ShortUrlRequest shortUrlRequest)
+        {
+            var url = GetConfiguration()["AzureFunctionUrlShortenerUrl"];
+
+            CancellationToken cancellationToken;
+
+            using (var client = new HttpClient())
+            using (var request = new HttpRequestMessage(HttpMethod.Post, url))
+            using (var httpContent = CreateHttpContent(shortUrlRequest))
+            {
+                request.Content = httpContent;
 
                 using (var response = await client
                     .SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken)
@@ -54,31 +75,28 @@ namespace adminBlazorWebsite.Data
         }
 
 
-        // private static HttpContent CreateHttpContent(object content)
-        // {
-        //     HttpContent httpContent = null;
+        private static StringContent CreateHttpContent(object content)
+        {
+            StringContent httpContent = null;
 
-        //     if (content != null)
-        //     {
-        //         var ms = new MemoryStream();
-        //         SerializeJsonIntoStream(content, ms);
-        //         ms.Seek(0, SeekOrigin.Begin);
-        //         httpContent = new StreamContent(ms);
-        //         httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-        //     }
+            if (content != null)
+            {
+                var jsonString = JsonConvert.SerializeObject(content);
+                httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
+            }
 
-        //     return httpContent;
-        // }
+            return httpContent;
+        }
 
-        // public static void SerializeJsonIntoStream(object value, Stream stream)
-        // {
-        //     using (var sw = new StreamWriter(stream, new UTF8Encoding(false), 1024, true))
-        //     using (var jtw = new JsonTextWriter(sw) { Formatting = Formatting.None })
-        //     {
-        //         var js = new JsonSerializer();
-        //         js.Serialize(jtw, value);
-        //         jtw.Flush();
-        //     }
-        // }
+        public static void SerializeJsonIntoStream(object value, Stream stream)
+        {
+            using (var sw = new StreamWriter(stream, new UTF8Encoding(false), 1024, true))
+            using (var jtw = new JsonTextWriter(sw) { Formatting = Formatting.None })
+            {
+                var js = new JsonSerializer();
+                js.Serialize(jtw, value);
+                jtw.Flush();
+            }
+        }
     }
 }
