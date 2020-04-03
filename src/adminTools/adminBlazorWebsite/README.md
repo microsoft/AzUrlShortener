@@ -12,6 +12,8 @@ To deploy YOUR version of **Azure Url Shortener Admin Blazor WebSite** just clic
 
 ## How to use it
 
+> ⚠️Right now the Website doesn't use any security. Anyone with the URL will be able to see and create links.
+
 ### Create a short Url
 
 Once you are in the website, first go into the **Manage Urls** section by clicking the option in the left menu. Than click the **Add New Url** button.
