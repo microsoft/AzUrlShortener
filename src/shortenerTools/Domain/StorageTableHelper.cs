@@ -74,7 +74,7 @@ namespace Cloud5mins.domain
         public  async Task<int> GetNextTableId()
         {
             //Get current ID
-            TableOperation selOperation = TableOperation.Retrieve<NextId>("1", "Key");
+            TableOperation selOperation = TableOperation.Retrieve<NextId>("1", "KEY");
             TableResult result = await GetUrlsTable().ExecuteAsync(selOperation);
             NextId entity = result.Result as NextId;
 
