@@ -43,7 +43,7 @@
         "webAppName": "[toLower(concat(parameters('baseName'), variables('suffix')))]",
         "webAppStorageAccountName": "[tolower(concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),16)), variables('suffix'), 'stg'))]",
         "webAppHhostingPlanName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), 'plan')]",
-        "functionProjectFolder": "src/adminTools/adminBlazorWebsite/src"
+        "functionProjectFolder": "src/adminTools/adminBlazorWebsite/src/adminBlazorWebsite.csproj"
     },
     "resources": [
         {
@@ -113,18 +113,19 @@
         {
             "name": "[variables('webAppHhostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2018-02-01",
+            "apiVersion": "2018-11-01",
             "kind": "linux",
             "location": "[resourceGroup().location]",
             "sku": {
-                "name": "F1",
-                "capacity": 1
+                "Tier": "Free",
+                "Name": "F1"
             },
             "tags": {
                 "displayName": "[variables('webAppHhostingPlanName')]"
             },
             "properties": {
-                "name": "[variables('webAppHhostingPlanName')]"
+                "name": "[variables('webAppHhostingPlanName')]",
+                "reserved": true
             }
         }
     ],
