@@ -9,7 +9,7 @@ Here, you will find the list of all available interfaces with the instructions t
 ## List of available Admin interfaces
 
 
-### [Postman](postman/README.md)
+### 1- [Postman](postman/README.md)
 
 Simple use of the API testing tool Postman to call the Azure Functions.
 
@@ -18,6 +18,13 @@ Simple use of the API testing tool Postman to call the Azure Functions.
 More details [here](postman/README.md).
 
 
+### 2- [Admin Blazor Website](adminBlazorWebsite/README.md)
+
+A simple website that implement the basic functionalities. You can list all URLs and create new ones. The website is done using Asp .Net Core Blazor with a server side. It can be deploy in Azure with one-click deployment.  
+
+![Postman Create ShotUrl](medias/adminBlazorWebsite.png)
+
+More details [here](adminBlazorWebsite/README.md).
 
 
 ---

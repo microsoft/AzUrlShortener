@@ -1,0 +1,99 @@
+@page "/Urls"
+@using adminBlazorWebsite.Data
+@inject UrlShortenerService UrlService
+@attribute [Authorize(Roles = "admin")]
+
+@if (UrlList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>RowKey</th>
+                <th>Url</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var url in UrlList.UrlList)
+            {
+                <tr>
+                    <td>@url.RowKey</td>
+                    <td>@url.Url</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+    <p>
+    <!-- Add a new ShortUrl -->
+    <button class="btn btn-primary"
+            @onclick="CreateShortUrl">
+        Add New Url
+    </button>
+</p>
+}
+
+@if(ShowPopup)
+{
+    <div class="modal" tabindex="-1" style="display:block" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Short Url Request</h3>
+                    <!-- Button to close the popup -->
+                    <button type="button" class="close"
+                            @onclick="ClosePopup">
+                        <span aria-hidden="true">X</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" type="text"
+                                       placeholder="The Url to redirect"
+                                       @bind="shortUrlRequest.Url" />
+                    <input class="form-control" type="text"
+                                       placeholder="Vanity or the 'End' part of the Url"
+                                       @bind="shortUrlRequest.Vanity" />
+                    <br />
+                    <button class="btn btn-primary"
+                            @onclick="SaveShortUrl">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code
+{
+    bool ShowPopup = false;
+    ShortUrlRequest shortUrlRequest = new ShortUrlRequest();
+    ShortUrlList UrlList;
+
+    void ClosePopup()
+    {
+        ShowPopup = false;
+    }
+    private async Task SaveShortUrl()
+    {
+        ShowPopup = false;
+        await UrlService.CreateShortUrl(shortUrlRequest);
+        UrlList = await UrlService.GetUrlList();
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        UrlList = await UrlService.GetUrlList();
+    }
+
+    [Authorize(Roles = "admin")]
+    void CreateShortUrl()
+    {
+        shortUrlRequest = new ShortUrlRequest();
+        ShowPopup = true;
+    }
+
+}

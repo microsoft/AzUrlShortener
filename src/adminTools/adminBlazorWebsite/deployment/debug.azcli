@@ -1,0 +1,15 @@
+
+# az login
+
+# az accound set -s ######-#####-#####-######
+
+
+
+az group create -n AdminUrlShortener -l eastus
+
+# validate with Parameter file
+az group deployment validate -g AdminUrlShortener  --template-file "deployment/adminBlazorWebsite-deployAzure.json" --parameters "deployment/adminBlazorWebsite-deployAzure.params.json"  --verbose 
+
+# deploy it
+az group deployment create  -g AdminUrlShortener -n cloud5minsv2 --template-file "deployment/adminBlazorWebsite-deployAzure.json" --parameters "deployment/adminBlazorWebsite-deployAzure.params.json"  --verbose 
+

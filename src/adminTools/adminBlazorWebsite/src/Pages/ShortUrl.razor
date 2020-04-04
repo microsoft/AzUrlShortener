@@ -1,0 +1,34 @@
+@using adminBlazorWebsite.Data
+@inject UrlShortenerService UrlService
+@attribute [Authorize(Roles = "admin")]
+
+
+<EditForm Model="@shortUrlRequest" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="Url"></label>
+        <InputText id="url" @bind-Value="shortUrlRequest.Url" />
+    </div>
+
+    <div class="form-group">
+        <label for="Vanity"></label>
+        <InputText id="vanity" @bind-Value="shortUrlRequest.Vanity" />
+    </div>
+    
+    <button class="btn btn-primary" type="submit">Submit</button>
+    <button class="btn btn-secondary" type="button">Cancel</button>
+</EditForm>
+
+
+
+@code {
+    private ShortUrlRequest shortUrlRequest = new ShortUrlRequest();
+
+    [Authorize(Roles = "admin")]
+    private async Task HandleValidSubmit()
+    {
+        await UrlService.CreateShortUrl(shortUrlRequest);
+    }
+}

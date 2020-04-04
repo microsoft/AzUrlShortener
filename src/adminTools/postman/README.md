@@ -79,7 +79,7 @@ To execute the call click the *Send button*. The response will be a json documne
 }
 ```
 
-![Postman List all Short Urls](medias/postman_Urllist.png.png)
+![Postman List all Short Urls](medias/postman_Urllist.png)
 
 
 ## Question, problem?
