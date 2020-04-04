@@ -1,6 +1,7 @@
 @page "/Urls"
 @using adminBlazorWebsite.Data
 @inject UrlShortenerService UrlService
+@attribute [Authorize(Roles = "admin")]
 
 @if (UrlList == null)
 {
@@ -88,6 +89,7 @@ else
         UrlList = await UrlService.GetUrlList();
     }
 
+    [Authorize(Roles = "admin")]
     void CreateShortUrl()
     {
         shortUrlRequest = new ShortUrlRequest();

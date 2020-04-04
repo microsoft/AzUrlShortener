@@ -34,7 +34,8 @@ namespace adminBlazorWebsite
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
                     _config.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>(options => {options.SignIn.RequireConfirmedAccount = true;})
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
