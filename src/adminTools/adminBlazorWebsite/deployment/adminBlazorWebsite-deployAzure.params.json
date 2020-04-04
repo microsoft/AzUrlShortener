@@ -5,6 +5,18 @@
         "baseName": {
             "value": "AzUrlShortenerAdmin"
         },
+        "AdminEMail": {
+            "value": "admin@cloud5mins.com"
+        },
+        "AdminPassword": {
+            "value": "_STRONG-PWD_"
+        },
+        "AzureFunctionUrlListUrl": {
+            "value": "http//"
+        },
+        "AzureFunctionUrlShortenerUrl": {
+            "value": "http//"
+        },
         "OwnerName": {
             "value": "Frank"
         },

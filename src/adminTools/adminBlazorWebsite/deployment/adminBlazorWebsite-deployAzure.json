@@ -9,6 +9,30 @@
                 "description": "Name use as base-template to named the resources to be deployed in Azure."
             }
         },
+        "AdminEMail": {
+           "type": "string",
+           "metadata": {
+                "description": "Email use to create the administrator of the Website"
+            }
+        },
+        "AdminPassword": {
+           "type": "securestring",
+           "metadata": {
+                "description": "Strong Password use to create the Administrator account"
+            }
+        },
+        "AzureFunctionUrlListUrl": {
+           "type": "string",
+           "metadata": {
+                "description": "URL of the Azure Function UrlList"
+            }
+        },
+        "AzureFunctionUrlShortenerUrl": {
+           "type": "string",
+           "metadata": {
+                "description": "URL of the Azure Function UrlShortener"
+            }
+        },
         "GitHubURL": {
             "type": "string",
             "defaultValue": "https://github.com/fboucher/AzUrlShortener.git",
@@ -64,15 +88,23 @@
                     "appSettings": [
                         {
                             "name": "AzureFunctionUrlListUrl",
-                            "value": "_YOUR_AZFunction_URL_"
+                            "value": "[parameters('AzureFunctionUrlListUrl')]"
                         },
                         {
                             "name": "AzureFunctionUrlShortenerUrl",
-                            "value": "_YOUR_AZFunction_URL_"
+                            "value": "[parameters('AzureFunctionUrlShortenerUrl')]"
                         },
                         {
                             "name": "PROJECT",
                             "value": "[variables('functionProjectFolder')]"
+                        },
+                        {
+                            "name": "defaultAdminEMail",
+                            "value": "[parameters('AdminEMail')]"
+                        },
+                        {
+                            "name": "defaultAdminPW",
+                            "value": "[parameters('AdminPassword')]"
                         }
                     ],
                     "linuxFxVersion": "DOTNETCORE|3.1",
