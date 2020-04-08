@@ -9,6 +9,8 @@ namespace  adminBlazorWebsite.Data
 
         public string Url { get; set; }
 
+        public int Clicks { get; set; }
+
         public ShortUrlEntity(){}
 
         public static ShortUrlEntity GetEntity(string longUrl, string endUrl){

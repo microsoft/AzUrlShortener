@@ -40,6 +40,8 @@ namespace Cloud5mins.Function
                 if (newUrl != null)
                 {
                     log.LogInformation($"Found it: {newUrl.Url}");
+                    newUrl.Clicks++;
+                    await stgHelper.SaveShortUrlEntity(newUrl);
                     redirectUrl = WebUtility.UrlDecode(newUrl.Url);
                 }
             }
