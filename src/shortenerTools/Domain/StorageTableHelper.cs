@@ -66,6 +66,25 @@ namespace Cloud5mins.domain
             return lstShortUrl;
         }
 
+        public async Task<List<ClickStatsEntity>> GetAllStatsByVanity(string vanity)
+        {
+            var tblUrls = GetStatsTable();
+            TableContinuationToken token = null;
+            var lstShortUrl = new List<ClickStatsEntity>();
+            do
+            {
+                // Retreiving all entities that are NOT the NextId entity 
+                // (it's the only one in the partion "KEY")
+                TableQuery<ClickStatsEntity> rangeQuery = new TableQuery<ClickStatsEntity>().Where(
+                    filter: TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, vanity));
+
+                var queryResult = await tblUrls.ExecuteQuerySegmentedAsync(rangeQuery, token);
+                lstShortUrl.AddRange(queryResult.Results as List<ClickStatsEntity>);
+                token = queryResult.ContinuationToken;
+            } while (token != null);
+            return lstShortUrl;
+        }
+
         public  async Task<bool> IfShortUrlEntityExist(ShortUrlEntity row)
         {
              ShortUrlEntity eShortUrl = await GetShortUrlEntity(row);
