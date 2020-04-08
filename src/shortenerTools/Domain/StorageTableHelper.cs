@@ -21,10 +21,19 @@ namespace Cloud5mins.domain
            return storageAccount;
        }
 
+        private  CloudTable GetStatsTable(){
+            CloudTable table = GetTable("ClickStats");
+            return table;
+        }
         private  CloudTable GetUrlsTable(){
+            CloudTable table = GetTable("UrlsDetails");
+            return table;
+        }
+
+        private  CloudTable GetTable(string tableName){
             CloudStorageAccount storageAccount = this.CreateStorageAccountFromConnectionString();
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient(new TableClientConfiguration());
-            CloudTable table = tableClient.GetTableReference("UrlsDetails");
+            CloudTable table = tableClient.GetTableReference(tableName);
             table.CreateIfNotExists();
 
             return table;
@@ -71,7 +80,13 @@ namespace Cloud5mins.domain
              return eShortUrl;
         }  
 
-        public  async Task<int> GetNextTableId()
+        public async void SaveClickStatsEntity(ClickStatsEntity newStats)
+        {
+             TableOperation insOperation = TableOperation.InsertOrMerge(newStats);
+             TableResult result = await GetStatsTable().ExecuteAsync(insOperation);
+        }  
+
+        public async Task<int> GetNextTableId()
         {
             //Get current ID
             TableOperation selOperation = TableOperation.Retrieve<NextId>("1", "KEY");
@@ -95,5 +110,7 @@ namespace Cloud5mins.domain
 
             return entity.Id;
         }
+
+
     }
 }
