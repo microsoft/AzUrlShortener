@@ -10,6 +10,9 @@
         },
         "GitHubBranch": {
             "value": "dev"
+        },
+        "defaultUrlRedirect": {
+            "value": "https://azure.com"
         }
     }
 }

@@ -39,6 +39,14 @@ The is many different way to manage your short Urls, from a direct HTTP call to 
 ---
 
 
+## How It Works
+
+If you are interested to learn more about what's under the hood, and get more details on each Azure Function, read the [How it works](how-it-works.md) page.
+
+
+---
+
+
 
 ## Contributing
 
