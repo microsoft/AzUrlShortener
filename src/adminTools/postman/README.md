@@ -6,9 +6,15 @@ Postman is a API testing tool, so there is no deployment. To get it go to [Postm
 
 ## How to use it
 
-### Create a short Url
+With Postman, you will need to create a request for each functions. Here some requirements:
 
-In Postman, use the URL from the **UrlShortener** Azure Function. Set the request to POST. In the body of the request, add a JSON document containing two properties. 
+- Set the request to POST.
+- Add a header: Content-Type = application/json
+- Use the URL **WITH** the security `Code` if the function as one. ([Read here](https://github.com/FBoucher/AzUrlShortener/blob/feature/docs/post-deployment-configuration.md#how-to-get-the-azure-function-urls) to learn how to get the URLs )
+
+### 1- Create a short Url
+
+In Postman, use the URL from the **UrlShortener** Azure Function.  In the body of the request, add a JSON document containing two properties. 
 
 See the examples bellow to create short generic URL. 
 
@@ -41,14 +47,14 @@ To execute the call click the *Send button*. The response will be:
 ![Postman Create ShotUrl](medias/postman_createShotUrl.png)
 
 
-### List all Urls
+### 2- List all Urls
 
 In Postman, use the URL from the **UrlList** Azure Function. Set the request to GET. No body content is required for this request. However, make sure the url contains the security token `code`.
 
     https://shortenertools.azurewebsites.net/api/UrlList?code=JVzE6CvlEHxDHbq.....
 
 
-To execute the call click the *Send button*. The response will be a json documnet with an array:
+To execute the call click the *Send button*. The response will be a json document with an array:
 
 
 ```json
