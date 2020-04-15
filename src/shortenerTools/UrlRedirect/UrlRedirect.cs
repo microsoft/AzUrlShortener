@@ -21,7 +21,7 @@ namespace Cloud5mins.Function
         {
             log.LogInformation($"C# HTTP trigger function processed for Url: {shortUrl}");
 
-            var redirectUrl = "http://azure.com";
+            string redirectUrl = "https://azure.com";
 
             if (!String.IsNullOrWhiteSpace(shortUrl))
             {
@@ -30,6 +30,8 @@ namespace Cloud5mins.Function
                     .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                     .AddEnvironmentVariables()
                     .Build();
+
+                redirectUrl = config["defaultRedirectUrl"];
 
                 StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]); 
 
