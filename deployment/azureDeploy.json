@@ -9,6 +9,13 @@
                 "description": "Name use as base-template to named the resources to be deployed in Azure."
             }
         },
+        "defaultUrlRedirect": {
+            "defaultValue": "https://azure.com",
+            "type": "string",
+            "metadata": {
+                "description": "Default URL use when the key pass by the user is not found."
+            }
+        },
         "GitHubURL": {
             "type": "string",
             "defaultValue": "https://github.com/fboucher/AzUrlShortener.git",
@@ -106,6 +113,10 @@
                         {
                             "name": "UlsDataStorage",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('UrlsStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('UrlsStorageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                        },
+                        {
+                            "name": "defaultUrlRedirect",
+                            "value": "[parameters('defaultUrlRedirect')]"
                         }
                     ]
                 },
