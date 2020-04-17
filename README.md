@@ -20,7 +20,7 @@ To deploy YOUR version of **Azure Url Shortener** you could fork this repo, but 
 
 To have all details and alternative deployment refer to the [Deployment Details](azFunctions-deployment.md) page.
 
-### Post Deployment Configuration
+#### Post Deployment Configuration
 
 A good Url Shortener wouldn't be completed without a custom domain name. To know how to add it and other useful post-deployment configurations refer to the [post-deployment-configuration](post-deployment-configuration.md) page.
 
