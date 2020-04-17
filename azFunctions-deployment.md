@@ -18,7 +18,7 @@ Once all the resources are created you will end-up with:
 
 - Azure Function: Where the code from the project [src/shortenerTools](src/shortenerTools) will be copy.
 - Service Plan: Dynamic service plan (aka. [Consumption Plan](https://azure.microsoft.com/en-us/pricing/details/functions/?WT.mc_id=azurlshortener-github-frbouche)) to make sure you are only charged on a per-second granularity.
-- Application Insights: To get some metric/ usage of our function. (In the future we could interface that information in a friendly web UI)
+- Application Insights: To get some metric/ usage of our function. (In the future we could Frontend that information in a friendly web UI)
 - 2 Storage account: 1 for the Azure Function, the second use as Data Storage leveraging the [Azure Table storage](https://azure.microsoft.com/en-us/services/storage/tables/?WT.mc_id=azurlshortener-github-frbouche).
 
 ![ArmResult][ArmResult]
