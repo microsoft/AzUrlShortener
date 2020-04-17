@@ -1,4 +1,4 @@
-# AdminBlazorWebsite Interface
+# Admin Blazor Website Frontend
 
 ## Deployment
 
@@ -28,9 +28,6 @@ To test it a simple F5 in VSCode or Visual Studio should work.
 
 ## How to use it
 
-> ⚠️Right now the Website doesn't use any security. Anyone with the URL will be able to see and create links.
-
-
 ### Create a short Url
 
 Once you are in the website, first go into the **Manage Urls** section by clicking the option in the left menu. Than click the **Add New Url** button.
@@ -52,7 +49,7 @@ Once you are in the website, just click on the **Manage Urls** on the left menu.
 
 ## Question, problem?
 
-If you have question or encounter any problem using this admin interface with AzShortenerUrl please feel free to ask help in the [issues section](https://github.com/FBoucher/AzUrlShortener/issues).
+If you have question or encounter any problem using this admin Frontend with AzShortenerUrl please feel free to ask help in the [issues section](https://github.com/FBoucher/AzUrlShortener/issues).
 
 
 [adminBlazorWebsite_Url_list]: medias/adminBlazorWebsite_Url_list.png
