@@ -13,6 +13,9 @@
         },
         "defaultUrlRedirect": {
             "value": "https://azure.com"
+        },
+        "frontend": {
+            "value": "none"
         }
     }
 }

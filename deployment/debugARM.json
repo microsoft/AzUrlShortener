@@ -1,0 +1,45 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "frontend": {
+           "type": "string",
+           "allowedValues": [
+               "none",
+               "adminBlazorWebsite"
+           ],
+           "defaultValue": "adminBlazorWebsite",
+           "metadata": {
+                "description": "Select the frontend that will be deploy. Select 'none', if you don't want any. Frontend available: adminBlazorWebsite, none. "
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "frontendInfo": {
+            "adminBlazorWebsite": { 
+                "armTemplateUrl": "https://raw.githubusercontent.com/FBoucher/AzUrlShortener/master/src/adminTools/adminBlazorWebsite/deployment/adminBlazorWebsite-deployAzure.json"
+            }
+        }
+    },
+    "resources": [],
+    "outputs": {
+        "frontendTemplateUrl": {
+           "type": "string",
+           "value": "[variables('frontendInfo')[parameters('frontend')].armTemplateUrl]"
+        },
+        "azFuncUrl": {
+           "type": "string",
+           "value": "[resourceId('Microsoft.Web/sites/', 'shortenertools7cw4l')]"
+        },
+        "functionAppDetail": {
+           "type": "object",
+           "value": "[reference(resourceId('UrlShortener', 'Microsoft.Web/sites/', 'shortenertools7cw4l'), '2018-02-01')]"
+        },
+        "funcHostName": {
+           "type": "array",
+           "value": "[reference(resourceId('UrlShortener', 'Microsoft.Web/sites/', 'shortenertools7cw4l'), '2018-02-01').hostNames]"
+        }
+        
+    }
+}
