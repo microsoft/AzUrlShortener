@@ -78,7 +78,7 @@
         "UrlsStorageAccountName": "[concat('urldata', variables('suffix'), 'stg')]",
         "frontendInfo": {
             "adminBlazorWebsite": { 
-                "armTemplateUrl": "https://raw.githubusercontent.com/FBoucher/AzUrlShortener/master/src/adminTools/adminBlazorWebsite/deployment/adminBlazorWebsite-deployAzure.json"
+                "armTemplateUrl": "https://raw.githubusercontent.com/FBoucher/AzUrlShortener/feature/deploy-it-all/src/adminTools/adminBlazorWebsite/deployment/adminBlazorWebsite-deployAzure.json"
             }
         }
             
@@ -89,7 +89,7 @@
             "apiVersion": "2018-11-01",
             "name": "[variables('funcAppName')]",
             "type": "Microsoft.Web/sites",
-            "kind": "functionapp",
+            "kind": "functionapp,linux",
             "location": "[resourceGroup().location]",
             "tags": {
                 "Owner": "[parameters('OwnerName')]",
@@ -148,11 +148,12 @@
                             "name": "defaultUrlRedirect",
                             "value": "[parameters('defaultUrlRedirect')]"
                         }
-                    ]
+                    ],
+                    "linuxFxVersion": ""
                 },
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('funcHhostingPlanName'))]",                
                 "hostingEnvironment": "",
-                "clientAffinityEnabled": true
+                "clientAffinityEnabled": false
             },
             "resources": [
                 {
@@ -172,17 +173,21 @@
             ]
         },
         {
-            "apiVersion": "2018-02-01",
+            "apiVersion": "2018-11-01",
             "name": "[variables('funcHhostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
             "location": "[resourceGroup().location]",
+            "kind": "linux",
             "tags": {
                 "Owner": "[parameters('OwnerName')]",
                 "ExpireOn": "[parameters('ExpireOn')]"
             },
             "properties": {
                 "name": "[variables('funcHhostingPlanName')]",
-                "computeMode": "Dynamic"
+                "workerSize": "1",
+                "workerSizeId": "1",
+                "numberOfWorkers": "1",
+                "reserved": true
             },
             "sku": {
                 "Tier": "Dynamic",
@@ -208,11 +213,11 @@
         {
             "apiVersion": "2019-06-01",
             "type": "Microsoft.Storage/storageAccounts",
-            "kind": "BlobStorage",
             "name": "[variables('funcStorageAccountName')]",
             "location": "[resourceGroup().location]",
             "sku": {
-                "name": "Standard_LRS"
+                "name": "Standard_LRS",
+                "tier": "Standard"
             },
             "properties": {
                 "supportsHttpsTrafficOnly": true
@@ -221,15 +226,16 @@
         {
             "name": "[variables('UrlsStorageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2015-06-15",
+            "apiVersion": "2019-06-01",
             "location": "[resourceGroup().location]",
             "tags": {
                 "displayName": "[variables('UrlsStorageAccountName')]",
                 "Owner": "[parameters('OwnerName')]",
                 "ExpireOn": "[parameters('ExpireOn')]"
             },
-            "properties": {
-                "accountType": "Standard_LRS"
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
             }
         },
         {
@@ -247,7 +253,7 @@
                 },
                 "parameters": {
                     "basename": {
-                        "value" : "[parameters('baseName')]"
+                        "value" : "[concat('adm', parameters('baseName'))]"
                     },
                     "AdminEMail": {
                         "value" : "[parameters('frontend-AdminEMail')]"
@@ -256,10 +262,10 @@
                         "value" : "[parameters('frontend-AdminPassword')]"
                     },
                     "AzureFunctionUrlListUrl": {
-                        "value" : "[concat('https://', reference(resourceId('UrlShortener', 'Microsoft.Web/sites/', 'shortenertools7cw4l'), '2018-02-01').hostNames[1], '/api/UrlList')]"
+                        "value" : "[concat('https://', reference(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '2018-02-01').hostNames[0], '/api/UrlList?code=', listkeys(concat(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '/host/default/'),'2016-08-01').functionKeys.default)]"
                     },
                     "AzureFunctionUrlShortenerUrl": {
-                        "value" : "[concat('https://', reference(resourceId('UrlShortener', 'Microsoft.Web/sites/', 'shortenertools7cw4l'), '2018-02-01').hostNames[1], '/api/UrlShortener')]"
+                        "value" : "[concat('https://', reference(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '2018-02-01').hostNames[0], '/api/UrlShortener?code=', listkeys(concat(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '/host/default/'),'2016-08-01').functionKeys.default)]"
                     },
                     "GitHubURL": {
                         "value" : "[parameters('GitHubURL')]"
@@ -282,6 +288,10 @@
         "frontendTemplateUrl": {
            "type": "string",
            "value": "[variables('frontendInfo')[parameters('frontend')].armTemplateUrl]"
+        },
+        "UrlListUrl": {
+           "type": "string",
+           "value": "[concat('https://', reference(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '2018-02-01').hostNames[1], '/api/UrlList?code=', listkeys(concat(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '/host/default/'),'2016-08-01').functionKeys.default)]"
         }
     }
 }

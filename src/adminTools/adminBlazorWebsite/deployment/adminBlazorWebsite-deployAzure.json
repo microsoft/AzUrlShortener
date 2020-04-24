@@ -149,8 +149,8 @@
             "kind": "linux",
             "location": "[resourceGroup().location]",
             "sku": {
-                "Tier": "Free",
-                "Name": "F1"
+                "Tier": "Basic",
+                "Name": "B1"
             },
             "tags": {
                 "displayName": "[variables('webAppHhostingPlanName')]"

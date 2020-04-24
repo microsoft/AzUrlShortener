@@ -8,10 +8,7 @@
                "none",
                "adminBlazorWebsite"
            ],
-           "defaultValue": "adminBlazorWebsite",
-           "metadata": {
-                "description": "Select the frontend that will be deploy. Select 'none', if you don't want any. Frontend available: adminBlazorWebsite, none. "
-            }
+           "defaultValue": "adminBlazorWebsite"
         }
     },
     "functions": [],
@@ -39,6 +36,10 @@
         "funcHostName": {
            "type": "array",
            "value": "[reference(resourceId('UrlShortener', 'Microsoft.Web/sites/', 'shortenertools7cw4l'), '2018-02-01').hostNames]"
+        },
+        "functionsKey": {
+           "type": "string",
+           "value": "[listkeys(concat(resourceId('UrlShortener', 'Microsoft.Web/sites/', 'shortenertools7cw4l'), '/host/default/'),'2016-08-01').functionKeys.default]"
         }
         
     }
