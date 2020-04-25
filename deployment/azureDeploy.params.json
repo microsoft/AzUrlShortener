@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "baseName": {
-            "value": "ShortenerTools2"
+            "value": "AzUrlShortTools"
         },
         "OwnerName": {
             "value": "Frank"
         },
         "GitHubBranch": {
-            "value": "dev"
+            "value": "master"
         },
         "defaultUrlRedirect": {
             "value": "https://azure.com"

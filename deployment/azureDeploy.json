@@ -164,10 +164,10 @@
                       "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
                     ],
                     "properties": {
-                        "RepoUrl": "[parameters('GitHubURL')]",
+                        "repoUrl": "[parameters('GitHubURL')]",
                         "branch": "[parameters('GitHubBranch')]",
                         "publishRunbook": true,
-                        "IsManualIntegration": true
+                        "IsManualIntegration": false
                     }
                 }
             ]
@@ -239,12 +239,26 @@
             }
         },
         {
+            "name": "[concat('admin-', resourceGroup().name)]",
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2018-05-01",
+            "condition": "[equals(parameters('frontend'), 'adminBlazorWebsite')]",
+            "location": "[resourceGroup().location]",
+            "tags": {
+
+                "Owner": "[parameters('OwnerName')]",
+                "ExpireOn": "[parameters('ExpireOn')]"
+            }
+        },
+        {
             "name": "FrontendDeployment",
             "type": "Microsoft.Resources/deployments",
             "condition": "[not(equals(parameters('frontend'), 'none'))]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
+                "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]",
+                "[resourceId('Microsoft.Web/sites/sourcecontrols', variables('funcAppName'), 'web')]"
             ],
+            "resourceGroup": "[concat('admin-', resourceGroup().name)]",
             "apiVersion": "2019-10-01",
             "properties": {
                 "mode": "Incremental",

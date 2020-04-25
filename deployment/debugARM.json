@@ -40,6 +40,10 @@
         "functionsKey": {
            "type": "string",
            "value": "[listkeys(concat(resourceId('UrlShortener', 'Microsoft.Web/sites/', 'shortenertools7cw4l'), '/host/default/'),'2016-08-01').functionKeys.default]"
+        },
+        "AzFuncGitResscourceId": {
+           "type": "string",
+           "value": "[resourceId('Microsoft.Web/sites/sourcecontrols', 'shortenertools7cw4l', 'web')]"
         }
         
     }
