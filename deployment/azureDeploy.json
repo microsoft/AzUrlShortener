@@ -50,19 +50,21 @@
         },
         "OwnerName":{
             "type":"string",
-            "defaultValue":"",
+            "defaultValue": "",
             "metadata": {
                 "description": "Owner of this deployment, person to contact for question."
             }
         },
         "frontend-AdminEMail": {
            "type": "string",
+           "defaultValue": "",
            "metadata": {
                 "description": "(Required only if frontend = adminBlazorWebsite) The EMail use to connect into the admin Blazor Website."
             }
         },
         "frontend-AdminPassword": {
            "type": "securestring",
+           "defaultValue": "",
            "metadata": {
                 "description": "(Required only if frontend = adminBlazorWebsite) Password use to connect into the admin Blazor Website."
             }
@@ -78,7 +80,7 @@
         "UrlsStorageAccountName": "[concat('urldata', variables('suffix'), 'stg')]",
         "frontendInfo": {
             "adminBlazorWebsite": { 
-                "armTemplateUrl": "https://raw.githubusercontent.com/FBoucher/AzUrlShortener/feature/deploy-it-all/src/adminTools/adminBlazorWebsite/deployment/adminBlazorWebsite-deployAzure.json"
+                "armTemplateUrl": "[concat('https://raw.githubusercontent.com/FBoucher/AzUrlShortener/', parameters('GitHubBranch'), '/src/adminTools/adminBlazorWebsite/deployment/adminBlazorWebsite-deployAzure.json')]"
             }
         }
             
@@ -283,14 +285,5 @@
             }
         }
     ],
-    "outputs":{
-        "frontendTemplateUrl": {
-           "type": "string",
-           "value": "[variables('frontendInfo')[parameters('frontend')].armTemplateUrl]"
-        },
-        "UrlListUrl": {
-           "type": "string",
-           "value": "[concat('https://', reference(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '2018-02-01').hostNames[0], '/api/UrlList?code=', listkeys(concat(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '/host/default/'),'2016-08-01').functionKeys.default)]"
-        }
-    }
+    "outputs":{}
 }

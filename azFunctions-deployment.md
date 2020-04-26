@@ -11,7 +11,16 @@ This will open the Azure Portal (portal.azure.com) in your subscription and crea
 - **Resource group**: Logical group where your resources will be created.
 - **Location**: Select a location (usually closer of your users)
 - **Base Name**: This is how you would like to named your resources. Because some names need to be globally unique, the deployment will generate a suffix and append it to the end of your Base name.
+- **Frontend**: Select the frontend that will be deploy. Select 'none', if you don't want any. Frontend available: `adminBlazorWebsite`, `none`. 
+- **Default Url Redirect**: Default URL use when the key pass by the user is not found.
 - **GitHub URL and Branch**: Keep the default if you when to deploy from Frank's master repo. 
+
+#### Setting for adminBlazorWebsite
+
+- **Frontend-Admin E Mail** : (Required only if frontend = adminBlazorWebsite) The EMail use to connect into the admin Blazor Website.
+- **Frontend-Admin Password** : (Required only if frontend = adminBlazorWebsite) Password use to connect into the admin Blazor Website. It MOST by strong Uppercase, lowercase, numbers, and special characters.
+
+
 - **Expire On and Owner Name**: Those value are for tags. They **won't affect** in any cases your deployment. I use it in another project ([AzSubscriptionCleaner](https://github.com/FBoucher/AzSubscriptionCleaner)) to clean my subscription; without this project it's just information.
 
 Once all the resources are created you will end-up with: 
