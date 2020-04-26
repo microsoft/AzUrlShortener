@@ -166,7 +166,7 @@
                         "repoUrl": "[parameters('GitHubURL')]",
                         "branch": "[parameters('GitHubBranch')]",
                         "publishRunbook": true,
-                        "IsManualIntegration": false
+                        "IsManualIntegration": true
                     }
                 }
             ]
