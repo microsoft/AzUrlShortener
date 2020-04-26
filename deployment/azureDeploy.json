@@ -89,7 +89,7 @@
             "apiVersion": "2018-11-01",
             "name": "[variables('funcAppName')]",
             "type": "Microsoft.Web/sites",
-            "kind": "functionapp,linux",
+            "kind": "functionapp",
             "location": "[resourceGroup().location]",
             "tags": {
                 "Owner": "[parameters('OwnerName')]",
@@ -148,12 +148,11 @@
                             "name": "defaultUrlRedirect",
                             "value": "[parameters('defaultUrlRedirect')]"
                         }
-                    ],
-                    "linuxFxVersion": ""
+                    ]
                 },
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('funcHhostingPlanName'))]",                
                 "hostingEnvironment": "",
-                "clientAffinityEnabled": false
+                "clientAffinityEnabled": true
             },
             "resources": [
                 {
@@ -177,15 +176,15 @@
             "name": "[variables('funcHhostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
             "location": "[resourceGroup().location]",
-            "kind": "linux",
+            "kind": "",
             "tags": {
                 "Owner": "[parameters('OwnerName')]",
                 "ExpireOn": "[parameters('ExpireOn')]"
             },
             "properties": {
                 "name": "[variables('funcHhostingPlanName')]",
-                "workerSize": "1",
-                "workerSizeId": "1",
+                "workerSize": "0",
+                "workerSizeId": "0",
                 "numberOfWorkers": "1",
                 "reserved": true
             },
@@ -239,18 +238,6 @@
             }
         },
         {
-            "name": "[concat('admin-', resourceGroup().name)]",
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2018-05-01",
-            "condition": "[equals(parameters('frontend'), 'adminBlazorWebsite')]",
-            "location": "[resourceGroup().location]",
-            "tags": {
-
-                "Owner": "[parameters('OwnerName')]",
-                "ExpireOn": "[parameters('ExpireOn')]"
-            }
-        },
-        {
             "name": "FrontendDeployment",
             "type": "Microsoft.Resources/deployments",
             "condition": "[not(equals(parameters('frontend'), 'none'))]",
@@ -258,7 +245,7 @@
                 "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]",
                 "[resourceId('Microsoft.Web/sites/sourcecontrols', variables('funcAppName'), 'web')]"
             ],
-            "resourceGroup": "[concat('admin-', resourceGroup().name)]",
+            "resourceGroup": "[resourceGroup().name]",
             "apiVersion": "2019-10-01",
             "properties": {
                 "mode": "Incremental",

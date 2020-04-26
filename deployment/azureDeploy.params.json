@@ -9,7 +9,7 @@
             "value": "Frank"
         },
         "GitHubBranch": {
-            "value": "master"
+            "value": "feature/deploy-it-all"
         },
         "defaultUrlRedirect": {
             "value": "https://azure.com"

@@ -107,11 +107,18 @@
                             "value": "[parameters('AdminPassword')]"
                         }
                     ],
-                    "linuxFxVersion": "DOTNETCORE|3.1",
-                    "alwaysOn": "false"
+                    "metadata":[
+                        {
+                            "name": "CURRENT_STACK",
+                            "value": "dotnetcore"
+                        }
+                    ],
+                    "phpVersion": "OFF",
+                    "alwaysOn": true
                 },
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('webAppHhostingPlanName'))]",
-                "clientAffinityEnabled": false
+                "hostingEnvironment": "",
+                "clientAffinityEnabled": true
             },
             "resources": [
                 {
@@ -146,7 +153,7 @@
             "name": "[variables('webAppHhostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2018-11-01",
-            "kind": "linux",
+            "kind": "",
             "location": "[resourceGroup().location]",
             "sku": {
                 "Tier": "Basic",
@@ -157,7 +164,10 @@
             },
             "properties": {
                 "name": "[variables('webAppHhostingPlanName')]",
-                "reserved": true
+                "workerSize": "0",
+                "workerSizeId": "0",
+                "numberOfWorkers": "1",
+                "hostingEnvironment": ""
             }
         }
     ],
