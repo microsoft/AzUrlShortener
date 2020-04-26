@@ -98,7 +98,8 @@
             "dependsOn": [
                 "[concat('microsoft.insights/components/', variables('insghtsAppName'))]",
                 "[concat('Microsoft.Web/serverfarms/', variables('funcHhostingPlanName'))]",
-                "[concat('Microsoft.Storage/storageAccounts/',variables('funcStorageAccountName'))]"
+                "[concat('Microsoft.Storage/storageAccounts/',variables('funcStorageAccountName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/',variables('UrlsStorageAccountName'))]"
             ],
             "properties": {
                 "name": "[variables('funcAppName')]",
@@ -183,10 +184,7 @@
             },
             "properties": {
                 "name": "[variables('funcHhostingPlanName')]",
-                "workerSize": "0",
-                "workerSizeId": "0",
-                "numberOfWorkers": "1",
-                "reserved": true
+                "computeMode": "Dynamic"
             },
             "sku": {
                 "Tier": "Dynamic",
@@ -292,7 +290,7 @@
         },
         "UrlListUrl": {
            "type": "string",
-           "value": "[concat('https://', reference(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '2018-02-01').hostNames[1], '/api/UrlList?code=', listkeys(concat(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '/host/default/'),'2016-08-01').functionKeys.default)]"
+           "value": "[concat('https://', reference(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '2018-02-01').hostNames[0], '/api/UrlList?code=', listkeys(concat(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '/host/default/'),'2016-08-01').functionKeys.default)]"
         }
     }
 }
