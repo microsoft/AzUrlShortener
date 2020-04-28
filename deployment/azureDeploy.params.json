@@ -3,16 +3,25 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "baseName": {
-            "value": "ShortenerTools2"
+            "value": "AzUrlShortTools"
         },
         "OwnerName": {
             "value": "Frank"
         },
         "GitHubBranch": {
-            "value": "dev"
+            "value": "feature/deploy-it-all"
         },
         "defaultUrlRedirect": {
             "value": "https://azure.com"
+        },
+        "frontend": {
+            "value": "adminBlazorWebsite"
+        },
+        "frontend-AdminEMail": {
+            "value": "test@test.com"
+        },
+        "frontend-AdminPassword": {
+            "value": "Supernewt42!"
         }
     }
 }

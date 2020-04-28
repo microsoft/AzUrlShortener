@@ -9,6 +9,17 @@
                 "description": "Name use as base-template to named the resources to be deployed in Azure."
             }
         },
+        "frontend": {
+           "type": "string",
+           "allowedValues": [
+               "none",
+               "adminBlazorWebsite"
+           ],
+           "defaultValue": "adminBlazorWebsite",
+           "metadata": {
+                "description": "Select the frontend that will be deploy. Select 'none', if you don't want any. Frontend available: adminBlazorWebsite, none. "
+            }
+        },
         "defaultUrlRedirect": {
             "defaultValue": "https://azure.com",
             "type": "string",
@@ -39,9 +50,23 @@
         },
         "OwnerName":{
             "type":"string",
-            "defaultValue":"",
+            "defaultValue": "",
             "metadata": {
                 "description": "Owner of this deployment, person to contact for question."
+            }
+        },
+        "frontend-AdminEMail": {
+           "type": "string",
+           "defaultValue": "",
+           "metadata": {
+                "description": "(Required only if frontend = adminBlazorWebsite) The EMail use to connect into the admin Blazor Website."
+            }
+        },
+        "frontend-AdminPassword": {
+           "type": "securestring",
+           "defaultValue": "",
+           "metadata": {
+                "description": "(Required only if frontend = adminBlazorWebsite) Password use to connect into the admin Blazor Website."
             }
         }
     },
@@ -52,7 +77,14 @@
         "funcHhostingPlanName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), 'plan')]",
         "insghtsAppName":"[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), '-meta')]",
         "functionProjectFolder": "src/shortenerTools",
-        "UrlsStorageAccountName": "[concat('urldata', variables('suffix'), 'stg')]"
+        "UrlsStorageAccountName": "[concat('urldata', variables('suffix'), 'stg')]",
+        "frontendInfo": {
+            "adminBlazorWebsite": { 
+                "armTemplateUrl": "[concat('https://raw.githubusercontent.com/FBoucher/AzUrlShortener/', parameters('GitHubBranch'), '/src/adminTools/adminBlazorWebsite/deployment/adminBlazorWebsite-deployAzure.json')]"
+            }
+        }
+            
+        
     },
     "resources": [
         {
@@ -68,7 +100,8 @@
             "dependsOn": [
                 "[concat('microsoft.insights/components/', variables('insghtsAppName'))]",
                 "[concat('Microsoft.Web/serverfarms/', variables('funcHhostingPlanName'))]",
-                "[concat('Microsoft.Storage/storageAccounts/',variables('funcStorageAccountName'))]"
+                "[concat('Microsoft.Storage/storageAccounts/',variables('funcStorageAccountName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/',variables('UrlsStorageAccountName'))]"
             ],
             "properties": {
                 "name": "[variables('funcAppName')]",
@@ -133,7 +166,7 @@
                       "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
                     ],
                     "properties": {
-                        "RepoUrl": "[parameters('GitHubURL')]",
+                        "repoUrl": "[parameters('GitHubURL')]",
                         "branch": "[parameters('GitHubBranch')]",
                         "publishRunbook": true,
                         "IsManualIntegration": true
@@ -146,6 +179,7 @@
             "name": "[variables('funcHhostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
             "location": "[resourceGroup().location]",
+            "kind": "",
             "tags": {
                 "Owner": "[parameters('OwnerName')]",
                 "ExpireOn": "[parameters('ExpireOn')]"
@@ -168,9 +202,11 @@
                 "Owner": "[parameters('OwnerName')]",
                 "ExpireOn": "[parameters('ExpireOn')]"
             },
+            "kind": "",
             "properties": {
+                "Application_Type": "web",
                 "ApplicationId": "[variables('funcAppName')]",
-                "Request_Source": "IbizaWebAppExtensionCreate"
+                "Request_Source": "rest"
             }
         },
         {
@@ -179,7 +215,8 @@
             "name": "[variables('funcStorageAccountName')]",
             "location": "[resourceGroup().location]",
             "sku": {
-                "name": "Standard_LRS"
+                "name": "Standard_LRS",
+                "tier": "Standard"
             },
             "properties": {
                 "supportsHttpsTrafficOnly": true
@@ -188,16 +225,65 @@
         {
             "name": "[variables('UrlsStorageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2015-06-15",
+            "apiVersion": "2019-06-01",
             "location": "[resourceGroup().location]",
             "tags": {
                 "displayName": "[variables('UrlsStorageAccountName')]",
                 "Owner": "[parameters('OwnerName')]",
                 "ExpireOn": "[parameters('ExpireOn')]"
             },
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            }
+        },
+        {
+            "name": "FrontendDeployment",
+            "type": "Microsoft.Resources/deployments",
+            "condition": "[not(equals(parameters('frontend'), 'none'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]",
+                "[resourceId('Microsoft.Web/sites/sourcecontrols', variables('funcAppName'), 'web')]"
+            ],
+            "resourceGroup": "[resourceGroup().name]",
+            "apiVersion": "2019-10-01",
             "properties": {
-                "accountType": "Standard_LRS"
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('frontendInfo')[parameters('frontend')].armTemplateUrl]"
+                },
+                "parameters": {
+                    "basename": {
+                        "value" : "[concat('adm', parameters('baseName'))]"
+                    },
+                    "AdminEMail": {
+                        "value" : "[parameters('frontend-AdminEMail')]"
+                    },
+                    "AdminPassword": {
+                        "value" : "[parameters('frontend-AdminPassword')]"
+                    },
+                    "AzureFunctionUrlListUrl": {
+                        "value" : "[concat('https://', reference(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '2018-02-01').hostNames[0], '/api/UrlList?code=', listkeys(concat(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '/host/default/'),'2016-08-01').functionKeys.default)]"
+                    },
+                    "AzureFunctionUrlShortenerUrl": {
+                        "value" : "[concat('https://', reference(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '2018-02-01').hostNames[0], '/api/UrlShortener?code=', listkeys(concat(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '/host/default/'),'2016-08-01').functionKeys.default)]"
+                    },
+                    "GitHubURL": {
+                        "value" : "[parameters('GitHubURL')]"
+                    },
+                    "GitHubBranch": {
+                        "value" : "[parameters('GitHubBranch')]"
+                    },
+                    "ExpireOn": {
+                        "value" : "[parameters('ExpireOn')]"
+                    },
+                    "OwnerName": {
+                        "value" : "[parameters('OwnerName')]"
+                    }
+
+                }
             }
         }
-    ]
+    ],
+    "outputs":{}
 }
