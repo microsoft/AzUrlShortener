@@ -8,6 +8,8 @@ namespace Cloud5mins.domain
         //public string Id { get; set; }
         public string Url { get; set; }
 
+        public string ShortUrl { get; set; }
+
         public int Clicks { get; set; }
 
         public ShortUrlEntity(){}

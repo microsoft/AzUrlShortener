@@ -32,6 +32,10 @@ namespace Cloud5mins.Function
             try
             {
                result.UrlList = await stgHelper.GetAllShortUrlEntities();
+               var host = req.RequestUri.GetLeftPart(UriPartial.Authority); 
+               foreach(ShortUrlEntity url in result.UrlList){
+                   url.ShortUrl = host + "/" + url.RowKey;
+               }
             }
             catch (Exception ex)
             {
