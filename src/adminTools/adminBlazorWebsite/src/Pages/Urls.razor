@@ -1,7 +1,9 @@
 @page "/Urls"
 @using adminBlazorWebsite.Data
 @inject UrlShortenerService UrlService
+@inject IJSRuntime JSRuntime;
 @attribute [Authorize(Roles = "admin")]
+
 
 @if (UrlList == null)
 {
@@ -16,7 +18,8 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>RowKey</th>
+                <th></th>
+                <th>Vanity</th>
                 <th>Url</th>
                 <th>Clicks</th>
             </tr>
@@ -25,7 +28,8 @@ else
             @foreach (var url in UrlList.UrlList)
             {
                 <tr>
-                    <td>@url.RowKey</td>
+                    <td><button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => CopyToClipboardAsync(url.ShortUrl))">Copy</button></td>
+                    <td><a href="@url.ShortUrl" target="blank">@url.RowKey</a></td>
                     <td>@url.Url</td>
                     <td>@url.Clicks</td>
                 </tr>
@@ -72,7 +76,6 @@ else
     </div>
 }
 
-
 @code
 {
     bool ShowPopup = false;
@@ -99,6 +102,14 @@ else
     {
         shortUrlRequest = new ShortUrlRequest();
         ShowPopup = true;
+    }
+
+
+
+    [Inject] public IJSRuntime JsRuntime { get; set; }
+    public async Task CopyToClipboardAsync(string url)
+    {
+        await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", url);
     }
 
 }
