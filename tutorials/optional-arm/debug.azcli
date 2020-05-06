@@ -1,0 +1,30 @@
+
+
+az group create -n c5mShortDemo -l eastus
+
+## validate with Parameter file
+az group deployment validate -g c5mShortDemo  --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.json"  --verbose 
+
+## deploy it
+az group deployment create  -g c5mShortDemo -n cloud5minsv1 --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.json"  --verbose 
+
+
+
+#debug adminBlazorWebsite
+
+az group deployment validate -g c5mShortDemo  --template-file "src/adminTools/adminBlazorWebsite/deployment/adminBlazorWebsite-deployAzure.json" --parameters "src/adminTools/adminBlazorWebsite/deployment/adminBlazorWebsite-deployAzure.params.json"  --verbose 
+
+
+az group deployment create  -g c5mShortDemo -n cloud5minsv1 --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.json"  --verbose 
+
+
+
+
+
+# Debuging fake ARM template
+## validate with Parameter file
+az group deployment validate -g c5mShortDemo  --template-file "deployment/debugARM.json"   --verbose 
+
+## deploy it
+az group deployment create  -g c5mShortDemo -n cloud5minsv1 --template-file "deployment/debugARM.json" --verbose 
+
