@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "baseName": {
+            "value": "ShortenerTools2"
+        },
+        "OwnerName": {
+            "value": "Frank"
+        },
+        "GitHubBranch": {
+            "value": "dev"
+        },
+        "defaultUrlRedirect": {
+            "value": "https://azure.com"
+        }
+    }
+}
