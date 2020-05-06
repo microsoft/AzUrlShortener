@@ -85,13 +85,23 @@ namespace Cloud5mins.domain
             return lstShortUrl;
         }
 
-        public  async Task<bool> IfShortUrlEntityExist(ShortUrlEntity row)
+
+        public async Task<bool> IfShortUrlEntityExist(ShortUrlEntity row)
         {
              ShortUrlEntity eShortUrl = await GetShortUrlEntity(row);
              return (eShortUrl != null);
         }
 
-        public  async Task<ShortUrlEntity> SaveShortUrlEntity(ShortUrlEntity newShortUrl)
+         public async Task<ShortUrlEntity> UpdateShortUrlEntity(ShortUrlEntity urlEntity)
+         {
+            ShortUrlEntity originalUrl = await GetShortUrlEntity(urlEntity);
+            originalUrl.Url =urlEntity.Url;
+
+            return await SaveShortUrlEntity(originalUrl);
+         }
+
+
+        public async Task<ShortUrlEntity> SaveShortUrlEntity(ShortUrlEntity newShortUrl)
         {
              TableOperation insOperation = TableOperation.InsertOrMerge(newShortUrl);
              TableResult result = await GetUrlsTable().ExecuteAsync(insOperation);
