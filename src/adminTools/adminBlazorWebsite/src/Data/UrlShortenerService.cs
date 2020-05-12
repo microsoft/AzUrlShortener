@@ -26,9 +26,24 @@ namespace adminBlazorWebsite.Data
             return config;
         }
 
+        private static string GetFunctionUrl(string functionName){
+            StringBuilder FuncUrl = new StringBuilder(GetConfiguration()["azFunctionUrl"]);
+            FuncUrl.Append("/api/");
+            FuncUrl.Append(functionName);
+
+            string code = GetConfiguration()["code"];
+            if(!string.IsNullOrWhiteSpace(code))
+            {
+                FuncUrl.Append("?code=");
+                FuncUrl.Append(code);
+            }
+            
+            return FuncUrl.ToString();
+        }
+
         public async Task<ShortUrlList> GetUrlList()
         {
-            var url = GetConfiguration()["AzureFunctionUrlListUrl"];
+            var url = GetFunctionUrl("UrlList");
 
             CancellationToken cancellationToken;
 
@@ -49,7 +64,7 @@ namespace adminBlazorWebsite.Data
 
         public async Task<ShortUrlList> CreateShortUrl(ShortUrlRequest shortUrlRequest)
         {
-            var url = GetConfiguration()["AzureFunctionUrlShortenerUrl"];
+            var url = GetFunctionUrl("UrlShortener");
 
             CancellationToken cancellationToken;
 
@@ -73,7 +88,7 @@ namespace adminBlazorWebsite.Data
 
         public async Task<ShortUrlEntity> UpdateShortUrl(ShortUrlEntity editedUrl)
         {
-            var url = GetConfiguration()["AzureFunction_UrlUpdate_Url"];
+            var url = GetFunctionUrl("UrlUpdate");
 
             CancellationToken cancellationToken;
 
