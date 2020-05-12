@@ -20,7 +20,7 @@
                 "description": "Select the frontend that will be deploy. Select 'none', if you don't want any. Frontend available: adminBlazorWebsite, none. "
             }
         },
-        "defaultUrlRedirect": {
+        "defaultRedirectUrl": {
             "defaultValue": "https://azure.com",
             "type": "string",
             "metadata": {
@@ -148,8 +148,8 @@
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('UrlsStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('UrlsStorageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
                         },
                         {
-                            "name": "defaultUrlRedirect",
-                            "value": "[parameters('defaultUrlRedirect')]"
+                            "name": "defaultRedirectUrl",
+                            "value": "[parameters('defaultRedirectUrl')]"
                         }
                     ]
                 },
