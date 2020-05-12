@@ -75,7 +75,7 @@
         "funcAppName": "[toLower(concat(parameters('baseName'), variables('suffix')))]",
         "funcStorageAccountName": "[tolower(concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),16)), variables('suffix'), 'stg'))]",
         "funcHhostingPlanName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), 'plan')]",
-        "insghtsAppName":"[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), '-meta')]",
+        "insightsAppName":"[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), '-meta')]",
         "functionProjectFolder": "src/shortenerTools",
         "UrlsStorageAccountName": "[concat('urldata', variables('suffix'), 'stg')]",
         "frontendInfo": {
@@ -98,7 +98,7 @@
                 "ExpireOn": "[parameters('ExpireOn')]"
             },
             "dependsOn": [
-                "[concat('microsoft.insights/components/', variables('insghtsAppName'))]",
+                "[concat('microsoft.insights/components/', variables('insightsAppName'))]",
                 "[concat('Microsoft.Web/serverfarms/', variables('funcHhostingPlanName'))]",
                 "[concat('Microsoft.Storage/storageAccounts/',variables('funcStorageAccountName'))]",
                 "[concat('Microsoft.Storage/storageAccounts/',variables('UrlsStorageAccountName'))]"
@@ -117,11 +117,11 @@
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                            "value": "[reference(concat('microsoft.insights/components/', variables('insghtsAppName')), '2015-05-01').InstrumentationKey]"
+                            "value": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').InstrumentationKey]"
                         },
                         {
                             "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            "value": "[reference(concat('microsoft.insights/components/', variables('insghtsAppName')), '2015-05-01').ConnectionString]"
+                            "value": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').ConnectionString]"
                         },
                         {
                             "name": "AzureWebJobsStorage",
@@ -195,7 +195,7 @@
         },
         {
             "apiVersion": "2015-05-01",
-            "name": "[variables('insghtsAppName')]",
+            "name": "[variables('insightsAppName')]",
             "type": "microsoft.insights/components",
             "location": "[resourceGroup().location]",
             "tags": {
@@ -262,14 +262,11 @@
                     "AdminPassword": {
                         "value" : "[parameters('frontend-AdminPassword')]"
                     },
-                    "AzureFunctionUrlListUrl": {
-                        "value" : "[concat('https://', reference(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '2018-02-01').hostNames[0], '/api/UrlList?code=', listkeys(concat(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '/host/default/'),'2016-08-01').functionKeys.default)]"
+                    "AzureFunctionUrl": {
+                        "value" : "[concat('https://', reference(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '2018-02-01').hostNames[0])]"
                     },
-                    "AzureFunctionUrlShortenerUrl": {
-                        "value" : "[concat('https://', reference(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '2018-02-01').hostNames[0], '/api/UrlShortener?code=', listkeys(concat(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '/host/default/'),'2016-08-01').functionKeys.default)]"
-                    },
-                    "AzureFunctionUrlUpdateUrl": {
-                        "value" : "[concat('https://', reference(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '2018-02-01').hostNames[0], '/api/UrlUpdate?code=', listkeys(concat(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '/host/default/'),'2016-08-01').functionKeys.default)]"
+                    "SecurityCode": {
+                        "value" : "[listkeys(concat(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '/host/default/'),'2016-08-01').functionKeys.default]"
                     },
                     "GitHubURL": {
                         "value" : "[parameters('GitHubURL')]"

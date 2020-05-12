@@ -21,24 +21,19 @@
                 "description": "Strong Password use to create the Administrator account"
             }
         },
-        "AzureFunctionUrlListUrl": {
+        "AzureFunctionUrl": {
            "type": "string",
            "metadata": {
-                "description": "URL of the Azure Function UrlList"
+                "description": "URL of the Azure Function (ex: https://....azurewebsites.net)"
             }
         },
-        "AzureFunctionUrlShortenerUrl": {
-           "type": "string",
-           "metadata": {
-                "description": "URL of the Azure Function UrlShortener"
+        "SecurityCode": {
+            "type": "string",
+            "minLength": 1,
+            "metadata": {
+                "description": "Security token for the Azure Function."
             }
-        },
-        "AzureFunctionUrlUpdateUrl": {
-           "type": "string",
-           "metadata": {
-                "description": "URL of the Azure Function UrlUpdate"
-            }
-        },
+        }
         "GitHubURL": {
             "type": "string",
             "defaultValue": "https://github.com/fboucher/AzUrlShortener.git",
@@ -93,16 +88,12 @@
                 "siteConfig": {
                     "appSettings": [
                         {
-                            "name": "AzureFunctionUrlListUrl",
-                            "value": "[parameters('AzureFunctionUrlListUrl')]"
+                            "name": "azFunctionUrl",
+                            "value": "[parameters('AzureFunctionUrl')]"
                         },
                         {
-                            "name": "AzureFunctionUrlShortenerUrl",
-                            "value": "[parameters('AzureFunctionUrlShortenerUrl')]"
-                        },
-                        {
-                            "name": "AzureFunctionUrlUpdateUrl",
-                            "value": "[parameters('AzureFunctionUrlUpdateUrl')]"
+                            "name": "code",
+                            "value": "[parameters('SecurityCode')]"
                         },
                         {
                             "name": "PROJECT",
