@@ -21,22 +21,16 @@
                 "description": "Strong Password use to create the Administrator account"
             }
         },
-        "AzureFunctionUrlListUrl": {
+        "AzureFunctionUrl": {
            "type": "string",
            "metadata": {
-                "description": "URL of the Azure Function UrlList"
+                "description": "URL of the Azure Function (ex: https://....azurewebsites.net)"
             }
         },
-        "AzureFunctionUrlShortenerUrl": {
-           "type": "string",
-           "metadata": {
-                "description": "URL of the Azure Function UrlShortener"
-            }
-        },
-        "AzureFunctionUrlUpdateUrl": {
-           "type": "string",
-           "metadata": {
-                "description": "URL of the Azure Function UrlUpdate"
+        "SecurityCode": {
+            "type": "string",
+            "metadata": {
+                "description": "Security token for the Azure Function."
             }
         },
         "GitHubURL": {
@@ -93,16 +87,12 @@
                 "siteConfig": {
                     "appSettings": [
                         {
-                            "name": "AzureFunctionUrlListUrl",
-                            "value": "[parameters('AzureFunctionUrlListUrl')]"
+                            "name": "azFunctionUrl",
+                            "value": "[parameters('AzureFunctionUrl')]"
                         },
                         {
-                            "name": "AzureFunctionUrlShortenerUrl",
-                            "value": "[parameters('AzureFunctionUrlShortenerUrl')]"
-                        },
-                        {
-                            "name": "AzureFunctionUrlUpdateUrl",
-                            "value": "[parameters('AzureFunctionUrlUpdateUrl')]"
+                            "name": "code",
+                            "value": "[parameters('SecurityCode')]"
                         },
                         {
                             "name": "PROJECT",
