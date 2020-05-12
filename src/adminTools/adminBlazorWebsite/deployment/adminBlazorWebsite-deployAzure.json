@@ -29,11 +29,10 @@
         },
         "SecurityCode": {
             "type": "string",
-            "minLength": 1,
             "metadata": {
                 "description": "Security token for the Azure Function."
             }
-        }
+        },
         "GitHubURL": {
             "type": "string",
             "defaultValue": "https://github.com/fboucher/AzUrlShortener.git",
