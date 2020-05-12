@@ -17,6 +17,9 @@
         "AzureFunctionUrlShortenerUrl": {
             "value": "http//"
         },
+        "AzureFunctionUrlUpdateUrl": {
+            "value": "http//"
+        },
         "OwnerName": {
             "value": "Frank"
         },

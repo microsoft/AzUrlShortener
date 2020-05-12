@@ -33,6 +33,12 @@
                 "description": "URL of the Azure Function UrlShortener"
             }
         },
+        "AzureFunctionUrlUpdateUrl": {
+           "type": "string",
+           "metadata": {
+                "description": "URL of the Azure Function UrlUpdate"
+            }
+        },
         "GitHubURL": {
             "type": "string",
             "defaultValue": "https://github.com/fboucher/AzUrlShortener.git",
@@ -93,6 +99,10 @@
                         {
                             "name": "AzureFunctionUrlShortenerUrl",
                             "value": "[parameters('AzureFunctionUrlShortenerUrl')]"
+                        },
+                        {
+                            "name": "AzureFunctionUrlUpdateUrl",
+                            "value": "[parameters('AzureFunctionUrlUpdateUrl')]"
                         },
                         {
                             "name": "PROJECT",

@@ -268,6 +268,9 @@
                     "AzureFunctionUrlShortenerUrl": {
                         "value" : "[concat('https://', reference(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '2018-02-01').hostNames[0], '/api/UrlShortener?code=', listkeys(concat(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '/host/default/'),'2016-08-01').functionKeys.default)]"
                     },
+                    "AzureFunctionUrlUpdateUrl": {
+                        "value" : "[concat('https://', reference(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '2018-02-01').hostNames[0], '/api/UrlUpdate?code=', listkeys(concat(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '/host/default/'),'2016-08-01').functionKeys.default)]"
+                    },
                     "GitHubURL": {
                         "value" : "[parameters('GitHubURL')]"
                     },
