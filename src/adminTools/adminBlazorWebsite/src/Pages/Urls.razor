@@ -22,6 +22,7 @@ else
                 <th>Vanity</th>
                 <th>Url</th>
                 <th>Clicks</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -32,6 +33,7 @@ else
                     <td><a href="@url.ShortUrl" target="blank">@url.RowKey</a></td>
                     <td>@url.Url</td>
                     <td>@url.Clicks</td>
+                    <td><button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => EditShortUrl(url))">Edit</button></td>
                 </tr>
             }
         </tbody>
@@ -45,7 +47,7 @@ else
 </p>
 }
 
-@if(ShowPopup)
+@if(ShowCreatePopup)
 {
     <div class="modal" tabindex="-1" style="display:block" role="dialog">
         <div class="modal-dialog">
@@ -76,20 +78,62 @@ else
     </div>
 }
 
+
+@if(ShowEditPopup)
+{
+    <div class="modal" tabindex="-1" style="display:block" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Edit Short Url</h3>
+                    <!-- Button to close the popup -->
+                    <button type="button" class="close"
+                            @onclick="ClosePopup">
+                        <span aria-hidden="true">X</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label>The Url to redirect</label>
+                    <input class="form-control" type="text"
+                                       placeholder="https://..."
+                                       @bind="editedUrl.Url" />
+                    <br />
+                    <button class="btn btn-primary"
+                            @onclick="SaveUpdatedShortUrl">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
 @code
 {
-    bool ShowPopup = false;
+    bool ShowCreatePopup = false;
+    bool ShowEditPopup = false;
     ShortUrlRequest shortUrlRequest = new ShortUrlRequest();
+    ShortUrlEntity editedUrl;
     ShortUrlList UrlList;
 
     void ClosePopup()
     {
-        ShowPopup = false;
+        ShowCreatePopup = false;
+        ShowEditPopup = false;
     }
     private async Task SaveShortUrl()
     {
-        ShowPopup = false;
+        ShowCreatePopup = false;
         await UrlService.CreateShortUrl(shortUrlRequest);
+        UrlList = await UrlService.GetUrlList();
+    }
+    
+    private async Task SaveUpdatedShortUrl()
+    {
+        ShowEditPopup = false;
+        await UrlService.UpdateShortUrl(editedUrl);
         UrlList = await UrlService.GetUrlList();
     }
     protected override async Task OnParametersSetAsync()
@@ -101,9 +145,16 @@ else
     void CreateShortUrl()
     {
         shortUrlRequest = new ShortUrlRequest();
-        ShowPopup = true;
+        ShowCreatePopup = true;
     }
 
+
+    [Authorize(Roles = "admin")]
+    void EditShortUrl(ShortUrlEntity urlEntity)
+    {
+        editedUrl = urlEntity;
+        ShowEditPopup = true;
+    }
 
 
     [Inject] public IJSRuntime JsRuntime { get; set; }

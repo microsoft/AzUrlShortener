@@ -71,6 +71,30 @@ namespace adminBlazorWebsite.Data
         }
 
 
+        public async Task<ShortUrlEntity> UpdateShortUrl(ShortUrlEntity editedUrl)
+        {
+            var url = GetConfiguration()["AzureFunction_UrlUpdate_Url"];
+
+            CancellationToken cancellationToken;
+
+            using (var client = new HttpClient())
+            using (var request = new HttpRequestMessage(HttpMethod.Post, url))
+            using (var httpContent = CreateHttpContent(editedUrl))
+            {
+                request.Content = httpContent;
+
+                using (var response = await client
+                    .SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken)
+                    .ConfigureAwait(false))
+                {
+
+                    var resultList = response.Content.ReadAsStringAsync().Result;
+                    return JsonConvert.DeserializeObject<ShortUrlEntity>(resultList);
+                }
+            }
+        }
+
+
         private static StringContent CreateHttpContent(object content)
         {
             StringContent httpContent = null;
