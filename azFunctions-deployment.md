@@ -56,7 +56,7 @@ You can learn more about it on [Using linked and nested templates when deploying
 
 [![Thumbnail of the YouTube video about the Nested ARM template deployment][Episode60_EN]](https://youtu.be/IePDTQk6Bz8)
 
-There also a blog post [Simplify your deployment with nested Azure Resource Manager (ARM) templates](http://www.frankysnotes.com/2020/05/simplify-your-deployment-with-nested.html)
+There also a **blog post**: [Simplify your deployment with nested Azure Resource Manager (ARM) templates](http://www.frankysnotes.com/2020/05/simplify-your-deployment-with-nested.html)
 
 If you are interested to see the ARM templates before-after you can go in the [Tutorial Section](tutorials/optional-arm/Howto.md)
 
