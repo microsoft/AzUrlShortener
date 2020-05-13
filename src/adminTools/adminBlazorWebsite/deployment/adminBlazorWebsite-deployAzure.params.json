@@ -11,14 +11,11 @@
         "AdminPassword": {
             "value": "Supernewt42!"
         },
-        "AzureFunctionUrlListUrl": {
+        "AzureFunctionUrl": {
             "value": "http//"
         },
-        "AzureFunctionUrlShortenerUrl": {
-            "value": "http//"
-        },
-        "AzureFunctionUrlUpdateUrl": {
-            "value": "http//"
+        "SecurityCode": {
+            "value": ""
         },
         "OwnerName": {
             "value": "Frank"
