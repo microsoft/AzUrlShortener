@@ -8,7 +8,7 @@ Input:
     }
 
 
-Ouput:
+Output:
     {
         "Url": "https://SOME_URL",
         "Clicks": 0,
