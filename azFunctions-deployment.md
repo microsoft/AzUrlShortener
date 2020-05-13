@@ -1,5 +1,7 @@
 # Deployment Details
 
+This page describes step by step how to deploy the Azure URL Shortener. To learn more  about how the deployment was built see the section [bellow](#how-the-deployment-works)
+
 ## Deployment with the `Deploy to Azure` Button
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/?WT.mc_id=urlshortener-github-frbouche#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFBoucher%2FAzUrlShortener%2Fmaster%2Fdeployment%2FazureDeploy.json)
@@ -33,10 +35,33 @@ Once all the resources are created you will end-up with:
 ![ArmResult][ArmResult]
 
 
+---
+
+
 ## Deploy using Azure CLI
 
 An alternative method to deploy is to use the Azure CLI command that you can find in the [debug.azcli](deployment/debug.azcli) file.
 
 
+---
+
+
+## How the Deployment works
+
+The deployment uses Azure Resource Manager (ARM) template, one for the Azure Function, and one for the frontend. 
+
+You can deploy each part individually by using the respective ARM template in the deployment folder or all together. To get that possible, the templates were nested. 
+
+You can learn more about it on [Using linked and nested templates when deploying Azure resources](https://c5m.ca/nestedARM) in the Microsoft documentation, watching this video where I explains how I built this deployment.
+
+[![Thumbnail of the YouTube video about the Nested ARM template deployment][Episode60_EN]](https://youtu.be/IePDTQk6Bz8)
+
+There also a **blog post**: [Simplify your deployment with nested Azure Resource Manager (ARM) templates](http://www.frankysnotes.com/2020/05/simplify-your-deployment-with-nested.html)
+
+If you are interested to see the ARM templates before-after you can go in the [Tutorial Section](tutorials/optional-arm/Howto.md)
+
+
+
 [createARM]: medias/createARM.png
 [ArmResult]: medias/ArmResult.png
+[Episode60_EN]: medias/Episode60_EN.png
