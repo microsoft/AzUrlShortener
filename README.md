@@ -32,9 +32,11 @@ A good Url Shortener wouldn't be completed without a custom domain name. To know
 ## How To Use It
 
 There is many different way to manage your Url Shortener, from a direct HTTP call to a fancy website. 
-[Here](src/adminTools/README.md), you will find the list of all available frontend with the instructions to deploy and use them.
+[See the complete list of admin frontends here](src/adminTools/README.md), with the instructions to deploy and use them. There is also instructions or [guidance](src/adminTools/README.md#how-to-add-a-new-frontend) if you would like to create a new one and collaborate to this project.
 
-[See the complete list of admin frontends here](src/adminTools/README.md)
+There is also a video that does a quick tour of the project.
+
+[![YouTube thumbnail of the Az URL Shortener quick tour video][ThumbnailYTAzUrlShortener_EN]](https://youtu.be/fzXy2D77WMM)
 
 
 ---
@@ -84,3 +86,4 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 
 [UrlShortener]: medias/UrlShortener_600.png
+[ThumbnailYTAzUrlShortener_EN]: medias/ThumbnailYTAzUrlShortener_EN.png
