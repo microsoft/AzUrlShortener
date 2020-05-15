@@ -6,10 +6,10 @@ Input:
         // [Required] The url you wish to have a short version for
         "url": "https://docs.microsoft.com/en-ca/azure/azure-functions/functions-create-your-first-function-visual-studio",
         
-        // Title of the page, or text description of your choice.
+        // [Optional] Title of the page, or text description of your choice.
         "title": "Quickstart: Create your first function in Azure using Visual Studio"
 
-        // the end of the URL. If nothing one will be generated for you.
+        // [Optional] the end of the URL. If nothing one will be generated for you.
         "vanity": "azFunc"
     }
 

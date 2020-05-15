@@ -36,6 +36,8 @@ namespace Cloud5mins.domain
             return string.Join(string.Empty, s.Reverse());
         }
 
-
+        public static string GetShortUrl(string host, string vanity){
+               return host + "/" + vanity;
+        }
     }
 }

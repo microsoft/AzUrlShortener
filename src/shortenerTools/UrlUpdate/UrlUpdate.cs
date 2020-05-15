@@ -2,8 +2,16 @@
 ```c#
 Input:
     {
+         // [Required]
         "PartitionKey": "d",
+
+         // [Required]
         "RowKey": "doc",
+
+        // [Optional] New Title for this URL, or text description of your choice.
+        "title": "Quickstart: Create your first function in Azure using Visual Studio"
+
+        // [Optional] New long Url where the the user will be redirect
         "Url": "https://SOME_URL"
     }
 
@@ -13,6 +21,7 @@ Output:
         "Url": "https://SOME_URL",
         "Clicks": 0,
         "PartitionKey": "d",
+        "title": "Quickstart: Create your first function in Azure using Visual Studio"
         "RowKey": "doc",
         "Timestamp": "0001-01-01T00:00:00+00:00",
         "ETag": "W/\"datetime'2020-05-06T14%3A33%3A51.2639969Z'\""
@@ -64,7 +73,10 @@ namespace Cloud5mins.Function
 
             try
             {
-               result = await stgHelper.UpdateShortUrlEntity(input);
+                result = await stgHelper.UpdateShortUrlEntity(input);
+                var host = req.RequestUri.GetLeftPart(UriPartial.Authority); 
+                result.ShortUrl = Utility.GetShortUrl(host, result.RowKey);
+
             }
             catch (Exception ex)
             {

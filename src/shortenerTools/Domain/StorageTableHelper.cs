@@ -95,7 +95,8 @@ namespace Cloud5mins.domain
          public async Task<ShortUrlEntity> UpdateShortUrlEntity(ShortUrlEntity urlEntity)
          {
             ShortUrlEntity originalUrl = await GetShortUrlEntity(urlEntity);
-            originalUrl.Url =urlEntity.Url;
+            originalUrl.Url = urlEntity.Url;
+            originalUrl.Title = urlEntity.Title;
 
             return await SaveShortUrlEntity(originalUrl);
          }
