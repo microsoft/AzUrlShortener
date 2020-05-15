@@ -55,7 +55,7 @@ If you are interested to learn more about what's under the hood, and get more de
 
 If you find a bug or would like to add a feature, check out those resources:
 
-- To see the current work in progress: [GLO boards](https://app.gitkraken.com/glo/board/XnI94exk8AARj-ph)
+- To see the current work in progress: [GLO boards 'kanban board'](https://app.gitkraken.com/glo/board/XnI94exk8AARj-ph) </br></br> [![AzUrlShortener Glo Board 'kanban board'][glo]](https://app.gitkraken.com/glo/board/XnI94exk8AARj-ph)
 
 Check out our [Code of Conduct](CODE_OF_CONDUCT.md) and [Contributing](CONTRIBUTING.md) docs. This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.  Contributions of any kind welcome!
 
@@ -87,3 +87,5 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 [UrlShortener]: medias/UrlShortener_600.png
 [ThumbnailYTAzUrlShortener_EN]: medias/ThumbnailYTAzUrlShortener_EN.png
+[glo]: medias/glo-board_screenshot.png
+
