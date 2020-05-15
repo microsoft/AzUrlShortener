@@ -20,6 +20,7 @@ else
             <tr>
                 <th></th>
                 <th>Vanity</th>
+                <th>Title</th>
                 <th>Url</th>
                 <th>Clicks</th>
                 <th></th>
@@ -31,7 +32,12 @@ else
                 <tr>
                     <td><button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => CopyToClipboardAsync(url.ShortUrl))">Copy</button></td>
                     <td><a href="@url.ShortUrl" target="blank">@url.RowKey</a></td>
-                    <td>@url.Url</td>
+                    <td>
+                        <span>@url.Title</span>
+                    </td>
+                    <td>
+                        <span title="@url.Url">@url.GetDisplayableUrl()</span>
+                    </td>
                     <td>@url.Clicks</td>
                     <td><button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => EditShortUrl(url))">Edit</button></td>
                 </tr>
@@ -61,9 +67,17 @@ else
                     </button>
                 </div>
                 <div class="modal-body">
+                    <label>Title</label>
+                    <input class="form-control" type="text"
+                                       placeholder="Title or description for this URL"
+                                       @bind="shortUrlRequest.Title" />
+                    <br />
+                    <label>The Url to redirect</label>
                     <input class="form-control" type="text"
                                        placeholder="The Url to redirect"
                                        @bind="shortUrlRequest.Url" />
+                    <br />
+                    <label>Vanity</label>
                     <input class="form-control" type="text"
                                        placeholder="Vanity or the 'End' part of the Url"
                                        @bind="shortUrlRequest.Vanity" />
@@ -93,6 +107,11 @@ else
                     </button>
                 </div>
                 <div class="modal-body">
+                    <label>Title</label>
+                    <input class="form-control" type="text"
+                                       placeholder="Title or description for this URL"
+                                       @bind="editedUrl.Title" />
+                    <br />
                     <label>The Url to redirect</label>
                     <input class="form-control" type="text"
                                        placeholder="https://..."

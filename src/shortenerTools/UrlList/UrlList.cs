@@ -1,3 +1,20 @@
+/*
+```c#
+Input:
+
+
+Output:
+    {
+        "Url": "https://SOME_URL",
+        "Clicks": 0,
+        "PartitionKey": "d",
+        "title": "Quickstart: Create your first function in Azure using Visual Studio"
+        "RowKey": "doc",
+        "Timestamp": "0001-01-01T00:00:00+00:00",
+        "ETag": "W/\"datetime'2020-05-06T14%3A33%3A51.2639969Z'\""
+    }
+*/
+
 using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
@@ -34,7 +51,7 @@ namespace Cloud5mins.Function
                result.UrlList = await stgHelper.GetAllShortUrlEntities();
                var host = req.RequestUri.GetLeftPart(UriPartial.Authority); 
                foreach(ShortUrlEntity url in result.UrlList){
-                   url.ShortUrl = host + "/" + url.RowKey;
+                   url.ShortUrl = Utility.GetShortUrl(host, url.RowKey);
                }
             }
             catch (Exception ex)

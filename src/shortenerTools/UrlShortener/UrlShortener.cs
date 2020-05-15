@@ -1,3 +1,25 @@
+/*
+```c#
+Input:
+
+    {
+        // [Required] The url you wish to have a short version for
+        "url": "https://docs.microsoft.com/en-ca/azure/azure-functions/functions-create-your-first-function-visual-studio",
+        
+        // [Optional] Title of the page, or text description of your choice.
+        "title": "Quickstart: Create your first function in Azure using Visual Studio"
+
+        // [Optional] the end of the URL. If nothing one will be generated for you.
+        "vanity": "azFunc"
+    }
+
+Output:
+    {
+        "ShortUrl": "http://c5m.ca/azFunc",
+        "LongUrl": "https://docs.microsoft.com/en-ca/azure/azure-functions/functions-create-your-first-function-visual-studio"
+    }
+*/
+
 using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
@@ -45,12 +67,13 @@ namespace Cloud5mins.Function
             {
                 string longUrl = input.Url.Trim();
                 string vanity = input.Vanity.Trim();
+                string title = input.Title.Trim();
                 
                 ShortUrlEntity newRow;
 
                 if(!string.IsNullOrEmpty(vanity))
                 {
-                    newRow = new ShortUrlEntity(longUrl, vanity);
+                    newRow = new ShortUrlEntity(longUrl, vanity, title);
                     if(await stgHelper.IfShortUrlEntityExist(newRow))
                     {
                         return req.CreateResponse(HttpStatusCode.Conflict, "This Short URL already exist.");
@@ -58,14 +81,14 @@ namespace Cloud5mins.Function
                 }
                 else
                 {
-                    newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, stgHelper));
+                    newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, stgHelper), title);
                 }
 
                 await stgHelper.SaveShortUrlEntity(newRow);
 
                 var host = req.RequestUri.GetLeftPart(UriPartial.Authority);
                 log.LogInformation($"-> host = {host}");
-                result = new ShortResponse(host, newRow.Url, newRow.RowKey);
+                result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
 
                 log.LogInformation("Short Url created.");
              }
