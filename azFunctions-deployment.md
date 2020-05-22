@@ -1,6 +1,6 @@
 # Deployment Details
 
-This page describes step by step how to deploy the Azure URL Shortener. To learn more  about how the deployment was built see the section [bellow](#how-the-deployment-works)
+This page describes step by step how to deploy the Azure URL Shortener. To learn more  about how the deployment was built see the section [below](#how-the-deployment-works)
 
 ## Deployment with the `Deploy to Azure` Button
 
