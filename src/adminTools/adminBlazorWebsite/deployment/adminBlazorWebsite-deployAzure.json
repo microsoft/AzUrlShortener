@@ -18,7 +18,7 @@
         "AdminPassword": {
            "type": "securestring",
            "metadata": {
-                "description": "Strong Password use to create the Administrator account"
+                "description": "Strong Password use to create the Administrator account. It MOST have: an uppercase character ,a lowercase character, a digit, a non-alphanumeric character, must be at least six (6) characters long."
             }
         },
         "AzureFunctionUrl": {
