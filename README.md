@@ -45,7 +45,7 @@ IF you are using the Admin Blazor Website, repeat the same operation but selecti
 
 ## How To Use It
 
-There is many different way to manage your Url Shortener, from a direct HTTP call to a fancy website. 
+There are many different ways to manage your Url Shortener, from a direct HTTP call to a fancy website. 
 [See the complete list of admin frontends here](src/adminTools/README.md), with the instructions to deploy and use them. There is also instructions or [guidance](src/adminTools/README.md#how-to-add-a-new-frontend) if you would like to create a new one and collaborate to this project.
 
 There is also a video that does a quick tour of the project.

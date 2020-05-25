@@ -20,7 +20,7 @@ This function return the statistic for a specific URL. You can call it directly 
 
 ```json
 {
-    "vanity": "docs",
+    "vanity": "docs"
 }
 ```
 
@@ -90,6 +90,7 @@ Example of of a body **without** vanity.
 ```json
 {
     "url": "https://docs.microsoft.com/en-ca/azure/azure-functions/functions-create-your-first-function-visual-studio",
+    "title": "MS Docs - Create first function",
     "vanity": ""
 }
 ```
@@ -99,6 +100,7 @@ Example of of a body **with** vanity.
 ```json
 {
     "url": "https://docs.microsoft.com/en-ca/azure/azure-functions/functions-create-your-first-function-visual-studio",
+    "title": "MS Docs - Create first function",
     "vanity": "azFunc"
 }
 ```
