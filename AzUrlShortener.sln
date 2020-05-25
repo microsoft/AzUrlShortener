@@ -7,6 +7,24 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "shortenerTools", "src\short
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "adminBlazorWebsite", "src\adminTools\adminBlazorWebsite\src\adminBlazorWebsite.csproj", "{C0F1FBEA-E94D-4D65-9DD4-FA3089547354}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{91EC9638-F1E4-4939-837B-206A6E94B7BD}"
+	ProjectSection(SolutionItems) = preProject
+		deployment\azureDeploy.json = deployment\azureDeploy.json
+		deployment\azureDeploy.params.json = deployment\azureDeploy.params.json
+		deployment\debug.azcli = deployment\debug.azcli
+		deployment\debugARM.json = deployment\debugARM.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{029E1EDF-80F2-40D5-9C76-4C5371D6AB94}"
+	ProjectSection(SolutionItems) = preProject
+		azFunctions-deployment.md = azFunctions-deployment.md
+		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
+		CONTRIBUTING.md = CONTRIBUTING.md
+		how-it-works.md = how-it-works.md
+		post-deployment-configuration.md = post-deployment-configuration.md
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
