@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <AzureFunctionsVersion>v3</AzureFunctionsVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.7" />
+    <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.6" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.0.2" />
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.7" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.4" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.2" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
@@ -16,9 +16,9 @@
     <None Update="proxies.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="local.settings.json">
+    <None  Update="local.settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-    </None>
+    </None >
   </ItemGroup>
 </Project>
