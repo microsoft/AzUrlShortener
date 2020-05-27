@@ -15,4 +15,4 @@ update_configs:
         - "fboucher"
     default_reviewers: 
         - "fboucher"
-    target_branch: "AZURL78-add-dependabot"
+    target_branch: "dev"
