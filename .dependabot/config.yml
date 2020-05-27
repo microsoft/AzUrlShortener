@@ -1,0 +1,18 @@
+version: 1
+update_configs:
+  - package_manager: "dotnet:nuget"
+    directory: "/src/shortenerTools"
+    update_schedule: "weekly"
+    default_assignees: 
+        - "fboucher"
+    default_reviewers: 
+        - "fboucher"
+    target_branch: "dev"
+  - package_manager: "dotnet:nuget"
+    directory: "/src/adminTools/adminBlazorWebsite/src"
+    update_schedule: "weekly"
+    default_assignees: 
+        - "fboucher"
+    default_reviewers: 
+        - "fboucher"
+    target_branch: "dev"
