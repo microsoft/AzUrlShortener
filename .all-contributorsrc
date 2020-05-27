@@ -37,6 +37,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "vnbaaij",
+      "name": "Vincent Baaij",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1761079?v=4",
+      "profile": "http://baaijte.net",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }
