@@ -14,30 +14,37 @@ namespace Cloud5mins.domain
 
         public int Clicks { get; set; }
 
+        public bool? IsArchived { get; set; }
+
         public ShortUrlEntity(){}
 
-        public ShortUrlEntity(string longUrl, string endUrl){
-            initialize(longUrl, endUrl, string.Empty);
+        public ShortUrlEntity(string longUrl, string endUrl)
+        {
+            Initialize(longUrl, endUrl, string.Empty);
         }
 
-        public ShortUrlEntity(string longUrl, string endUrl, string title){
-            initialize(longUrl, endUrl, title);
+        public ShortUrlEntity(string longUrl, string endUrl, string title)
+        {
+            Initialize(longUrl, endUrl, title);
         }
 
-        private void initialize(string longUrl, string endUrl, string title){
+        private void Initialize(string longUrl, string endUrl, string title)
+        {
             PartitionKey = endUrl.First().ToString();
             RowKey = endUrl;
             Url = longUrl;
             Title = title;
             Clicks = 0;
+            IsArchived = false;
         }
 
-        public static ShortUrlEntity GetEntity(string longUrl, string endUrl){
+        public static ShortUrlEntity GetEntity(string longUrl, string endUrl, string title){
             return new ShortUrlEntity
             {
                 PartitionKey = endUrl.First().ToString(),
                 RowKey = endUrl,
-                Url = longUrl
+                Url = longUrl,
+                Title = title
             };
         }
     }
