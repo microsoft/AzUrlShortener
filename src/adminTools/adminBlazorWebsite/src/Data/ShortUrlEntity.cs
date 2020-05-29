@@ -32,7 +32,7 @@ namespace  adminBlazorWebsite.Data
 
             var lenght = Url.ToString().Length;
             if (lenght >= 50){
-                return Url.Substring(1,50);
+                return string.Concat(Url.Substring(1,50), "...");
             }
             return Url;
         }
