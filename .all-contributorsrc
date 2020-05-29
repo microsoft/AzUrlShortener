@@ -28,6 +28,34 @@
         "code",
         "video"
       ]
+    },
+    {
+      "login": "AK0785",
+      "name": "AKER",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/40241010?v=4",
+      "profile": "https://github.com/AK0785",
+      "contributions": [
+        "ideas"
+      ]
+    },
+    {
+      "login": "vnbaaij",
+      "name": "Vincent Baaij",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1761079?v=4",
+      "profile": "http://baaijte.net",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "kmm7",
+      "name": "kmm7",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/13196402?v=4",
+      "profile": "https://github.com/kmm7",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
     }
   ]
 }
