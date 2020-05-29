@@ -109,6 +109,28 @@ namespace adminBlazorWebsite.Data
             }
         }
 
+        public async Task<ShortUrlEntity> ArchiveShortUrl(ShortUrlEntity archivedUrl) 
+        {
+            var url = GetFunctionUrl("UrlArchive");
+
+            CancellationToken cancellationToken;
+
+            using (var client = new HttpClient())
+            using (var request = new HttpRequestMessage(HttpMethod.Delete, url))
+            using (var httpContent = CreateHttpContent(archivedUrl))
+            {
+                request.Content = httpContent;
+
+                using (var response = await client
+                    .SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken)
+                    .ConfigureAwait(false))
+                {
+                    var resultList = response.Content.ReadAsStringAsync().Result;
+                    return JsonConvert.DeserializeObject<ShortUrlEntity>(resultList);
+                }
+            }
+        }
+
 
         private static StringContent CreateHttpContent(object content)
         {

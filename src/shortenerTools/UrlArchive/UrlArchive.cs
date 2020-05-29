@@ -1,18 +1,16 @@
-/*
+﻿/*
 ```c#
 Input:
-
-
-Output:
     {
-        "Url": "https://SOME_URL",
-        "Clicks": 0,
+         // [Required]
         "PartitionKey": "d",
-        "title": "Quickstart: Create your first function in Azure using Visual Studio"
+
+         // [Required]
         "RowKey": "doc",
-        "Timestamp": "0001-01-01T00:00:00+00:00",
-        "ETag": "W/\"datetime'2020-05-06T14%3A33%3A51.2639969Z'\""
+
     }
+
+
 */
 
 using System;
@@ -24,37 +22,43 @@ using System.Net;
 using System.Net.Http;
 using Cloud5mins.domain;
 using Microsoft.Extensions.Configuration;
-using System.Linq;
 
 namespace Cloud5mins.Function
 {
-    public static class UrlList
+    public static class UrlArchive
     {
-        [FunctionName("UrlList")]
+        [FunctionName("UrlArchive")]
         public static async Task<HttpResponseMessage> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequestMessage req, 
-        ILogger log, 
+        [HttpTrigger(AuthorizationLevel.Function, "delete", Route = null)]HttpRequestMessage req,
+        ILogger log,
         ExecutionContext context)
         {
             log.LogInformation($"C# HTTP trigger function processed this request: {req}");
 
-            var result = new ListResponse();
+            // Validation of the inputs
+            if (req == null)
+            {
+                return req.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            ShortUrlEntity input = await req.Content.ReadAsAsync<ShortUrlEntity>();
+            if (input == null)
+            {
+                return req.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            ShortUrlEntity result;
             var config = new ConfigurationBuilder()
                 .SetBasePath(context.FunctionAppDirectory)
                 .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
 
-            StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]); 
+            StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
 
             try
             {
-               result.UrlList = await stgHelper.GetAllShortUrlEntities();
-                result.UrlList = result.UrlList.Where(p => !(p.IsArchived ?? false)).ToList();
-               var host = req.RequestUri.GetLeftPart(UriPartial.Authority); 
-               foreach(ShortUrlEntity url in result.UrlList){
-                   url.ShortUrl = Utility.GetShortUrl(host, url.RowKey);
-               }
+                result = await stgHelper.ArchiveShortUrlEntity(input);
             }
             catch (Exception ex)
             {
@@ -62,7 +66,7 @@ namespace Cloud5mins.Function
                 return req.CreateResponse(HttpStatusCode.BadRequest, ex);
             }
 
-            return req.CreateResponse(HttpStatusCode.OK, result);
+            return req.CreateResponse(HttpStatusCode.OK);
         }
     }
 }
