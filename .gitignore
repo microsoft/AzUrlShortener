@@ -272,3 +272,7 @@ __pycache__/
 src/adminTools/adminBlazorWebsite/appsettings.Development.json
 
 src/adminTools/adminBlazorWebsite/src/appsettings.Development.json
+
+src/shortenerTools/.vscode/settings.json
+
+.vscode/settings.json
