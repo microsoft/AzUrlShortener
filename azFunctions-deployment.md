@@ -17,10 +17,15 @@ This will open the Azure Portal (portal.azure.com) in your subscription and crea
 - **Default Url Redirect**: Default URL use when the key pass by the user is not found.
 - **GitHub URL and Branch**: Keep the default if you when to deploy from Frank's master repo. 
 
-#### Setting for adminBlazorWebsite
+#### Setting for adminBlazorWebsite (Required only if frontend = adminBlazorWebsite)
 
-- **Frontend-Admin E Mail** : (Required only if frontend = adminBlazorWebsite) The EMail use to connect into the admin Blazor Website.
-- **Frontend-Admin Password** : (Required only if frontend = adminBlazorWebsite) Password use to connect into the admin Blazor Website. It MOST by strong Uppercase, lowercase, numbers, and special characters.
+- **Frontend-Admin E Mail**: The EMail use to connect into the admin Blazor Website.
+- **Frontend-Admin Password**: Password use to connect into the admin Blazor Website. It **_MOST_** have:
+  - an uppercase character
+  - a lowercase character
+  - a digit
+  - a non-alphanumeric character 
+  - _must be at least six characters long_
 
 
 - **Expire On and Owner Name**: Those value are for tags. They **won't affect** in any cases your deployment. I use it in another project ([AzSubscriptionCleaner](https://github.com/FBoucher/AzSubscriptionCleaner)) to clean my subscription; without this project it's just information.

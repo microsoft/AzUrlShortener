@@ -26,6 +26,20 @@ To have all details and alternative deployment refer to the [Deployment Details]
 A good Url Shortener wouldn't be completed without a custom domain name. To know how to add it and other useful post-deployment configurations refer to the [post-deployment-configuration](post-deployment-configuration.md) page.
 
 
+### How to Update / Upgrade
+
+You deployed the Azure Url Shortener and it's now running in your Azure Subscription, but you would like to have the new feature(s). Updating your current version is in fact really simple.  
+
+#### Update the Azure Functions
+
+Navigate to the Azure portal (azure.portal.com) and select the Azure Function instance, for this project.
+
+From the left panel, click on the **Deployment Center** (1), then the **Sync** button(2). This will start a synchronization between GitHub and the App Service (aka Azure Function) local Git. 
+
+![Steps to update the Azure Function doing a Git Sync][AzFunctionGitSync]
+
+IF you are using the Admin Blazor Website, repeat the same operation but selecting the App Service with the name starting by "adm".
+
 ---
 
 
@@ -85,7 +99,9 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 > This project was inspire by a project created by [Jeremy Likness](https://github.com/JeremyLikness) that you can find here [jlik.me](https://github.com/JeremyLikness/jlik.me).
 
 
-[UrlShortener]: medias/UrlShortener_600.png
-[ThumbnailYTAzUrlShortener_EN]: medias/ThumbnailYTAzUrlShortener_EN.png
-[glo]: medias/glo-board_screenshot.png
+[UrlShortener]: https://github.com/FBoucher/AzUrlShortener/raw/master/medias/UrlShortener_600.png
+[ThumbnailYTAzUrlShortener_EN]: https://github.com/FBoucher/AzUrlShortener/raw/master/medias/ThumbnailYTAzUrlShortener_EN.png
+[glo]: https://github.com/FBoucher/AzUrlShortener/raw/master/medias/glo-board_screenshot.png
+[AzFunctionGitSync]: https://github.com/FBoucher/AzUrlShortener/raw/master/medias/AzFunctionGitSync.png
+
 

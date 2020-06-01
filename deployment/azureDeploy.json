@@ -66,7 +66,7 @@
            "type": "securestring",
            "defaultValue": "",
            "metadata": {
-                "description": "(Required only if frontend = adminBlazorWebsite) Password use to connect into the admin Blazor Website."
+                "description": "(Required only if frontend = adminBlazorWebsite) Password use to connect into the admin Blazor Website. It MOST have: an uppercase character,a lowercase character, a digit, a non-alphanumeric character, must be at least six (6) characters long."
             }
         }
     },
