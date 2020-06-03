@@ -88,6 +88,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/AK0785"><img src="https://avatars1.githubusercontent.com/u/40241010?v=4" width="100px;" alt=""/><br /><sub><b>AKER</b></sub></a><br /><a href="#ideas-AK0785" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="http://baaijte.net"><img src="https://avatars3.githubusercontent.com/u/1761079?v=4" width="100px;" alt=""/><br /><sub><b>Vincent Baaij</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/commits?author=vnbaaij" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/kmm7"><img src="https://avatars3.githubusercontent.com/u/13196402?v=4" width="100px;" alt=""/><br /><sub><b>kmm7</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/commits?author=kmm7" title="Code">💻</a> <a href="#ideas-kmm7" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/fs366e2spm"><img src="https://avatars2.githubusercontent.com/u/52791126?v=4" width="100px;" alt=""/><br /><sub><b>fs366e2spm</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/issues?q=author%3Afs366e2spm" title="Bug reports">🐛</a> <a href="#ideas-fs366e2spm" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
