@@ -53,7 +53,13 @@ namespace Cloud5mins.Function
             {
                 return req.CreateResponse(HttpStatusCode.NotFound);
             }
-           
+
+            // If the Url parameter only contains whitespaces or is empty return with BadRequest.
+            if (string.IsNullOrWhiteSpace(input.Url))
+            {
+                return req.CreateErrorResponse(HttpStatusCode.BadRequest, "The url parameter can not be empty.");
+            }
+
             var result = new ShortResponse();
             var config = new ConfigurationBuilder()
                 .SetBasePath(context.FunctionAppDirectory)
