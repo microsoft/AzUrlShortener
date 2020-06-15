@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace  adminBlazorWebsite.Data
@@ -10,6 +11,8 @@ namespace  adminBlazorWebsite.Data
 
         public string Title { get; set; }
 
+        [Required]
+        [Url]
         public string Url { get; set; }
 
         public string ShortUrl { get; set; }
