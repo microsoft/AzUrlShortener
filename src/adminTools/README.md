@@ -27,10 +27,10 @@ A simple website that implement the basic functionalities. You can list all URLs
 More details [here](adminBlazorWebsite/README.md).
 
 
-### 3- [TinyBlazorAdmin Website](https://github.com/FBoucher/TinyBlazorAdmin/README.md)
+### 3- [TinyBlazorAdmin Website](https://github.com/FBoucher/TinyBlazorAdmin)
 Admin tools for Azure Url Shortener using Blazor Single Page Application (webassembly).
 
-More details will come for sure... [here](TinyBlazorAdmin/README.md).
+More details [here](.../TinyBlazorAdmin).
 
 
 ### 4- [M365 SharePoint List](SharePointList/README.md)
