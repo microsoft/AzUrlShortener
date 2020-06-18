@@ -17,6 +17,17 @@ To deploy YOUR version of **Azure Url Shortener** to Azure and make sure you don
 ## How to use it
 
 ### Create a SharePoint list
+Goto https://office.com and login with your M365 account then click on SharePoint
+![SharePoint on Office.com](medias/Office_com_SharePoint.jpg)
+
+Assuming you have the required permission to create a new Site, click here via **Create site**
+![Create Team Site](medias/Create_TeamSite.jpg) or ask your admin to create a site for you (https://docs.microsoft.com/en-us/sharepoint/create-site-collection).
+
+![UrlShortenerUI site](medias/UrlShortenerUI_site.jpg)
+
+> **Note**: Technically a new site is not required, the UI list can be added any existing (modern) SharePoint site you have permission to.
+
+
 
 Once you are in the website, first go into the **Manage Urls** section by clicking the option in the left menu. Than click the **Add New Url** button.
 
