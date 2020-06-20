@@ -74,8 +74,8 @@ namespace Cloud5mins.Function
             try
             {
                 string longUrl = input.Url.Trim();
-                string vanity = input.Vanity.Trim();
-                string title = input.Title.Trim();
+                string vanity = string.IsNullOrWhiteSpace(input.Vanity) ? "" : input.Vanity.Trim();
+                string title = string.IsNullOrWhiteSpace(input.Title) ? "" : input.Title.Trim();
 
                 ShortUrlEntity newRow;
 
