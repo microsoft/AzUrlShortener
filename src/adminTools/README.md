@@ -27,6 +27,22 @@ A simple website that implement the basic functionalities. You can list all URLs
 More details [here](adminBlazorWebsite/README.md).
 
 
+### 3- [TinyBlazorAdmin Website](https://github.com/FBoucher/TinyBlazorAdmin)
+Admin tools for Azure Url Shortener using Blazor Single Page Application (webassembly).
+
+More details [here](https://github.com/FBoucher/TinyBlazorAdmin).
+
+
+### 4- [PowerAutomate Flow](PowerAutomateFlow/README.md)
+Very simple PowerAutomate Flows (premium license required) to call the Azure Functions  
+More details [here](PowerAutomateFlow/README.md).
+
+
+### 5- [M365 SharePoint List](SharePointList/README.md) => Coming
+A simple SharePoint list as Admin UI to create and manage AzureShortener Urls. PowerAutomate Flows call the AzureFunction URLs to create, edit or delete (archive) the AzUrlShortener Urls.
+
+More details [here](SharePointList/README.md).
+
 ---
 
 ## How to add a new frontend
