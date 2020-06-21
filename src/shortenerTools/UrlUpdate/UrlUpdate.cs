@@ -62,6 +62,12 @@ namespace Cloud5mins.Function
                 return req.CreateResponse(HttpStatusCode.NotFound);
             }
 
+            // Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
+            if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
+            {
+                return req.CreateErrorResponse(HttpStatusCode.BadRequest, $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
+            }
+
             ShortUrlEntity result;
             var config = new ConfigurationBuilder()
                 .SetBasePath(context.FunctionAppDirectory)
