@@ -91,6 +91,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/fs366e2spm"><img src="https://avatars2.githubusercontent.com/u/52791126?v=4" width="100px;" alt=""/><br /><sub><b>fs366e2spm</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/issues?q=author%3Afs366e2spm" title="Bug reports">🐛</a> <a href="#ideas-fs366e2spm" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/Hedlund01"><img src="https://avatars1.githubusercontent.com/u/48281171?v=4" width="100px;" alt=""/><br /><sub><b>Hugo Hedlund</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/commits?author=Hedlund01" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/thefisk"><img src="https://avatars2.githubusercontent.com/u/39799908?v=4" width="100px;" alt=""/><br /><sub><b>Nathan Fisk</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/commits?author=thefisk" title="Documentation">📖</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-enable -->
