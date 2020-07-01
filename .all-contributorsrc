@@ -75,6 +75,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "thefisk",
+      "name": "Nathan Fisk",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/39799908?v=4",
+      "profile": "https://github.com/thefisk",
+      "contributions": [
+        "doc"
+      ]
     }
   ]
 }
