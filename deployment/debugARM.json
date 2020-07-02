@@ -15,7 +15,7 @@
     "variables": {
         "frontendInfo": {
             "adminBlazorWebsite": { 
-                "armTemplateUrl": "https://raw.githubusercontent.com/FBoucher/AzUrlShortener/master/src/adminTools/adminBlazorWebsite/deployment/adminBlazorWebsite-deployAzure.json"
+                "armTemplateUrl": "https://raw.githubusercontent.com/FBoucher/AzUrlShortener/main/src/adminTools/adminBlazorWebsite/deployment/adminBlazorWebsite-deployAzure.json"
             }
         }
     },

@@ -4,7 +4,7 @@ This page describes step by step how to deploy the Azure URL Shortener. To learn
 
 ## Deployment with the `Deploy to Azure` Button
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/?WT.mc_id=urlshortener-github-frbouche#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFBoucher%2FAzUrlShortener%2Fmaster%2Fdeployment%2FazureDeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/?WT.mc_id=urlshortener-github-frbouche#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFBoucher%2FAzUrlShortener%2Fmain%2Fdeployment%2FazureDeploy.json)
 
 This will open the Azure Portal (portal.azure.com) in your subscription and create the required resources.
 
@@ -15,7 +15,7 @@ This will open the Azure Portal (portal.azure.com) in your subscription and crea
 - **Base Name**: This is how you would like to named your resources. Because some names need to be globally unique, the deployment will generate a suffix and append it to the end of your Base name.
 - **Frontend**: Select the frontend that will be deploy. Select 'none', if you don't want any. Frontend available: `adminBlazorWebsite`, `none`. 
 - **Default Url Redirect**: Default URL use when the key pass by the user is not found.
-- **GitHub URL and Branch**: Keep the default if you when to deploy from Frank's master repo. 
+- **GitHub URL and Branch**: Keep the default if you when to deploy from Frank's main repo. 
 
 #### Setting for adminBlazorWebsite (Required only if frontend = adminBlazorWebsite)
 
