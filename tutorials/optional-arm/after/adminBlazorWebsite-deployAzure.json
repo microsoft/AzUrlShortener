@@ -42,9 +42,9 @@
         },
         "GitHubBranch": {
             "type": "string",
-            "defaultValue": "master",
+            "defaultValue": "main",
             "metadata": {
-                "description": "Name of the branch to use when deploying (Default = master)."
+                "description": "Name of the branch to use when deploying (Default = main)."
             }
         },
         "ExpireOn":{
