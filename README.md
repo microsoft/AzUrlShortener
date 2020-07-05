@@ -12,6 +12,13 @@ A simple and easy to use and to deploy budget-friendly Url Shortener for everyon
 
 > If you don't own an Azure subscription already, you can create your **free** account today. It comes with 200$ credit, so you can experience almost everything without spending a dime. [Create your free Azure account today](https://azure.microsoft.com/en-us/free?WT.mc_id=azurlshortener-github-frbouche)
 
+Features:
+
+- 1-Click deployment.
+- Create Edit and Delete short URL.
+- Keep Statistics of your clicks.
+- Budget-friendly and 100% open-source.
+
 
 ## How To Deploy
 
@@ -60,6 +67,21 @@ There is also a video that does a quick tour of the project.
 
 If you are interested to learn more about what's under the hood, and get more details on each Azure Function, read the [How it works](how-it-works.md) page.
 
+
+---
+
+
+## What's Next?
+
+We are working on the **version 1.0** (ETA Summer 2020). This version will:
+
+- Use Azure Active Directory (AAD)
+- Client side website (more budget friendly) see GitHub project: [TinyBlazorAdmin](https://github.com/FBoucher/TinyBlazorAdmin) for more details.
+
+Optional (if not then soon after)
+
+- Statistics
+- Better Grid to display the URL
 
 ---
 
