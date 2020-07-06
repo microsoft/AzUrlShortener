@@ -84,6 +84,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "alsmyr",
+      "name": "Erik Alsmyr",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3719489?v=4",
+      "profile": "http://www.lexplore.com",
+      "contributions": [
+        "bug",
+        "doc"
+      ]
     }
   ]
 }
