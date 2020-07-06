@@ -94,6 +94,15 @@
         "bug",
         "doc"
       ]
+    },
+    {
+      "login": "jawn",
+      "name": "Bernard Vander Beken",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1705112?v=4",
+      "profile": "https://jawn.net",
+      "contributions": [
+        "doc"
+      ]
     }
   ]
 }
