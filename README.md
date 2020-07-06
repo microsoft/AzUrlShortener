@@ -115,6 +115,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/thefisk"><img src="https://avatars2.githubusercontent.com/u/39799908?v=4" width="100px;" alt=""/><br /><sub><b>Nathan Fisk</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/commits?author=thefisk" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://www.lexplore.com"><img src="https://avatars0.githubusercontent.com/u/3719489?v=4" width="100px;" alt=""/><br /><sub><b>Erik Alsmyr</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/issues?q=author%3Aalsmyr" title="Bug reports">🐛</a> <a href="https://github.com/FBoucher/AzUrlShortener/commits?author=alsmyr" title="Documentation">📖</a></td>
   </tr>
 </table>
 
