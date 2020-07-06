@@ -10,7 +10,7 @@ With Postman, you will need to create a request for each functions. Here some re
 
 - Set the request to POST.
 - Add a header: Content-Type = application/json
-- Use the URL **WITH** the security `Code` if the function as one. ([Read here](https://github.com/FBoucher/AzUrlShortener/blob/feature/docs/post-deployment-configuration.md#how-to-get-the-azure-function-urls) to learn how to get the URLs )
+- Use the URL **WITH** the security `Code` if the function as one. ([Read here](https://github.com/FBoucher/AzUrlShortener/blob/main/post-deployment-configuration.md#how-to-get-the-azure-function-urls) to learn how to get the URLs )
 
 ### 1- Create a short Url
 
