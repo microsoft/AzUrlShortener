@@ -21,7 +21,7 @@ For that goto your Azure Function App Service and copy the Url for the **UrlShor
 ![Copy Azure Function Url](medias/GetAzureFunctionURL2.jpg)
 
 When you run the Flow and you have set the correct URL to the Azure Function your new ShortUrl is created and returned in the HTTP call:
-![CResult new created ShortUrl](medias/Result_CreateShortUrl.jpg)
+![Result new created ShortUrl](medias/Result_CreateShortUrl.jpg)
 
 
 ### Flow 2 - Get all URLs
