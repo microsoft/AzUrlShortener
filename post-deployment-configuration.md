@@ -15,7 +15,7 @@ To find the URLs of you functions go to the Azure Portal (portal.azure.com), and
 
 ![getURL][getURL]
 
-**For Each Function**, expend the Functions section from the left menu, and click on the Function **name** ex: UrlRedirect (1). Then click on the **</> Get function URL** (2) button.  
+**For Each Function**, expand the Functions section from the left menu, and click on the Function **name** ex: UrlRedirect (1). Then click on the **</> Get function URL** (2) button.  
 
 > **Note:** You will notice a `code` at the end of some functions, it's **IMPORTANT** to keep that code with your URL and to keep it secret. This code is your security token. If your keys get compromised, or if you want to recycle them, it's possible from the the Azure portal in the Azure Function blade click on Platform features | All settings | App Keys.
 

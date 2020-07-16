@@ -4,11 +4,11 @@
 
 To deploy YOUR version of **Azure Url Shortener Admin Blazor WebSite** to Azure, you just need to click on the "Deploy to Azure" button.
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/?WT.mc_id=urlshortener-github-frbouche#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFBoucher%2FAzUrlShortener%2Fmaster%2Fsrc%2FadminTools%2FadminBlazorWebsite%2Fdeployment%2FadminBlazorWebsite-deployAzure.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/?WT.mc_id=urlshortener-github-frbouche#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFBoucher%2FAzUrlShortener%2Fmain%2Fsrc%2FadminTools%2FadminBlazorWebsite%2Fdeployment%2FadminBlazorWebsite-deployAzure.json)
 
 > **Note**: this is now done automatically during the Azure deployment.
 >
-> Once it's deployed, you will need to add the URLs of the Azure Function in the configuration of the website. You can use this page to know [How to get the Azure Function URLs](https://github.com/FBoucher/AzUrlShortener/blob/master/post-deployment-configuration.md#how-to-get-the-azure-function-urls). 
+> Once it's deployed, you will need to add the URLs of the Azure Function in the configuration of the website. You can use this page to know [How to get the Azure Function URLs](https://github.com/FBoucher/AzUrlShortener/blob/main/post-deployment-configuration.md#how-to-get-the-azure-function-urls). 
 > 
 > To update the website configuration, go to the Azure Portal [portal.azure.com](portal.azure.com). Find the website you just deployed, and click on it. From the left menu, select *Configuration*. Update the value of the config named: `AzureFunctionUrlListUrl` and `AzureFunctionUrlShortenerUrl`.
 > 

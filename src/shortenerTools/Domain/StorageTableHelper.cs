@@ -96,10 +96,18 @@ namespace Cloud5mins.domain
          {
             ShortUrlEntity originalUrl = await GetShortUrlEntity(urlEntity);
             originalUrl.Url = urlEntity.Url;
-            originalUrl.Title = urlEntity.Title;
+            originalUrl.Title = urlEntity.Title;            
 
             return await SaveShortUrlEntity(originalUrl);
          }
+
+        public async Task<ShortUrlEntity> ArchiveShortUrlEntity(ShortUrlEntity urlEntity)
+        {
+            ShortUrlEntity originalUrl = await GetShortUrlEntity(urlEntity);
+            originalUrl.IsArchived = true;
+
+            return await SaveShortUrlEntity(originalUrl);
+        }
 
 
         public async Task<ShortUrlEntity> SaveShortUrlEntity(ShortUrlEntity newShortUrl)
