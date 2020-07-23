@@ -116,7 +116,7 @@ namespace adminBlazorWebsite.Data
             CancellationToken cancellationToken;
 
             using (var client = new HttpClient())
-            using (var request = new HttpRequestMessage(HttpMethod.Delete, url))
+            using (var request = new HttpRequestMessage(HttpMethod.Post, url))
             using (var httpContent = CreateHttpContent(archivedUrl))
             {
                 request.Content = httpContent;
