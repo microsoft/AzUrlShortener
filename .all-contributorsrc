@@ -84,6 +84,34 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "alsmyr",
+      "name": "Erik Alsmyr",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3719489?v=4",
+      "profile": "http://www.lexplore.com",
+      "contributions": [
+        "bug",
+        "doc"
+      ]
+    },
+    {
+      "login": "jawn",
+      "name": "Bernard Vander Beken",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1705112?v=4",
+      "profile": "https://jawn.net",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "IronManion",
+      "name": "IronManion",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/36028632?v=4",
+      "profile": "https://github.com/IronManion",
+      "contributions": [
+        "doc"
+      ]
     }
   ]
 }
