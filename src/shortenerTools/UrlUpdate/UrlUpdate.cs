@@ -62,6 +62,13 @@ namespace Cloud5mins.Function
                 return req.CreateResponse(HttpStatusCode.NotFound);
             }
 
+
+            // If the Url parameter only contains whitespaces or is empty return with BadRequest.
+            if (string.IsNullOrWhiteSpace(input.Url))
+            {
+                return req.CreateErrorResponse(HttpStatusCode.BadRequest, "The url parameter can not be empty.");
+            }
+
             // Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
             if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
             {
