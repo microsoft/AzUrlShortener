@@ -29,7 +29,7 @@ namespace Cloud5mins.Function
     {
         [FunctionName("UrlArchive")]
         public static async Task<HttpResponseMessage> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "delete", Route = null)]HttpRequestMessage req,
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequestMessage req,
         ILogger log,
         ExecutionContext context)
         {
@@ -66,7 +66,7 @@ namespace Cloud5mins.Function
                 return req.CreateResponse(HttpStatusCode.BadRequest, ex);
             }
 
-            return req.CreateResponse(HttpStatusCode.OK);
+            return req.CreateResponse(HttpStatusCode.OK, result);
         }
     }
 }
