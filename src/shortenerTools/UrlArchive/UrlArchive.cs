@@ -34,29 +34,44 @@ using System.Net;
 using System.Net.Http;
 using Cloud5mins.domain;
 using Microsoft.Extensions.Configuration;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace Cloud5mins.Function
 {
     public static class UrlArchive
     {
         [FunctionName("UrlArchive")]
-        public static async Task<HttpResponseMessage> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequestMessage req,
+        public static async Task<IActionResult> Run(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]HttpRequest req,
         ILogger log,
-        ExecutionContext context)
+        ExecutionContext context,
+        ClaimsPrincipal principal)
         {
             log.LogInformation($"C# HTTP trigger function processed this request: {req}");
+            
+            string userId = string.Empty;
+            var invalidRequest = Utility.CatchUnauthorize(principal, log);
+            if (invalidRequest != null)
+            {
+                return invalidRequest;
+            }
+            else
+            {
+                userId = principal.FindFirst(ClaimTypes.NameIdentifier).Value;
+            }
 
             // Validation of the inputs
             if (req == null)
             {
-                return req.CreateResponse(HttpStatusCode.NotFound);
+                return new BadRequestObjectResult(new {StatusCode =  HttpStatusCode.NotFound});
             }
 
             ShortUrlEntity input = await req.Content.ReadAsAsync<ShortUrlEntity>();
             if (input == null)
             {
-                return req.CreateResponse(HttpStatusCode.NotFound);
+                return new BadRequestObjectResult(new {StatusCode =  HttpStatusCode.NotFound});
             }
 
             ShortUrlEntity result;
@@ -75,10 +90,14 @@ namespace Cloud5mins.Function
             catch (Exception ex)
             {
                 log.LogError(ex, "An unexpected error was encountered.");
-                return req.CreateResponse(HttpStatusCode.BadRequest, ex);
+                return new BadRequestObjectResult(new
+                {
+                    message = ex.Message,
+                    StatusCode =  HttpStatusCode.BadRequest
+                });
             }
 
-            return req.CreateResponse(HttpStatusCode.OK, result);
+            return new OkObjectResult(result);
         }
     }
 }
