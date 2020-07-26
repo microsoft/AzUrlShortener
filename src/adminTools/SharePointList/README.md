@@ -52,10 +52,10 @@ Our new list is created and contains already a first "Title" column. You can cre
 
 
 **Automated way - via Flow (recommended way)**  
-You can import a flow, which creates a site and the list with the required columns automatically for you.
+You can import a flow, which creates a site (SharePoint SiteCollection) and the list with the required columns automatically for you.
 
 Goto: https://flow.microsoft.com  
-Then import the Flow: [Download and import Flow](src/[AzUrlShortener]-ProvisionSharePointsitewithlistorlistonly_20200716223631.zip)
+Then import the Flow: [Download and import Flow](deployment/AzUrlShortener-ProvisionSharePointsitewithlistorlistonly_20200726183707.zip)
 ![Import Flow to create site and list](medias/Import_PowerAutomate_Flow.jpg)
 
 Select the new imported Flow, enable (Turn on) and then run it:  
@@ -77,8 +77,51 @@ The values to create a new Site and/or should be more or less self explaining. N
 ![Run Flow](medias/RunFlow_to_create_site_and_or_list.jpg) 
 
 
+**Flow - Create new ShortURL**  
+Yupee - you provisioned a site and a list called UrlShortener.
+So you now need to import the Flows which connect to this list. After that whenever a new item is created or modified the Flow runs and creates, updates or archives a ShortUrl.
+
+Import now the Flow as you did it before to create a new ShortUrl:  
+Import the Flow: [Download and import CreateNewShortURL Flow](deployment/AzUrlShortener-CreatenewShortURL_20200726193851.zip)  
+During the import you need to create a new connection to SharePoint with a useraccount who has permission to the UrlShortener site.
+When the Flow is imported, open it for editing and update the Site Address so it's linked to your tenant and UrlShortener site and list.
+![Edit Flow and update Site Address](medias/Flow_CreateNewShortUrl.jpg)
+
+> REMARK: the "When an item is created or modified" has a value set in the settings for Trigger Conditions: `@empty(triggerBody()?['ShortUrl'])`  
+The Flow only gets triggered, when the column value of the column "ShortUrl" is empty (for new or modified item action). Just in case the UrlShortener list has been created manually and a different column name has been chosen, adapt the trigger conditions or the Flow will never run.
+![Edit Flow and update Site Address](medias/Flow_CreateNewShortUrl_TriggerConditions.jpg)
+
+Next, still editing the Flow open the Scope and Parse JSON action. Here the URL to the Azure Function to create a Url needs to be added. Define the full URL, including the code here.
+![Import Flow to create site and list](medias/Flow_CreateNewShortUrl_AzureFunctionUrl.jpg)
+
+Save the Flow (check if you need to activate it) and now you can already test it by adding a new item to the SharePoint list. The Flow should be triggered and the list will be updated with the new created ShortURL.
+
+
+**Flow - Update or Archive ShortURL**  
+Import the Flow as you did it before:
+Import the Flow: [Download and import UpdateOrArchiveShortURL Flow](deployment/AzUrlShortener-UpdateorArchiveShortURLValues_20200726200049.zip)
+
+When the Flow is imported, open it for editing and update the Site Address so it's linked to your tenant and UrlShortener site.
+![Edit Flow and update Site Address](medias/Flow_CreateNewShortUrl.jpg)
+
+> REMARK: the "When an item is created or modified" has a value set in the settings for Trigger Conditions: `@or(not(empty(triggerBody()?['ShortUrl'])), not(empty(triggerBody()?['Archive'])))`  
+The Flow only gets triggered, when the column value of the column "ShortUrl" is NOT empty or the value to "Archive" a URL is NOT empty. This is a little bit of a hack but works.
+
+Also here, open the Scope and Parse JSON action and add the URLs to both Azure Functions (Update and Archive). Define the full URL, including the code.
+![Edit Flow and update Site Address](medias/Flow_UpdateOrArchive_AzureFunctionUrl.jpg)
+
+Save the flow and ensure it's activated and everything is done.
+
 ---
 
+## What's next? What's planned?
+- [ ] Use Logic Apps instead of PowerAutomate Flow
+- [ ] Secure Azure Function URLs via and read them from Key Vault
+- [ ] \(Optional) Replace Azure Functions with Logic Apps
+- [ ] Further ideas?
+
+
+---
 
 ## Question, problem?
 
