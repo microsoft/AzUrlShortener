@@ -31,12 +31,13 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using System.Net;
-using System.Net.Http;
 using Cloud5mins.domain;
 using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using System.IO;
+using System.Text.Json;
 
 namespace Cloud5mins.Function
 {
@@ -52,6 +53,8 @@ namespace Cloud5mins.Function
             log.LogInformation($"C# HTTP trigger function processed this request: {req}");
             
             string userId = string.Empty;
+            ShortUrlEntity input;
+
             var invalidRequest = Utility.CatchUnauthorize(principal, log);
             if (invalidRequest != null)
             {
@@ -68,7 +71,13 @@ namespace Cloud5mins.Function
                 return new BadRequestObjectResult(new {StatusCode =  HttpStatusCode.NotFound});
             }
 
-            ShortUrlEntity input = await req.Content.ReadAsAsync<ShortUrlEntity>();
+            //ShortUrlEntity input = await req.Content.ReadAsAsync<ShortUrlEntity>();
+            using (var reader = new StreamReader(req.Body))
+            {
+                var body = reader.ReadToEnd();
+                input  = JsonSerializer.Deserialize<ShortUrlEntity>(body);
+            }
+
             if (input == null)
             {
                 return new BadRequestObjectResult(new {StatusCode =  HttpStatusCode.NotFound});
