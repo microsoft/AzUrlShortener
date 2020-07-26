@@ -45,66 +45,63 @@ namespace Cloud5mins.Function
     {
         [FunctionName("UrlArchive")]
         public static async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
         ILogger log,
         ExecutionContext context,
         ClaimsPrincipal principal)
         {
             log.LogInformation($"C# HTTP trigger function processed this request: {req}");
-            
+
             string userId = string.Empty;
             ShortUrlEntity input;
-
-            var invalidRequest = Utility.CatchUnauthorize(principal, log);
-            if (invalidRequest != null)
-            {
-                return invalidRequest;
-            }
-            else
-            {
-                userId = principal.FindFirst(ClaimTypes.NameIdentifier).Value;
-            }
-
-            // Validation of the inputs
-            if (req == null)
-            {
-                return new BadRequestObjectResult(new {StatusCode =  HttpStatusCode.NotFound});
-            }
-
-            //ShortUrlEntity input = await req.Content.ReadAsAsync<ShortUrlEntity>();
-            using (var reader = new StreamReader(req.Body))
-            {
-                var body = reader.ReadToEnd();
-                input  = JsonSerializer.Deserialize<ShortUrlEntity>(body);
-            }
-
-            if (input == null)
-            {
-                return new BadRequestObjectResult(new {StatusCode =  HttpStatusCode.NotFound});
-            }
-
             ShortUrlEntity result;
-            var config = new ConfigurationBuilder()
-                .SetBasePath(context.FunctionAppDirectory)
-                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
-
-            StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
-
             try
             {
+                var invalidRequest = Utility.CatchUnauthorize(principal, log);
+                if (invalidRequest != null)
+                {
+                    return invalidRequest;
+                }
+                else
+                {
+                    userId = principal.FindFirst(ClaimTypes.GivenName).Value;
+                    log.LogInformation("Authenticated user {user}.", userId);
+                }
+
+                // Validation of the inputs
+                if (req == null)
+                {
+                    return new BadRequestObjectResult(new { StatusCode = HttpStatusCode.NotFound });
+                }
+
+                using (var reader = new StreamReader(req.Body))
+                {
+                    var body = reader.ReadToEnd();
+                    input = JsonSerializer.Deserialize<ShortUrlEntity>(body);
+                    if (input == null)
+                    {
+                        return new BadRequestObjectResult(new { StatusCode = HttpStatusCode.NotFound });
+                    }
+                }
+
+                var config = new ConfigurationBuilder()
+                    .SetBasePath(context.FunctionAppDirectory)
+                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                    .AddEnvironmentVariables()
+                    .Build();
+
+                StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
+
                 result = await stgHelper.ArchiveShortUrlEntity(input);
             }
             catch (Exception ex)
             {
                 log.LogError(ex, "An unexpected error was encountered.");
-                return new BadRequestObjectResult(new
-                {
-                    message = ex.Message,
-                    StatusCode =  HttpStatusCode.BadRequest
-                });
-            }
+                return new BadRequestObjectResult(new {
+                                                        message = ex.Message,
+                                                        StatusCode = HttpStatusCode.BadRequest
+                                                    });
+                }
 
             return new OkObjectResult(result);
         }

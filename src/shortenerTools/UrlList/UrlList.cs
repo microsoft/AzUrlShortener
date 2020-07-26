@@ -60,7 +60,7 @@ namespace Cloud5mins.Function
                 }
                 else
                 {
-                    userId = principal.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    userId = principal.FindFirst(ClaimTypes.GivenName).Value;
                     log.LogInformation("Authenticated user {user}.", userId);
                 }
 

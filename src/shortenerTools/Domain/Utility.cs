@@ -43,7 +43,7 @@ namespace Cloud5mins.domain
                return host + "/" + vanity;
         }
 
-        public static UnauthorizedResult CatchUnauthorize(ClaimsPrincipal principal, ILogger log)
+        public static IActionResult CatchUnauthorize(ClaimsPrincipal principal, ILogger log)
         {
             if (principal == null)
             {
@@ -63,6 +63,15 @@ namespace Cloud5mins.domain
                 return new UnauthorizedResult();
             }
 
+            if (principal.FindFirst(ClaimTypes.GivenName) is null)
+            {
+                log.LogError("Claim not Found");
+                return new BadRequestObjectResult(new
+                {
+                    message = "Claim not Found",
+                    StatusCode = System.Net.HttpStatusCode.BadRequest
+                });
+            }
             return null;
         }
     }
