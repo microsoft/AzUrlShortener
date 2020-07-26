@@ -21,7 +21,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using System.Net;
-//using System.Net.Http;
 using Cloud5mins.domain;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
@@ -54,35 +53,16 @@ namespace Cloud5mins.Function
 
             try
             {
-                // var invalidRequest = Utility.CatchUnauthorize(principal, log);
-                // if (invalidRequest != null)
-                // {
-                //     return invalidRequest;
-                // }
-                // else
-                // {
-                //     userId = principal.FindFirst(ClaimTypes.NameIdentifier).Value;
-                //     log.LogInformation("Authenticated user {user}.", userId);
-                // }
-                if (principal == null)
+                var invalidRequest = Utility.CatchUnauthorize(principal, log);
+                if (invalidRequest != null)
                 {
-                    log.LogWarning("No principal.");
-                    return new UnauthorizedResult();
+                    return invalidRequest;
                 }
-
-                if (principal.Identity == null)
+                else
                 {
-                    log.LogWarning("No identity.");
-                    return new UnauthorizedResult();
+                    userId = principal.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    log.LogInformation("Authenticated user {user}.", userId);
                 }
-
-                if (!principal.Identity.IsAuthenticated)
-                {
-                    log.LogWarning("Request was not authenticated.");
-                    return new UnauthorizedResult();
-                }
-                userId = principal.FindFirst(ClaimTypes.NameIdentifier).Value;
-                log.LogInformation("Authenticated user {user}.", userId);
 
                 result.UrlList = await stgHelper.GetAllShortUrlEntities();
                 result.UrlList = result.UrlList.Where(p => !(p.IsArchived ?? false)).ToList();
@@ -96,15 +76,13 @@ namespace Cloud5mins.Function
             catch (Exception ex)
             {
                 log.LogError(ex, "An unexpected error was encountered.");
-                //return req.CreateResponse(HttpStatusCode.BadRequest, ex);
                 return new BadRequestObjectResult(new
                 {
-                    message = HttpStatusCode.BadRequest,
-                    currentDate = DateTime.Now
+                    message = ex.Message,
+                    StatusCode =  HttpStatusCode.BadRequest
                 });
             }
 
-            //return req.CreateResponse(HttpStatusCode.OK, result);
             return new OkObjectResult(result);
         }
     }
