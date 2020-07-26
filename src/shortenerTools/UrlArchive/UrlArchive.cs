@@ -8,8 +8,20 @@ Input:
          // [Required]
         "RowKey": "doc",
 
+        // [Optional] all other properties
     }
-
+Output:
+    {
+        "Url": "https://docs.microsoft.com/en-ca/azure/azure-functions/functions-create-your-first-function-visual-studio",
+        "Title": "My Title",
+        "ShortUrl": null,
+        "Clicks": 0,
+        "IsArchived": true,
+        "PartitionKey": "a",
+        "RowKey": "azFunc2",
+        "Timestamp": "2020-07-23T06:22:33.852218-04:00",
+        "ETag": "W/\"datetime'2020-07-23T10%3A24%3A51.3440526Z'\""
+    }
 
 */
 
