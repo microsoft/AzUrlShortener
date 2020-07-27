@@ -53,7 +53,7 @@ namespace Cloud5mins.Function
                 using (var reader = new StreamReader(req.Body))
                 {
                     var strBody = reader.ReadToEnd();
-                    input = JsonSerializer.Deserialize<UrlClickStatsRequest>(strBody);
+                    input = JsonSerializer.Deserialize<UrlClickStatsRequest>(strBody, new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
                     if (input == null)
                     {
                         return new BadRequestObjectResult(new { StatusCode = HttpStatusCode.NotFound });
