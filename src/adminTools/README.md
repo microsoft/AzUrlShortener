@@ -43,6 +43,15 @@ A simple SharePoint list as Admin UI to create and manage AzureShortener Urls. P
 
 More details [here](SharePointList/README.md).
 
+
+### 6- [PowerShell](PowerShell/README.md)
+
+Simple use of the API in PowerShell calling the Azure Functions.
+
+![PowerShell Create, List, Update or Archive ShortURLs](medias/RunPowerShell.jpg)
+
+More details [here](PowerShell/README.md).
+
 ---
 
 ## How to add a new frontend
