@@ -48,7 +48,7 @@ More details [here](SharePointList/README.md).
 
 Simple use of the API in PowerShell calling the Azure Functions.
 
-![PowerShell Create, List, Update or Archive ShortURLs](medias/RunPowerShell.jpg)
+![PowerShell Create List Update or Archive ShortURLs](medias/RunPowerShell.jpg)
 
 More details [here](PowerShell/README.md).
 
