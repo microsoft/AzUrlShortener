@@ -38,10 +38,19 @@ Very simple PowerAutomate Flows (premium license required) to call the Azure Fun
 More details [here](PowerAutomateFlow/README.md).
 
 
-### 5- [M365 SharePoint List](SharePointList/README.md) => Coming
+### 5- [M365 SharePoint List](SharePointList/README.md)
 A simple SharePoint list as Admin UI to create and manage AzureShortener Urls. PowerAutomate Flows call the AzureFunction URLs to create, edit or delete (archive) the AzUrlShortener Urls.
 
 More details [here](SharePointList/README.md).
+
+
+### 6- [PowerShell](PowerShell/README.md)
+
+Simple use of the API in PowerShell calling the Azure Functions.
+
+![PowerShell Create List Update or Archive ShortURLs](PowerShell/medias/RunPowerShell.jpg)
+
+More details [here](PowerShell/README.md).
 
 ---
 
