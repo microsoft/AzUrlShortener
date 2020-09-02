@@ -11,7 +11,44 @@ Azure Functions
 Azure Function were the perfect match for this project because when you use a dynamic plan you are charged only when the function is running. In our case, it's only a few seconds at the time. To know more read [Azure Function Pricing](https://azure.microsoft.com/en-us/pricing/details/functions/?WT.mc_id=azurlshortener-github-frbouch)
 
 
-1- Function: UrlClickStats
+1- Function: UrlArchive
+--------------------------
+
+This function set the property `IsArchived` to true. It's a soft delete. When `IsArchived` equal true it won't be return in the list and should works anymore as a short URL. You can call it directly doing an HTTP request of type POST with a header "Content-Type" equal to "application/json". Passing the vanity of that specific URL in the body as showed below.
+
+### Expected Input 
+
+```json
+{
+    // [Required]
+    "PartitionKey": "d",
+
+    // [Required]
+    "RowKey": "doc",
+
+    // [Optional] all other properties
+}
+```
+
+### Output
+
+```json
+{
+    "Url": "https://docs.microsoft.com/en-ca/azure/azure-functions/functions-create-your-first-function-visual-studio",
+    "Title": "My Title",
+    "ShortUrl": null,
+    "Clicks": 0,
+    "IsArchived": true,
+    "PartitionKey": "a",
+    "RowKey": "azFunc2",
+    "Timestamp": "2020-07-23T06:22:33.852218-04:00",
+    "ETag": "W/\"datetime'2020-07-23T10%3A24%3A51.3440526Z'\""
+}
+```
+
+
+
+2- Function: UrlClickStats
 --------------------------
 
 This function return the statistic for a specific URL. You can call it directly doing an HTTP request of type POST with a header "Content-Type" equal to "application/json". Passing the vanity of that specific URL in the body as showed below.
@@ -42,7 +79,7 @@ This function return the statistic for a specific URL. You can call it directly 
 
 
 
-2- Function: UrlList
+3- Function: UrlList
 -------------------------
 
 This function return a list of all URLs created previously including the clicks count. You can call it directly doing an HTTP request of type GET with a header "Content-Type" equal to "application/json". 
@@ -68,7 +105,7 @@ No input required.
 }
 ```
 
-3- Function: UrlRedirect
+4- Function: UrlRedirect
 -------------------------
 
 This function return a HTTP Redirect to the URL. You can call it directly doing an HTTP request of type POST or GET passing the vanity at the end of the URL. The Azure Function Proxy will call Function passing the parameter.
@@ -78,7 +115,7 @@ For example if the domain is *c5m.ca* and the vanity is "2w", the request `c5m.c
 Every times the Azure Function is called it will increment the click count and save the timestamp when this call appends.
 
 
-4- Function: UrlShortener
+5- Function: UrlShortener
 -------------------------
 
 This function creates the short version of our URL and return the info it. You can call it directly doing an HTTP request of type POST with a header "Content-Type" equal to "application/json". Passing the URL and an optional vanity in the body as showed below. If no vanity is specified one will be automatically generated for you!
@@ -124,6 +161,50 @@ Here the result when the vanity wasn't specified and the alternative when the va
 ```
 
 ---
+
+
+6- Function: UrlUpdate
+--------------------------
+
+This function will update the properties: `Url` and `Title` to the new value. You can call it directly doing an HTTP request of type POST with a header "Content-Type" equal to "application/json". Passing the vanity of that specific URL in the body as showed below.
+
+### Expected Input 
+
+```json
+{
+    // [Required]
+    "PartitionKey": "d",
+
+    // [Required]
+    "RowKey": "doc",
+
+    // [Optional] New Title for this URL, or text description of your choice.
+    "title": "Quickstart: Create your first function in Azure using Visual Studio"
+
+    // [Optional] New long Url where the the user will be redirect
+    "Url": "https://SOME_URL"
+}
+```
+
+### Output
+
+```json
+{
+    "Url": "https://docs.microsoft.com/en-ca/azure/azure-functions/functions-create-your-first-function-visual-studio",
+    "Title": "My Title",
+    "ShortUrl": null,
+    "Clicks": 0,
+    "IsArchived": true,
+    "PartitionKey": "a",
+    "RowKey": "azFunc2",
+    "Timestamp": "2020-07-23T06:22:33.852218-04:00",
+    "ETag": "W/\"datetime'2020-07-23T10%3A24%3A51.3440526Z'\""
+}
+```
+
+---
+
+
 
 Azure Table Storage
 ===================

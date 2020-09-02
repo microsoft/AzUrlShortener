@@ -1,0 +1,32 @@
+﻿<div class="modal" tabindex="-1" style="display:block" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">@Title</h3>
+                <!-- Button to close the popup -->
+                <button type="button" class="close"
+                        @onclick="ClosePopup">
+                    <span aria-hidden="true">X</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @ChildContent
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop show"></div>
+
+
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public EventCallback ClosePopup { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}
