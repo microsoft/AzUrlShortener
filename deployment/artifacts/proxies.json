@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json.schemastore.org/proxies",
+  "proxies": {
+    "Domain Redirect": {
+      "matchCondition": {
+        "route": "/{shortUrl}"
+      },
+      "backendUri": "http://localhost/api/UrlRedirect/{shortUrl}"
+    },
+    "Root": {
+      "matchCondition": {
+        "route": "/"
+      },
+      "responseOverrides": {
+        "response.statusCode": "301",
+        "response.statusReason": "Moved Permanently",
+        "response.headers.location": "%defaultRedirectUrl%"
+      }
+    }
+  }
+}
