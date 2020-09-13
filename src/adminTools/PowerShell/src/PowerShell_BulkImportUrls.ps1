@@ -5,7 +5,11 @@
 #"Microsoft2","https://www.microsoft.com"
 
 $UrlValuesFromCSV = Import-CSV .\BulkImportUrls.csv
+<<<<<<< HEAD
 $AzureFunctionUrlShortenerUrl = "https://shortenertools....azurewebsites.net/api/UrlShortener?code=..."
+=======
+#$AzureFunctionUrlShortenerUrl = "https://shortenertools....azurewebsites.net/api/UrlShortener?code=..."
+>>>>>>> PowerShell_BulkImport_CSV
 
 ForEach ($csventry in $UrlValuesFromCSV)
 {
