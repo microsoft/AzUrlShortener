@@ -19,7 +19,7 @@ See full examples in provided PowerShell file:
 PowerShell with all commands: [PowerShell_Create_List_Update_Archive_ShortURLs.ps1](src/PowerShell_Create_List_Update_Archive_ShortURLs.ps1)
 
 
-### 1- Create a short Url
+### 1a- Create a short Url
 
 In PowerShell, use the URL from the **UrlShortener** Azure Function.  In the body of the request, add a JSON document containing two properties. 
 
@@ -56,6 +56,20 @@ $Parameters = @{
 $newUrl = Invoke-RestMethod @Parameters | ConvertTo-Json
 $newUrl
 ```
+
+### 1b- Bulk Import short Urls from CSV file
+Create a csv file, e.g. name it BulkImportUrls.csv or save an excel file as csv.
+```csv
+title,url,vanity
+"Microsoft1","https://www.microsoft.com","msft1"
+"Microsoft2","https://www.microsoft.com"
+```
+
+Download BulkImportUrls.csv to start with: [BulkImportUrls.csv](src/BulkImportUrls.csv)
+
+Now run the 
+[PowerShell_BulkImportUrls.ps1](src/PowerShell_BulkImportUrls.ps1) (maybe not the best PowerShell code but it does its job... You are welcome to enhance it to a more advanced PowerShell script, e.g. using function, etc)
+
 
 ### 2- List all Urls
 
