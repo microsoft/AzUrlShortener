@@ -55,6 +55,7 @@ namespace Cloud5mins.Function
             }
 
             var res = req.CreateResponse(HttpStatusCode.OK,"Der Link führt zu <a href=\""+redirectUrl+"\">"+WebUtility.HtmlEncode(redirectUrl)+"</a>");
+            res.Headers.Add("Content-Type", "text/html; charset=utf-8"); 
             return res;
         }
   }
