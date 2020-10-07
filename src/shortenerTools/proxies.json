@@ -7,6 +7,12 @@
       },
       "backendUri": "http://localhost/api/UrlRedirect/{shortUrl}"
     },
+    "HoldUp Redirect": {
+      "matchCondition": {
+        "route": "/HoldUp/{shortUrl}"
+      },
+      "backendUri": "http://localhost/api/UrlHoldUpRedirect/{shortUrl}"
+    },
     "Root": {
       "matchCondition": {
         "route": "/"
