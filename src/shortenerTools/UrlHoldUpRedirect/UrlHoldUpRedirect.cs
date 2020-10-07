@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Cloud5mins.Function
 {
-    public static class UrlRedirect
+    public static class UrlHoldUpRedirect
     {
         [FunctionName("UrlHoldUpRedirect")]
         public static async Task<HttpResponseMessage> Run(
