@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using Cloud5mins.domain;
 using Microsoft.Extensions.Configuration;
+using System.Net.Http.Headers;
 
 namespace Cloud5mins.Function
 {
@@ -54,15 +55,23 @@ namespace Cloud5mins.Function
                 log.LogInformation("Bad Link, resorting to fallback.");
             }
 
-            var res = req.CreateResponse(HttpStatusCode.OK,
-                        "Der Link führt zu <a href=\""+redirectUrl+"\">"+WebUtility.HtmlEncode(redirectUrl)+"</a>< br/>Automatischer Redirect in 5 Sekunden"
-                      + "<script>"
-                      + "setTimeout(doRedir, 5000)"
-                      + "function doRedir() { window.location.href = \""+redirectUrl+"\"; }"
-                      + "</script>"
-                      );
-            res.Headers.Add("Content-Type", "text/html; charset=utf-8"); 
-            return res;
+            string html =     "<html>"
+                            + "<head><title>HoldUp-Redirect</title></head>"
+                            + "<body>"
+                            + "<h1>HoldUp-Redirect</h1>"
+                            + "<p>Der Link führt zu <a href=\""+redirectUrl+"\">"+WebUtility.HtmlEncode(redirectUrl)+"</a>< br/>Automatischer Redirect in 5 Sekunden</p>"
+                            + "<script>"
+                            + "setTimeout(doRedir, 5000)"
+                            + "function doRedir() { window.location.href = \""+redirectUrl+"\"; }"
+                            + "</script>"
+                            + "</body>"
+                            + "</html>";
+
+            var response = new HttpResponseMessage(HttpStatusCode.OK);
+            response.Content = new StringContent(html);
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
+            return response;
+
         }
   }
 }
