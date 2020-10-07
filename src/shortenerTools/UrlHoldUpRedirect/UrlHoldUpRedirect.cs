@@ -59,7 +59,7 @@ namespace Cloud5mins.Function
                             + "<head><title>HoldUp-Redirect</title></head>"
                             + "<body>"
                             + "<h1>HoldUp-Redirect</h1>"
-                            + "<p>Der Link führt zu <a href=\""+redirectUrl+"\">"+WebUtility.HtmlEncode(redirectUrl)+"</a>< br/>Automatischer Redirect in 5 Sekunden</p>"
+                            + "<p>The ShortLink belongs to <a href=\""+redirectUrl+"\">"+WebUtility.HtmlEncode(redirectUrl)+"</a>< br/>Automatic Redirect to this link at 5 Seconds.</p>"
                             + "<script>"
                             + "setTimeout(doRedir, 5000)"
                             + "function doRedir() { window.location.href = \""+redirectUrl+"\"; }"
