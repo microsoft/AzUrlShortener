@@ -54,7 +54,7 @@ namespace Cloud5mins.Function
                 log.LogInformation("Bad Link, resorting to fallback.");
             }
 
-            var res = req.CreateResponse(HttpStatusCode.OK)
+            var res = req.CreateResponse(HttpStatusCode.OK);
             res.Content = new StringContent("V 1.0: Der Link führt zu <a href=\""+redirectUrl+"\">"+WebUtility.HtmlEncode(redirectUrl)+"</a>");
             return res;
         }
