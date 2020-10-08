@@ -69,7 +69,7 @@ namespace Cloud5mins.Function
                         	+ "</script></p>\n"
                             + "<p>QR for Long-URL: "+WebUtility.HtmlEncode(redirectUrl)+"<br />\n"
                             + "<img src=\"http://api.qrserver.com/v1/create-qr-code/?color=000000&amp;bgcolor=FFFFFF&amp;data="+WebUtility.UrlEncode(redirectUrl)+"&amp;qzone=0&amp;margin=0&amp;size=250x250&amp;ecc=L\" alt=\"qr code\" />(*)\n"
-                            + "</p><p>(*) QR-Codes embedet from <a href=\"http://goqr.me/\">http://goqr.me</a>\n"
+                            + "</p><p>(*) QR-Codes embedet from <a href=\"http://goqr.me/\" target=\"_blank\">http://goqr.me</a>\n"
                             + "</p></body>\n"
                             + "</html>\n";
 
