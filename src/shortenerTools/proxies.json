@@ -13,6 +13,12 @@
       },
       "backendUri": "http://localhost/api/UrlHoldUpRedirect/{shortUrl}"
     },
+    "QR Redirect": {
+      "matchCondition": {
+        "route": "/QR/{shortUrl}"
+      },
+      "backendUri": "http://localhost/api/UrlQRRedirect/{shortUrl}"
+    },
     "Root": {
       "matchCondition": {
         "route": "/"
