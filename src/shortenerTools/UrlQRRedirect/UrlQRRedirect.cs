@@ -55,26 +55,26 @@ namespace Cloud5mins.Function
                 log.LogInformation("Bad Link, resorting to fallback.");
             }
 
-            string html =     "<html>"
-                            + "<head><title>QR-Code</title></head>"
-                            + "<body>"
-                            + "<h1>QR-Code</h1>"
-                            + "<div id=\"placeholder\"></div>"
+            string html =     "<html>\n"
+                            + "<head><title>QR-Code</title></head>\n"
+                            + "<body>\n"
+                            + "<h1>QR-Code</h1>\n"
+                            + "<div id=\"placeholder\"></div>\n"
                             + "<script type=\"text/javascript\">\n"
 	                        + "/* <![CDATA[ */\n"
                             + "content = \"<p>QR for Short-URL: \"+window.location.href+\"<br />\n\";\n"
                             + "content += \"// Embadding from http://goqr.me/\";\n"
                             + "content += \"<img src=\\\"http://api.qrserver.com/v1/create-qr-code/?color=000000&amp;bgcolor=FFFFFF&amp;data=\"+encodeURI(window.location.href)+\"&amp;qzone=0&amp;margin=0&amp;size=500x500&amp;ecc=L\\\" alt=\\\"qr code\\\" />\";\n"
                             + "content += \"//\"\n" 
-                            + "document.getElementById('placeholder').innerHTML = content;"
-                            + "/* ]]> */"
-                        	+ "</script>"
-                            + "</p><p>QR for Long-URL: "+WebUtility.HtmlEncode(redirectUrl)+"<br />"
-                            // Embadding from http://goqr.me/
-                            + "<img src=\"http://api.qrserver.com/v1/create-qr-code/?color=000000&amp;bgcolor=FFFFFF&amp;data="+WebUtility.UrlEncode(redirectUrl)+"&amp;qzone=0&amp;margin=0&amp;size=500x500&amp;ecc=L\" alt=\"qr code\" />"
-                            // 
-                            + "</p></body>"
-                            + "</html>";
+                            + "document.getElementById('placeholder').innerHTML = content;\n"
+                            + "/* ]]> */\n"
+                        	+ "</script>\n"
+                            + "</p><p>QR for Long-URL: "+WebUtility.HtmlEncode(redirectUrl)+"<br />\n"
+                            + "// Embadding from http://goqr.me/\n"
+                            + "<img src=\"http://api.qrserver.com/v1/create-qr-code/?color=000000&amp;bgcolor=FFFFFF&amp;data="+WebUtility.UrlEncode(redirectUrl)+"&amp;qzone=0&amp;margin=0&amp;size=500x500&amp;ecc=L\" alt=\"qr code\" />\n"
+                            + "//\n" 
+                            + "</p></body>\n"
+                            + "</html>\n";
 
             var response = new HttpResponseMessage(HttpStatusCode.OK);
             response.Content = new StringContent(html);
