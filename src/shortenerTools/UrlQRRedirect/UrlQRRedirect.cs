@@ -64,15 +64,13 @@ namespace Cloud5mins.Function
 	                        + "/* <![CDATA[ */\n"
                             + "content = \"<p>QR for Short-URL: \"+window.location.href+\"<br />\\n\";\n"
                             + "content += \"// Embadding from http://goqr.me/\\n\";\n"
-                            + "content += \"<img src=\\\"http://api.qrserver.com/v1/create-qr-code/?color=000000&amp;bgcolor=FFFFFF&amp;data=\"+encodeURI(window.location.href)+\"&amp;qzone=0&amp;margin=0&amp;size=500x500&amp;ecc=L\\\" alt=\\\"qr code\\\" />\\n\";\n"
-                            + "content += \"//\\n\";\n" 
+                            + "content += \"<img src=\\\"http://api.qrserver.com/v1/create-qr-code/?color=000000&amp;bgcolor=FFFFFF&amp;data=\"+encodeURI(window.location.href)+\"&amp;qzone=0&amp;margin=0&amp;size=500x500&amp;ecc=L\\\" alt=\\\"qr code\\\" />(*)\\n\";\n"
                             + "document.getElementById('placeholder').innerHTML = content;\n"
                             + "/* ]]> */\n"
                         	+ "</script>\n"
                             + "</p><p>QR for Long-URL: "+WebUtility.HtmlEncode(redirectUrl)+"<br />\n"
-                            + "// Embadding from http://goqr.me/\n"
-                            + "<img src=\"http://api.qrserver.com/v1/create-qr-code/?color=000000&amp;bgcolor=FFFFFF&amp;data="+WebUtility.UrlEncode(redirectUrl)+"&amp;qzone=0&amp;margin=0&amp;size=500x500&amp;ecc=L\" alt=\"qr code\" />\n"
-                            + "//\n" 
+                            + "<img src=\"http://api.qrserver.com/v1/create-qr-code/?color=000000&amp;bgcolor=FFFFFF&amp;data="+WebUtility.UrlEncode(redirectUrl)+"&amp;qzone=0&amp;margin=0&amp;size=500x500&amp;ecc=L\" alt=\"qr code\" />(*)\n"
+                            + "</p><p>(*) QR-Codes embedet from http://goqr.me/\n"
                             + "</p></body>\n"
                             + "</html>\n";
 
