@@ -59,7 +59,7 @@ namespace Cloud5mins.Function
                             + "<head><title>HoldUp-Redirect</title></head>"
                             + "<body>"
                             + "<h1>HoldUp-Redirect</h1>"
-                            + "<p>The ShortLink belongs to <a href=\""+redirectUrl+"\">"+WebUtility.HtmlEncode(redirectUrl)+"</a>"
+                            + "<p>The ShortLink belongs to <a href=\""+redirectUrl+"\">"+WebUtility.HtmlEncode(redirectUrl)+"</a></p>"
                             + "</body>"
                             + "</html>";
 
