@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -55,16 +56,51 @@ namespace Cloud5mins.Function
                 log.LogInformation("Bad Link, resorting to fallback.");
             }
 
-            string html =     "<html>"
-                            + "<head><title>HoldUp-Redirect</title></head>"
-                            + "<body>"
-                            + "<h1>HoldUp-Redirect</h1>"
-                            + "<p>The ShortLink belongs to <a href=\""+redirectUrl+"\">"+WebUtility.HtmlEncode(redirectUrl)+"</a></p>"
-                            + "</body>"
-                            + "</html>";
+            var fileName = "D:\\home\\site\\repository\\medias\\UrlHoldUpRedirect.html";
+            var fileContent = "";
 
+            try
+            {
+                var fileInfo = new FileInfo(fileName);
+        
+                // Prüfen ob die Datei existiert
+                if (fileInfo.Exists)
+                {
+                    // Datei in einen FileStream laden
+                    var fileStream = fileInfo.Open(FileMode.Open, FileAccess.Read);
+        
+                    // StreamReader initialisieren
+                    var reader = new StreamReader(fileStream);
+        
+                    String line;
+        
+                    // Lese Datei, Zeile für Zeile
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        fileContent += line + "\n";
+                    }
+        
+                    reader.Close();
+                    fileStream.Close();
+                }
+                else
+                {
+                        fileContent = "File "+fileName+" not found!";
+                }
+            }
+            catch (IOException ex)
+            {
+                fileContent = "File "+fileName+" cant be accessed!";
+                log.LogInformation("File "+fileName+" cant be accessed!"+ex.Message);
+            }
+
+            //Template Replacements
+            fileContent = fileContent.Replace("%%redirectUrl%%",redirectUrl);
+            fileContent = fileContent.Replace("%%HtmlEncoded_redirectUrl%%",WebUtility.HtmlEncode(redirectUrl));
+
+            //Return Response
             var response = new HttpResponseMessage(HttpStatusCode.OK);
-            response.Content = new StringContent(html);
+            response.Content = new StringContent(fileContent);
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
             return response;
 
