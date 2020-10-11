@@ -13,7 +13,10 @@ namespace Cloud5mins.domain
             if(string.IsNullOrEmpty(vanity))
             {
                 var newKey = await stgHelper.GetNextTableId();
-                string getCode() => Encode(newKey); 
+                string getCode() => Encode(newKey);
+                if (await stgHelper.IfShortUrlEntityExistByVanity(getCode()))
+                    return await GetValidEndUrl(vanity, stgHelper);
+
                 return string.Join(string.Empty, getCode());
             }
             else

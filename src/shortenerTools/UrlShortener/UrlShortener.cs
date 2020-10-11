@@ -90,10 +90,6 @@ namespace Cloud5mins.Function
                 else
                 {
                     newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, stgHelper), title);
-                    if (await stgHelper.IfShortUrlEntityExist(newRow))
-                    {
-                        return req.CreateResponse(HttpStatusCode.Conflict, "This Short URL already exist.");
-                    }
                 }
 
                 await stgHelper.SaveShortUrlEntity(newRow);
