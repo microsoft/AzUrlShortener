@@ -1,5 +1,7 @@
-using System.Linq;
 using Microsoft.Azure.Cosmos.Table;
+using shortenerTools;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Cloud5mins.domain
 {
@@ -12,11 +14,12 @@ namespace Cloud5mins.domain
 
         public string ShortUrl { get; set; }
 
-        public int Clicks { get; set; }
+        [EntityJsonPropertyConverter]
+        public Dictionary<string, int> Clicks { get; set; }
 
         public bool? IsArchived { get; set; }
 
-        public ShortUrlEntity(){}
+        public ShortUrlEntity() { }
 
         public ShortUrlEntity(string longUrl, string endUrl)
         {
@@ -34,11 +37,12 @@ namespace Cloud5mins.domain
             RowKey = endUrl;
             Url = longUrl;
             Title = title;
-            Clicks = 0;
+            Clicks = new Dictionary<string, int>();
             IsArchived = false;
         }
 
-        public static ShortUrlEntity GetEntity(string longUrl, string endUrl, string title){
+        public static ShortUrlEntity GetEntity(string longUrl, string endUrl, string title)
+        {
             return new ShortUrlEntity
             {
                 PartitionKey = endUrl.First().ToString(),

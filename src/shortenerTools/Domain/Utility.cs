@@ -10,10 +10,10 @@ namespace Cloud5mins.domain
 
         public static async Task<string> GetValidEndUrl(string vanity, StorageTableHelper stgHelper)
         {
-            if(string.IsNullOrEmpty(vanity))
+            if (string.IsNullOrEmpty(vanity))
             {
                 var newKey = await stgHelper.GetNextTableId();
-                string getCode() => Encode(newKey); 
+                string getCode() => Encode(newKey);
                 return string.Join(string.Empty, getCode());
             }
             else
@@ -36,8 +36,9 @@ namespace Cloud5mins.domain
             return string.Join(string.Empty, s.Reverse());
         }
 
-        public static string GetShortUrl(string host, string vanity){
-               return host + "/" + vanity;
+        public static string GetShortUrl(string host, string vanity)
+        {
+            return host + "/" + vanity;
         }
     }
 }

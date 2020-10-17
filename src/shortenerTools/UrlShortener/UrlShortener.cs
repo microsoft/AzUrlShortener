@@ -20,15 +20,15 @@ Output:
     }
 */
 
-using System;
-using System.Threading.Tasks;
+using Cloud5mins.domain;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Net;
 using System.Net.Http;
-using Cloud5mins.domain;
-using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
 namespace Cloud5mins.Function
 {
@@ -38,8 +38,8 @@ namespace Cloud5mins.Function
 
         [FunctionName("UrlShortener")]
         public static async Task<HttpResponseMessage> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequestMessage req, 
-        ILogger log, 
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequestMessage req,
+        ILogger log,
         ExecutionContext context)
         {
             log.LogInformation($"C# HTTP trigger function processed this request: {req}");
@@ -50,7 +50,7 @@ namespace Cloud5mins.Function
                 return req.CreateResponse(HttpStatusCode.NotFound);
             }
 
-            ShortRequest input = await req.Content.ReadAsAsync<ShortRequest>();
+            var input = await req.Content.ReadAsAsync<ShortRequest>();
             if (input == null)
             {
                 return req.CreateResponse(HttpStatusCode.NotFound);
@@ -68,7 +68,7 @@ namespace Cloud5mins.Function
             {
                 return req.CreateErrorResponse(HttpStatusCode.BadRequest, $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
             }
-            
+
             var result = new ShortResponse();
             var config = new ConfigurationBuilder()
                 .SetBasePath(context.FunctionAppDirectory)
@@ -76,20 +76,20 @@ namespace Cloud5mins.Function
                 .AddEnvironmentVariables()
                 .Build();
 
-            StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]); 
+            var stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
 
             try
             {
-                string longUrl = input.Url.Trim();
-                string vanity = string.IsNullOrWhiteSpace(input.Vanity) ? "" : input.Vanity.Trim();
-                string title = string.IsNullOrWhiteSpace(input.Title) ? "" : input.Title.Trim();
+                var longUrl = input.Url.Trim();
+                var vanity = string.IsNullOrWhiteSpace(input.Vanity) ? "" : input.Vanity.Trim();
+                var title = string.IsNullOrWhiteSpace(input.Title) ? "" : input.Title.Trim();
 
                 ShortUrlEntity newRow;
 
-                if(!string.IsNullOrEmpty(vanity))
+                if (!string.IsNullOrEmpty(vanity))
                 {
                     newRow = new ShortUrlEntity(longUrl, vanity, title);
-                    if(await stgHelper.IfShortUrlEntityExist(newRow))
+                    if (await stgHelper.IfShortUrlEntityExist(newRow))
                     {
                         return req.CreateResponse(HttpStatusCode.Conflict, "This Short URL already exist.");
                     }
@@ -106,7 +106,7 @@ namespace Cloud5mins.Function
                 result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
 
                 log.LogInformation("Short Url created.");
-             }
+            }
             catch (Exception ex)
             {
                 log.LogError(ex, "An unexpected error was encountered.");

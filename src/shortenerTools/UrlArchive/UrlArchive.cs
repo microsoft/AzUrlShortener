@@ -13,15 +13,15 @@ Input:
 
 */
 
-using System;
-using System.Threading.Tasks;
+using Cloud5mins.domain;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Net;
 using System.Net.Http;
-using Cloud5mins.domain;
-using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
 namespace Cloud5mins.Function
 {
@@ -29,7 +29,7 @@ namespace Cloud5mins.Function
     {
         [FunctionName("UrlArchive")]
         public static async Task<HttpResponseMessage> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequestMessage req,
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
         ILogger log,
         ExecutionContext context)
         {
@@ -41,7 +41,7 @@ namespace Cloud5mins.Function
                 return req.CreateResponse(HttpStatusCode.NotFound);
             }
 
-            ShortUrlEntity input = await req.Content.ReadAsAsync<ShortUrlEntity>();
+            var input = await req.Content.ReadAsAsync<ShortUrlEntity>();
             if (input == null)
             {
                 return req.CreateResponse(HttpStatusCode.NotFound);
@@ -54,7 +54,7 @@ namespace Cloud5mins.Function
                 .AddEnvironmentVariables()
                 .Build();
 
-            StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
+            var stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
 
             try
             {

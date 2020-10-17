@@ -3,9 +3,9 @@
   "Values": {
     "AzureWebJobsStorage": "",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "FUNCTIONS_V2_COMPATIBILITY_MODE":"true",
-    "UlsDataStorage":"",
-    "defaultRedirectUrl":"https://azure.com"
-
+    "FUNCTIONS_V2_COMPATIBILITY_MODE": "true",
+    "UlsDataStorage": "",
+    "defaultRedirectUrl": "https://azure.com",
+    "IpLocationService:Url": "https://freegeoip.app/"
   }
 }

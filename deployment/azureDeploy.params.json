@@ -6,22 +6,25 @@
             "value": "AzUrlShortTools"
         },
         "OwnerName": {
-            "value": "Frank"
+            "value": "Michael Reyeros"
         },
         "GitHubBranch": {
-            "value": "feature/deploy-it-all"
+            "value": "main"
         },
         "defaultRedirectUrl": {
             "value": "https://azure.com"
+        },
+        "ipLocationServiceUrl": {
+            "value": "https://freegeoip.app/"
         },
         "frontend": {
             "value": "adminBlazorWebsite"
         },
         "frontend-AdminEMail": {
-            "value": "test@test.com"
+            "value": "mreyeros@gmail.com"
         },
         "frontend-AdminPassword": {
-            "value": "Supernewt42!"
+            "value": "panCl8r8$7392*"
         }
     }
 }

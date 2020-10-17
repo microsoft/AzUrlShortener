@@ -15,16 +15,16 @@ Output:
     }
 */
 
-using System;
-using System.Threading.Tasks;
+using Cloud5mins.domain;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
-using Cloud5mins.domain;
-using Microsoft.Extensions.Configuration;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace Cloud5mins.Function
 {
@@ -32,8 +32,8 @@ namespace Cloud5mins.Function
     {
         [FunctionName("UrlList")]
         public static async Task<HttpResponseMessage> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequestMessage req, 
-        ILogger log, 
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequestMessage req,
+        ILogger log,
         ExecutionContext context)
         {
             log.LogInformation($"C# HTTP trigger function processed this request: {req}");
@@ -45,16 +45,17 @@ namespace Cloud5mins.Function
                 .AddEnvironmentVariables()
                 .Build();
 
-            StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]); 
+            var stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
 
             try
             {
-               result.UrlList = await stgHelper.GetAllShortUrlEntities();
+                result.UrlList = await stgHelper.GetAllShortUrlEntities();
                 result.UrlList = result.UrlList.Where(p => !(p.IsArchived ?? false)).ToList();
-               var host = req.RequestUri.GetLeftPart(UriPartial.Authority); 
-               foreach(ShortUrlEntity url in result.UrlList){
-                   url.ShortUrl = Utility.GetShortUrl(host, url.RowKey);
-               }
+                var host = req.RequestUri.GetLeftPart(UriPartial.Authority);
+                foreach (var url in result.UrlList)
+                {
+                    url.ShortUrl = Utility.GetShortUrl(host, url.RowKey);
+                }
             }
             catch (Exception ex)
             {
