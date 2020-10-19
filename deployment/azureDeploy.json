@@ -86,9 +86,9 @@
         "functionProjectFolder": "src/shortenerTools",
         "UrlsStorageAccountName": "[concat('urldata', variables('suffix'), 'stg')]",
         "frontendInfo": {
-            "adminBlazorWebsite": {
-                "armTemplateUrl": "[concat('https://raw.githubusercontent.com/fboucher/AzUrlShortener/', parameters('GitHubBranch'), '/src/adminTools/adminBlazorWebsite/deployment/adminBlazorWebsite-deployAzure.json')]"
-            }
+          "adminBlazorWebsite": {
+            "armTemplateUrl": "[concat('https://raw.githubusercontent.com/FBoucher/AzUrlShortener/', parameters('GitHubBranch'), '/src/adminTools/adminBlazorWebsite/deployment/adminBlazorWebsite-deployAzure.json')]"
+          }
         }
     },
     "resources": [
