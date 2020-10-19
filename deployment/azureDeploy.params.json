@@ -5,12 +5,12 @@
         "baseName": {
             "value": "AzUrlShortTools"
         },
-        "OwnerName": {
-            "value": "Michael Reyeros"
-        },
-        "GitHubBranch": {
-            "value": "main"
-        },
+      "OwnerName": {
+        "value": "Frank"
+      },
+      "GitHubBranch": {
+        "value": "feature/deploy-it-all"
+      },
         "defaultRedirectUrl": {
             "value": "https://azure.com"
         },
@@ -20,11 +20,11 @@
         "frontend": {
             "value": "adminBlazorWebsite"
         },
-        "frontend-AdminEMail": {
-            "value": "mreyeros@gmail.com"
-        },
-        "frontend-AdminPassword": {
-            "value": "panCl8r8$7392*"
-        }
+      "frontend-AdminEMail": {
+        "value": "test@test.com"
+      },
+      "frontend-AdminPassword": {
+        "value": "Supernewt42!"
+      }
     }
 }
