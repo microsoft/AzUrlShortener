@@ -16,8 +16,8 @@ Input:
 using Cloud5mins.domain;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using shortenerTools.Abstractions;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -25,10 +25,17 @@ using System.Threading.Tasks;
 
 namespace Cloud5mins.Function
 {
-    public static class UrlArchive
+    public class UrlArchive
     {
+        private readonly IStorageTableHelper _storageTableHelper;
+
+        public UrlArchive(IStorageTableHelper storageTableHelper)
+        {
+            _storageTableHelper = storageTableHelper;
+        }
+
         [FunctionName("UrlArchive")]
-        public static async Task<HttpResponseMessage> Run(
+        public async Task<HttpResponseMessage> Run(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
         ILogger log,
         ExecutionContext context)
@@ -48,17 +55,10 @@ namespace Cloud5mins.Function
             }
 
             ShortUrlEntity result;
-            var config = new ConfigurationBuilder()
-                .SetBasePath(context.FunctionAppDirectory)
-                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
-
-            var stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
-
+            
             try
             {
-                result = await stgHelper.ArchiveShortUrlEntity(input);
+                result = await _storageTableHelper.ArchiveShortUrlEntity(input);
             }
             catch (Exception ex)
             {

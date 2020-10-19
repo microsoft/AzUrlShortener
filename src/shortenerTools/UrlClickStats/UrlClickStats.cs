@@ -1,8 +1,8 @@
 using Cloud5mins.domain;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using shortenerTools.Abstractions;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -10,10 +10,17 @@ using System.Threading.Tasks;
 
 namespace Cloud5mins.Function
 {
-    public static class UrlClickStats
+    public class UrlClickStats
     {
+        private readonly IStorageTableHelper _storageTableHelper;
+
+        public UrlClickStats(IStorageTableHelper storageTableHelper)
+        {
+            _storageTableHelper = storageTableHelper;
+        }
+
         [FunctionName("UrlClickStats")]
-        public static async Task<HttpResponseMessage> Run(
+        public async Task<HttpResponseMessage> Run(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
         ILogger log,
         ExecutionContext context)
@@ -33,17 +40,10 @@ namespace Cloud5mins.Function
             }
 
             var result = new ClickStatsEntityList();
-            var config = new ConfigurationBuilder()
-                .SetBasePath(context.FunctionAppDirectory)
-                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
-
-            var stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
-
+            
             try
             {
-                result.ClickStatsList = await stgHelper.GetAllStatsByVanity(input.Vanity);
+                result.ClickStatsList = await _storageTableHelper.GetAllStatsByVanity(input.Vanity);
             }
             catch (Exception ex)
             {

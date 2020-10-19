@@ -29,15 +29,22 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using shortenerTools.Abstractions;
 
 namespace Cloud5mins.Function
 {
 
-    public static class UrlShortener
+    public class UrlShortener
     {
+        private readonly IStorageTableHelper _storageTableHelper;
+
+        public UrlShortener(IStorageTableHelper storageTableHelper)
+        {
+            _storageTableHelper = storageTableHelper;
+        }
 
         [FunctionName("UrlShortener")]
-        public static async Task<HttpResponseMessage> Run(
+        public async Task<HttpResponseMessage> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequestMessage req,
         ILogger log,
         ExecutionContext context)
@@ -56,28 +63,20 @@ namespace Cloud5mins.Function
                 return req.CreateResponse(HttpStatusCode.NotFound);
             }
 
-
             // If the Url parameter only contains whitespaces or is empty return with BadRequest.
             if (string.IsNullOrWhiteSpace(input.Url))
             {
                 return req.CreateErrorResponse(HttpStatusCode.BadRequest, "The url parameter can not be empty.");
             }
 
-            // Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
+            // Validates if input.url is a valid absolute url, aka is a complete reference to the resource, ex: http(s)://google.com
             if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
             {
                 return req.CreateErrorResponse(HttpStatusCode.BadRequest, $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
             }
 
-            var result = new ShortResponse();
-            var config = new ConfigurationBuilder()
-                .SetBasePath(context.FunctionAppDirectory)
-                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
-
-            var stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
-
+            ShortResponse result;
+            
             try
             {
                 var longUrl = input.Url.Trim();
@@ -89,17 +88,17 @@ namespace Cloud5mins.Function
                 if (!string.IsNullOrEmpty(vanity))
                 {
                     newRow = new ShortUrlEntity(longUrl, vanity, title);
-                    if (await stgHelper.IfShortUrlEntityExist(newRow))
+                    if (await _storageTableHelper.IfShortUrlEntityExist(newRow))
                     {
                         return req.CreateResponse(HttpStatusCode.Conflict, "This Short URL already exist.");
                     }
                 }
                 else
                 {
-                    newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, stgHelper), title);
+                    newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, _storageTableHelper), title);
                 }
 
-                await stgHelper.SaveShortUrlEntity(newRow);
+                await _storageTableHelper.SaveShortUrlEntity(newRow);
 
                 var host = req.RequestUri.GetLeftPart(UriPartial.Authority);
                 log.LogInformation($"-> host = {host}");

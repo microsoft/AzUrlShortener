@@ -1,5 +1,5 @@
 using Microsoft.Azure.Cosmos.Table;
-using shortenerTools;
+using shortenerTools.Infrastructure;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,7 +15,7 @@ namespace Cloud5mins.domain
         public string ShortUrl { get; set; }
 
         [EntityJsonPropertyConverter]
-        public Dictionary<string, int> Clicks { get; set; }
+        public Dictionary<string, int> Clicks { get; set; } = new Dictionary<string, int>();
 
         public bool? IsArchived { get; set; }
 
@@ -51,7 +51,18 @@ namespace Cloud5mins.domain
                 Title = title
             };
         }
+
+        public override IDictionary<string, EntityProperty> WriteEntity(OperationContext operationContext)
+        {
+            var results = base.WriteEntity(operationContext);
+            EntityJsonPropertyConverter.Serialize(this, results);
+            return results;
+        }
+
+        public override void ReadEntity(IDictionary<string, EntityProperty> properties, OperationContext operationContext)
+        {
+            base.ReadEntity(properties, operationContext);
+            EntityJsonPropertyConverter.Deserialize(this, properties);
+        }
     }
-
-
 }

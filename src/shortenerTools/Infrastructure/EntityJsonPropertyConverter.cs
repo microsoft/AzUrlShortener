@@ -20,7 +20,14 @@ namespace shortenerTools.Infrastructure
             entity.GetType().GetProperties()
                 .Where(x => x.GetCustomAttributes(typeof(EntityJsonPropertyConverterAttribute), false).Any())
                 .ToList()
-                .ForEach(x => x.SetValue(entity, JsonConvert.DeserializeObject(properties[x.Name].StringValue, x.PropertyType)));
+                .ForEach(x =>
+                {
+                    if (properties.ContainsKey(x.Name))
+                    {
+                        x.SetValue(entity,
+                            JsonConvert.DeserializeObject(properties[x.Name]?.StringValue, x.PropertyType));
+                    }
+                });
         }
     }
 }

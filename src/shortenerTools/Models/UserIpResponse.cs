@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 
 namespace shortenerTools.Models
 {
+    [ExcludeFromCodeCoverage]
     public class UserIpResponse
     {
         [JsonProperty("ip")]

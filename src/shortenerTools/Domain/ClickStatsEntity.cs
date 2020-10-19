@@ -17,6 +17,4 @@ namespace Cloud5mins.domain
             Datetime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
         }
     }
-
-
 }

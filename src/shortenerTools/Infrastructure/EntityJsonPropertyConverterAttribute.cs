@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace shortenerTools
+namespace shortenerTools.Infrastructure
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class EntityJsonPropertyConverterAttribute : Attribute

@@ -16,11 +16,13 @@ namespace Cloud5mins.Function
     {
         private readonly IUserIpLocationService _userIpLocationService;
         private readonly IConfiguration _configuration;
+        private readonly IStorageTableHelper _storageTableHelper;
 
-        public UrlRedirect(IUserIpLocationService userIpLocationService, IConfiguration configuration)
+        public UrlRedirect(IUserIpLocationService userIpLocationService, IConfiguration configuration, IStorageTableHelper storageTableHelper)
         {
             _userIpLocationService = userIpLocationService;
             _configuration = configuration;
+            _storageTableHelper = storageTableHelper;
         }
 
         [FunctionName("UrlRedirect")]
@@ -38,18 +40,16 @@ namespace Cloud5mins.Function
             {
                 redirectUrl = _configuration["defaultRedirectUrl"];
 
-                var stgHelper = new StorageTableHelper(_configuration["UlsDataStorage"]);
-
                 var tempUrl = new ShortUrlEntity(string.Empty, shortUrl);
 
-                var newUrl = await stgHelper.GetShortUrlEntity(tempUrl);
+                var newUrl = await _storageTableHelper.GetShortUrlEntity(tempUrl);
 
                 if (newUrl != null)
                 {
                     log.LogInformation($"Found it: {newUrl.Url}");
                     await SetUrlClickStatsAsync(newUrl);
-                    stgHelper.SaveClickStatsEntity(new ClickStatsEntity(newUrl.RowKey));
-                    await stgHelper.SaveShortUrlEntity(newUrl);
+                    _storageTableHelper.SaveClickStatsEntity(new ClickStatsEntity(newUrl.RowKey));
+                    await _storageTableHelper.SaveShortUrlEntity(newUrl);
                     redirectUrl = WebUtility.UrlDecode(newUrl.Url);
                 }
             }

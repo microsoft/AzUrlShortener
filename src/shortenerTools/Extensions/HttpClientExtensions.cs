@@ -38,7 +38,7 @@ namespace shortenerTools.Extensions
 
             throw new HttpClientException(response.RequestMessage.RequestUri.ToString(),
                 response.RequestMessage.Method.Method,
-                (int) response.StatusCode,
+                (int)response.StatusCode,
                 content,
                 response.RequestMessage.Content != null
                     ? await response.RequestMessage.Content.ReadAsStringAsync()

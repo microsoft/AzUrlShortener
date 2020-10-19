@@ -1,11 +1,11 @@
 using Microsoft.Azure.Cosmos.Table;
+using shortenerTools.Abstractions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Cloud5mins.domain
 {
-
-    public class StorageTableHelper
+    public class StorageTableHelper : IStorageTableHelper
     {
         private string StorageConnectionString { get; set; }
 

@@ -31,8 +31,8 @@ Output:
 using Cloud5mins.domain;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using shortenerTools.Abstractions;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -40,10 +40,17 @@ using System.Threading.Tasks;
 
 namespace Cloud5mins.Function
 {
-    public static class UrlUpdate
+    public class UrlUpdate
     {
+        private readonly IStorageTableHelper _storageTableHelper;
+
+        public UrlUpdate(IStorageTableHelper storageTableHelper)
+        {
+            _storageTableHelper = storageTableHelper;
+        }
+
         [FunctionName("UrlUpdate")]
-        public static async Task<HttpResponseMessage> Run(
+        public async Task<HttpResponseMessage> Run(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
         ILogger log,
         ExecutionContext context)
@@ -61,32 +68,24 @@ namespace Cloud5mins.Function
             {
                 return req.CreateResponse(HttpStatusCode.NotFound);
             }
-
-
+            
             // If the Url parameter only contains whitespaces or is empty return with BadRequest.
             if (string.IsNullOrWhiteSpace(input.Url))
             {
                 return req.CreateErrorResponse(HttpStatusCode.BadRequest, "The url parameter can not be empty.");
             }
 
-            // Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
+            // Validates if input.url is a valid absolute url, aka is a complete reference to the resource, ex: http(s)://google.com
             if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
             {
                 return req.CreateErrorResponse(HttpStatusCode.BadRequest, $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
             }
 
             ShortUrlEntity result;
-            var config = new ConfigurationBuilder()
-                .SetBasePath(context.FunctionAppDirectory)
-                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
-
-            var stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
-
+           
             try
             {
-                result = await stgHelper.UpdateShortUrlEntity(input);
+                result = await _storageTableHelper.UpdateShortUrlEntity(input);
                 var host = req.RequestUri.GetLeftPart(UriPartial.Authority);
                 result.ShortUrl = Utility.GetShortUrl(host, result.RowKey);
 

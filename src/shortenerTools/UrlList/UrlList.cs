@@ -18,8 +18,8 @@ Output:
 using Cloud5mins.domain;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using shortenerTools.Abstractions;
 using System;
 using System.Linq;
 using System.Net;
@@ -28,10 +28,17 @@ using System.Threading.Tasks;
 
 namespace Cloud5mins.Function
 {
-    public static class UrlList
+    public class UrlList
     {
+        private readonly IStorageTableHelper _storageTableHelper;
+
+        public UrlList(IStorageTableHelper storageTableHelper)
+        {
+            _storageTableHelper = storageTableHelper;
+        }
+
         [FunctionName("UrlList")]
-        public static async Task<HttpResponseMessage> Run(
+        public async Task<HttpResponseMessage> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequestMessage req,
         ILogger log,
         ExecutionContext context)
@@ -39,17 +46,10 @@ namespace Cloud5mins.Function
             log.LogInformation($"C# HTTP trigger function processed this request: {req}");
 
             var result = new ListResponse();
-            var config = new ConfigurationBuilder()
-                .SetBasePath(context.FunctionAppDirectory)
-                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
-
-            var stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
 
             try
             {
-                result.UrlList = await stgHelper.GetAllShortUrlEntities();
+                result.UrlList = await _storageTableHelper.GetAllShortUrlEntities();
                 result.UrlList = result.UrlList.Where(p => !(p.IsArchived ?? false)).ToList();
                 var host = req.RequestUri.GetLeftPart(UriPartial.Authority);
                 foreach (var url in result.UrlList)

@@ -20,6 +20,7 @@ Features:
 - 1-Click deployment.
 - Create Edit and Delete short URL.
 - Keep Statistics of your clicks.
+    - Click statistics by country
 - Budget-friendly and 100% open-source.
 
 
