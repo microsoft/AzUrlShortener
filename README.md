@@ -17,11 +17,16 @@ A simple and easy to use and to deploy budget-friendly Url Shortener for everyon
 
 Features:
 
-- 1-Click deployment.
+- 1-Click deployment (currently only in [V1](https://github.com/FBoucher/AzUrlShortener/tree/main-v1)).
 - Create Edit and Delete short URL.
 - Keep Statistics of your clicks.
 - Budget-friendly and 100% open-source.
 
+**[Version 1](https://github.com/FBoucher/AzUrlShortener/tree/main-v1)**
+- A local database (file) is used for authentification.
+
+**[Version 2](https://github.com/FBoucher/AzUrlShortener/tree/vNext)**
+- Azure Active Directory AAD (Microsoft Identity) is used for authentification.
 
 ## How To Deploy
 
@@ -36,11 +41,13 @@ To have all details and alternative deployment refer to the [Deployment Details]
 A good Url Shortener wouldn't be completed without a custom domain name. To know how to add it and other useful post-deployment configurations refer to the [post-deployment-configuration](post-deployment-configuration.md) page.
 
 
-### How to Update / Upgrade
+## How to Update / Upgrade
 
 You deployed the Azure Url Shortener and it's now running in your Azure Subscription, but you would like to have the new feature(s). Updating your current version is in fact really simple.  
 
-#### Update the Azure Functions
+>Note: Currently there is breaking changes between **v1** and **v2**. It is possible to migrate without losing anything, it's just that the documentation is not done yet. See [Issue #196](https://github.com/FBoucher/AzUrlShortener/issues/196) for more details on the progress.
+
+### Update the Azure Functions
 
 Navigate to the Azure portal (azure.portal.com) and select the Azure Function instance, for this project.
 
