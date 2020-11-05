@@ -18,9 +18,6 @@ az group deployment validate -g c5mShortDemo  --template-file "src/adminTools/ad
 az group deployment create  -g c5mShortDemo -n cloud5minsv1 --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.json"  --verbose 
 
 
-
-
-
 # Debuging fake ARM template
 ## validate with Parameter file
 az group deployment validate -g c5mShortDemo  --template-file "deployment/debugARM.json"   --verbose 
@@ -28,3 +25,13 @@ az group deployment validate -g c5mShortDemo  --template-file "deployment/debugA
 ## deploy it
 az group deployment create  -g c5mShortDemo -n cloud5minsv1 --template-file "deployment/debugARM.json" --verbose 
 
+
+# --> IN PROGRESS <--   --> IN PROGRESS <--   --> IN PROGRESS <-- 
+ 
+# Create the Service Princiapl and other Azure AD stuff for V1.x
+
+#TenantID=$(az account list --query "[?name=='Frank Perso Dev'].tenantId" --output tsv)
+#appID=$(az ad app create --display-name TinyAdminTestUI --reply-urls https://blue-stone-0c390700f.azurestaticapps.net/authentication/login-callback --query 'appId' -o tsv)
+
+
+# --> END of IN PROGRESS zone <--

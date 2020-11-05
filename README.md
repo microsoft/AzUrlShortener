@@ -17,30 +17,46 @@ A simple and easy to use and to deploy budget-friendly Url Shortener for everyon
 
 Features:
 
-- 1-Click deployment.
+- 1-Click deployment (currently only in [V1](https://github.com/FBoucher/AzUrlShortener/tree/main-v1)).
 - Create Edit and Delete short URL.
 - Keep Statistics of your clicks.
 - Budget-friendly and 100% open-source.
 
+**[Version 1](https://github.com/FBoucher/AzUrlShortener/tree/main-v1)**
+- A local database (file) is used for authentification.
 
-## How To Deploy
+**[Version 2](https://github.com/FBoucher/AzUrlShortener/tree/vNext)**
+- Azure Active Directory AAD (Microsoft Identity) is used for authentification.
+
+## How To Deploy Version 1
 
 To deploy YOUR version of **Azure Url Shortener** you could fork this repo, but if you are looking for the easy way just click on the "Deploy to Azure".
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/?WT.mc_id=urlshortener-github-frbouche#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFBoucher%2FAzUrlShortener%2Fmain%2Fdeployment%2FazureDeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/?WT.mc_id=urlshortener-github-frbouche#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFBoucher%2FAzUrlShortener%2Fmain-v1%2Fdeployment%2FazureDeploy.json)
 
-To have all details and alternative deployment refer to the [Deployment Details](azFunctions-deployment.md) page.
+To have all details and alternative deployment refer to the [Deployment Details](https://github.com/FBoucher/AzUrlShortener/blob/main-v1/azFunctions-deployment.md) page.
 
 #### Post Deployment Configuration
 
-A good Url Shortener wouldn't be completed without a custom domain name. To know how to add it and other useful post-deployment configurations refer to the [post-deployment-configuration](post-deployment-configuration.md) page.
+A good Url Shortener wouldn't be completed without a custom domain name. To know how to add it and other useful post-deployment configurations refer to the [post-deployment-configuration](https://github.com/FBoucher/AzUrlShortener/blob/main-v1/post-deployment-configuration.md) page.
 
 
-### How to Update / Upgrade
+## How To Deploy Version 2
+
+Right now the deployment of the Version 2 is possible Headless (just the Azure Function) or paired with [TinyBlazorAdmin](https://github.com/FBoucher/TinyBlazorAdmin).  It's a static website written in C# webassembly and it's even more budget friendly then v1. However, we are still working at the automation of the deployment.
+
+Until we have a 1-Click deployment you should follow the documented To have all details and alternative deployment refer to the [Deployment Details](https://github.com/FBoucher/TinyBlazorAdmin/blob/main/deployment.md) page.
+
+
+## How to Update / Upgrade
 
 You deployed the Azure Url Shortener and it's now running in your Azure Subscription, but you would like to have the new feature(s). Updating your current version is in fact really simple.  
 
-#### Update the Azure Functions
+>Note: Currently there is breaking changes between **v1** and **v2**. It is possible to migrate without losing anything, it's just that the documentation is not done yet. See [Issue #196](https://github.com/FBoucher/AzUrlShortener/issues/196) for more details on the progress.
+
+---
+
+### Update the Azure Functions
 
 Navigate to the Azure portal (azure.portal.com) and select the Azure Function instance, for this project.
 
@@ -76,13 +92,10 @@ If you are interested to learn more about what's under the hood, and get more de
 
 ## What's Next?
 
-We are working on the **version 1.0** (ETA Summer 2020). This version will:
+We are working on the **version 2.0** (ETA Summer 2020). This version will:
 
 - Use Azure Active Directory (AAD)
 - Client side website (more budget friendly) see GitHub project: [TinyBlazorAdmin](https://github.com/FBoucher/TinyBlazorAdmin) for more details.
-
-Optional (if not then soon after)
-
 - Statistics
 - Better Grid to display the URL
 
