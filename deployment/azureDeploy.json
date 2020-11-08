@@ -36,9 +36,9 @@
         },
         "GitHubBranch": {
             "type": "string",
-            "defaultValue": "main",
+            "defaultValue": "main-v1",
             "metadata": {
-                "description": "Name of the branch to use when deploying (Default = main)."
+                "description": "Name of the branch to use when deploying (TO DEPLOY V1 it needs to be = main-v1)."
             }
         },
         "ExpireOn":{
