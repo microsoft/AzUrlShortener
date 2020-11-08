@@ -5,7 +5,7 @@
 
 version: 2
 updates:
-  - package-ecosystem: "dotnet:nuget" 
+  - package-ecosystem: "nuget" 
     directory: "/src/shortenerTools"
     schedule:
       interval: "monthly"
@@ -16,7 +16,7 @@ updates:
     labels:
         - dependencies
         - Serverless Backend      
-  - package-ecosystem: "dotnet:nuget" 
+  - package-ecosystem: "nuget" 
     directory: "/src/adminTools/adminBlazorWebsite/src" 
     schedule:
       interval: "monthly"
