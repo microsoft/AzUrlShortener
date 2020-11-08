@@ -15,7 +15,7 @@ updates:
         - "fboucher"
     labels:
         - dependencies
-        - Serverless Backend      
+        - Serverless-Backend      
   - package-ecosystem: "nuget" 
     directory: "/src/adminTools/adminBlazorWebsite/src" 
     schedule:
