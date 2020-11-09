@@ -1,4 +1,5 @@
 using Cloud5mins.domain;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
@@ -6,11 +7,12 @@ using shortenerTools.Abstractions;
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Cloud5mins.Function
 {
-    public class UrlClickStats
+    public class UrlClickStats : FunctionBase
     {
         private readonly IStorageTableHelper _storageTableHelper;
 
@@ -20,38 +22,42 @@ namespace Cloud5mins.Function
         }
 
         [FunctionName("UrlClickStats")]
-        public async Task<HttpResponseMessage> Run(
+        public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
         ILogger log,
-        ExecutionContext context)
+        ExecutionContext context,
+        ClaimsPrincipal principal)
         {
             log.LogInformation($"C# HTTP trigger function processed this request: {req}");
 
+            var (requestValid, invalidResult, clickStatsRequest) = await ValidateRequestAsync<UrlClickStatsRequest>(context, req, principal, log);
+
             // Validation of the inputs
-            if (req == null)
+            if (!requestValid)
             {
-                return req.CreateResponse(HttpStatusCode.NotFound);
+                return invalidResult;
             }
 
-            var input = await req.Content.ReadAsAsync<UrlClickStatsRequest>();
-            if (input == null)
-            {
-                return req.CreateResponse(HttpStatusCode.NotFound);
-            }
-
-            var result = new ClickStatsEntityList();
-            
             try
             {
-                result.ClickStatsList = await _storageTableHelper.GetAllStatsByVanity(input.Vanity);
+                var result = new ClickStatsEntityList
+                {
+                    ClickStatsList = await _storageTableHelper.GetAllStatsByVanity(clickStatsRequest.Vanity)
+                };
+
+                return new OkObjectResult(result);
             }
             catch (Exception ex)
             {
-                log.LogError(ex, "An unexpected error was encountered.");
-                return req.CreateResponse(HttpStatusCode.BadRequest, ex);
-            }
+                log.LogError(ex, "{functionName} failed due to an unexpected error: {errorMessage}.",
+                    context.FunctionName, ex.GetBaseException().Message);
 
-            return req.CreateResponse(HttpStatusCode.OK, result);
+                return new BadRequestObjectResult(new
+                {
+                    message = ex.Message,
+                    StatusCode = HttpStatusCode.BadRequest
+                });
+            }
         }
     }
 }

@@ -21,20 +21,21 @@ Output:
 */
 
 using Cloud5mins.domain;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using shortenerTools.Abstractions;
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
-using shortenerTools.Abstractions;
 
 namespace Cloud5mins.Function
 {
 
-    public class UrlShortener
+    public class UrlShortener : FunctionBase
     {
         private readonly IStorageTableHelper _storageTableHelper;
 
@@ -44,44 +45,39 @@ namespace Cloud5mins.Function
         }
 
         [FunctionName("UrlShortener")]
-        public async Task<HttpResponseMessage> Run(
+        public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequestMessage req,
         ILogger log,
-        ExecutionContext context)
+        ExecutionContext context,
+        ClaimsPrincipal principal)
         {
             log.LogInformation($"C# HTTP trigger function processed this request: {req}");
 
             // Validation of the inputs
-            if (req == null)
-            {
-                return req.CreateResponse(HttpStatusCode.NotFound);
-            }
+            var (requestValid, invalidResult, shortRequest) = await ValidateRequestAsync<ShortRequest>(context, req, principal, log);
 
-            var input = await req.Content.ReadAsAsync<ShortRequest>();
-            if (input == null)
+            if (!requestValid)
             {
-                return req.CreateResponse(HttpStatusCode.NotFound);
+                return invalidResult;
             }
-
+            
             // If the Url parameter only contains whitespaces or is empty return with BadRequest.
-            if (string.IsNullOrWhiteSpace(input.Url))
+            if (string.IsNullOrWhiteSpace(shortRequest.Url))
             {
-                return req.CreateErrorResponse(HttpStatusCode.BadRequest, "The url parameter can not be empty.");
+                return new BadRequestObjectResult("The url parameter can not be empty.");
             }
 
             // Validates if input.url is a valid absolute url, aka is a complete reference to the resource, ex: http(s)://google.com
-            if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
+            if (!Uri.IsWellFormedUriString(shortRequest.Url, UriKind.Absolute))
             {
-                return req.CreateErrorResponse(HttpStatusCode.BadRequest, $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
+                return new BadRequestObjectResult($"{shortRequest.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
             }
 
-            ShortResponse result;
-            
             try
             {
-                var longUrl = input.Url.Trim();
-                var vanity = string.IsNullOrWhiteSpace(input.Vanity) ? "" : input.Vanity.Trim();
-                var title = string.IsNullOrWhiteSpace(input.Title) ? "" : input.Title.Trim();
+                var longUrl = shortRequest.Url.Trim();
+                var vanity = string.IsNullOrWhiteSpace(shortRequest.Vanity) ? "" : shortRequest.Vanity.Trim();
+                var title = string.IsNullOrWhiteSpace(shortRequest.Title) ? "" : shortRequest.Title.Trim();
 
                 ShortUrlEntity newRow;
 
@@ -90,7 +86,7 @@ namespace Cloud5mins.Function
                     newRow = new ShortUrlEntity(longUrl, vanity, title);
                     if (await _storageTableHelper.IfShortUrlEntityExist(newRow))
                     {
-                        return req.CreateResponse(HttpStatusCode.Conflict, "This Short URL already exist.");
+                        return new ConflictObjectResult("This Short URL already exist.");
                     }
                 }
                 else
@@ -102,17 +98,24 @@ namespace Cloud5mins.Function
 
                 var host = req.RequestUri.GetLeftPart(UriPartial.Authority);
                 log.LogInformation($"-> host = {host}");
-                result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
+
+                var result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
 
                 log.LogInformation("Short Url created.");
+
+                return new OkObjectResult(result);
             }
             catch (Exception ex)
             {
-                log.LogError(ex, "An unexpected error was encountered.");
-                return req.CreateResponse(HttpStatusCode.BadRequest, ex);
-            }
+                log.LogError(ex, "{functionName} failed due to an unexpected error: {errorMessage}.",
+                    context.FunctionName, ex.GetBaseException().Message);
 
-            return req.CreateResponse(HttpStatusCode.OK, result);
+                return new BadRequestObjectResult(new
+                {
+                    message = ex.Message,
+                    StatusCode = HttpStatusCode.BadRequest
+                });
+            }
         }
     }
 }

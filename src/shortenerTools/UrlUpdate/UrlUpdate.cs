@@ -29,6 +29,7 @@ Output:
 */
 
 using Cloud5mins.domain;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
@@ -36,11 +37,12 @@ using shortenerTools.Abstractions;
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Cloud5mins.Function
 {
-    public class UrlUpdate
+    public class UrlUpdate : FunctionBase
     {
         private readonly IStorageTableHelper _storageTableHelper;
 
@@ -50,53 +52,53 @@ namespace Cloud5mins.Function
         }
 
         [FunctionName("UrlUpdate")]
-        public async Task<HttpResponseMessage> Run(
+        public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
         ILogger log,
-        ExecutionContext context)
+        ExecutionContext context,
+        ClaimsPrincipal principal)
         {
             log.LogInformation($"C# HTTP trigger function processed this request: {req}");
 
             // Validation of the inputs
-            if (req == null)
+            var (requestValid, invalidResult, shortUrlEntity) = await ValidateRequestAsync<ShortUrlEntity>(context, req, principal, log);
+
+            if (!requestValid)
             {
-                return req.CreateResponse(HttpStatusCode.NotFound);
+                return invalidResult;
             }
 
-            var input = await req.Content.ReadAsAsync<ShortUrlEntity>();
-            if (input == null)
-            {
-                return req.CreateResponse(HttpStatusCode.NotFound);
-            }
-            
             // If the Url parameter only contains whitespaces or is empty return with BadRequest.
-            if (string.IsNullOrWhiteSpace(input.Url))
+            if (string.IsNullOrWhiteSpace(shortUrlEntity.Url))
             {
-                return req.CreateErrorResponse(HttpStatusCode.BadRequest, "The url parameter can not be empty.");
+                return new BadRequestObjectResult("The url parameter can not be empty.");
             }
 
             // Validates if input.url is a valid absolute url, aka is a complete reference to the resource, ex: http(s)://google.com
-            if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
+            if (!Uri.IsWellFormedUriString(shortUrlEntity.Url, UriKind.Absolute))
             {
-                return req.CreateErrorResponse(HttpStatusCode.BadRequest, $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
+                return new BadRequestObjectResult($"{shortUrlEntity.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
             }
 
-            ShortUrlEntity result;
-           
             try
             {
-                result = await _storageTableHelper.UpdateShortUrlEntity(input);
+                var result = await _storageTableHelper.UpdateShortUrlEntity(shortUrlEntity);
                 var host = req.RequestUri.GetLeftPart(UriPartial.Authority);
                 result.ShortUrl = Utility.GetShortUrl(host, result.RowKey);
 
+                return new OkObjectResult(result);
             }
             catch (Exception ex)
             {
-                log.LogError(ex, "An unexpected error was encountered.");
-                return req.CreateResponse(HttpStatusCode.BadRequest, ex);
-            }
+                log.LogError(ex, "{functionName} failed due to an unexpected error: {errorMessage}.",
+                    context.FunctionName, ex.GetBaseException().Message);
 
-            return req.CreateResponse(HttpStatusCode.OK, result);
+                return new BadRequestObjectResult(new
+                {
+                    message = ex.Message,
+                    StatusCode = HttpStatusCode.BadRequest
+                });
+            }
         }
     }
 }
