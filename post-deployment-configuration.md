@@ -65,18 +65,34 @@ Voila! You can now call your azURLShortener from your custom domain! ✔
 
 ### 3- Remove the www sub-domain
 
-Create a account in CloudFlare and add a site 
-
+This next section is to "fake" a naked domain.
 
 ![cf_addSite][cf_addSite]
 
+Create an account in cloudflare.com and add a site for your domain. We will need to customized the DNS and create some Page Rules. 
+
 ![cf_DNS_Rules][cf_DNS_Rules]
+
+On the cloudflare.com note the 2 nameservers adresses. Go to the origin name provider (in my case godaddy) and replace the nameservers names with the value found on cloudflare.
 
 ![cl_dns_details][cl_dns_details]
 
-![cf_rules_details][cf_rules_details]
+Now let's create a rules that will redirect all the incoming traffic from the naked-domain to www.domain. On the option on the top, click the **Pages Rules** (B). Then Click the Button **Create Page Rule**
+
+![Rule1][Rule1]
+
+In the field for **If the URL matches:** enter the naked-domain follow by `/*`. That will match everything coming from that URL
+
+For the **settings** select `Forwarding URL` and `301- Permanent Redirect`. Then the destination url should be `https://www.` with your domain and `/$1`.
+
+The URL shortener is now completly configured, and your users will be pleased. There only one last step to make YOUR experience more enjoyable.
 
 
+### 4- Add A Page Rule for your Admin page (TinyBlazorAdmin)
+
+The TinyBlazorAdmin is the place to manage all your URLs. Create a new Page rule to redirect all call to your domain and the prefix of your choice. ( ex: admin.07f.ca, manager.07f.ca, new.07f.ca, etc)
+
+Congradulation, you are all set!
 
 ---
 
@@ -121,4 +137,5 @@ And finally, click the **Copy** button to get the URL of your function _with the
 [cf_DNS_Rules]: medias/cf_DNS_Rules.png
 [cl_dns_details]: medias/cl_dns_details.png
 [cf_rules_details]: medias/cf_rules_details.png
+[Rule1]: medias/Rule1.png
 
