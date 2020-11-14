@@ -112,6 +112,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "jasonhand",
+      "name": "Jason Hand",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1173344?v=4",
+      "profile": "http://www.jasonhand.com",
+      "contributions": [
+        "doc",
+        "infra"
+      ]
     }
   ]
 }
