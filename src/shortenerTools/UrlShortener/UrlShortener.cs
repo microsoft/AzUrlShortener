@@ -128,9 +128,7 @@ namespace Cloud5mins.Function
 
                 await stgHelper.SaveShortUrlEntity(newRow);
 
-                //var host = req.RequestUri.GetLeftPart(UriPartial.Authority);
-                var host = req.Host.Host;
-                log.LogInformation($"-> host = {host}");
+                var host = string.IsNullOrEmpty(config["customDomain"]) ? req.Host.Host: config["customDomain"].ToString();
                 result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
 
                 log.LogInformation("Short Url created.");

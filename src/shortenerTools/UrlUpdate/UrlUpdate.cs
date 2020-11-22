@@ -115,8 +115,7 @@ namespace Cloud5mins.Function
                 StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
 
                 result = await stgHelper.UpdateShortUrlEntity(input);
-                //var host = req.RequestUri.GetLeftPart(UriPartial.Authority);
-                var host = req.Host.Host;
+                var host = string.IsNullOrEmpty(config["customDomain"]) ? req.Host.Host: config["customDomain"].ToString();
                 result.ShortUrl = Utility.GetShortUrl(host, result.RowKey);
 
             }
