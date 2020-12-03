@@ -4,6 +4,8 @@
 
 Of course the beauty of a URL shortener is to have short link and this is done the best by a naked domain (domain.com). To realized this you would need to by an expensive certificate with a wild card, and this doesn't fit in the goals of this project. We will achieve it nervertheless by having a secure www.domain.com and doing a dynamic forward of domain.com to www.domain.com.
 
+[<img src="https://img.youtube.com/vi/srZv8aj3ZP8/maxresdefault.jpg" width="50%">](https://youtu.be/srZv8aj3ZP8)
+
 ### 1- Assign a Domain to the Azure Function
 
 Let`s start by Adding a domain to the App Service.
