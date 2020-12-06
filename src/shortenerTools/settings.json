@@ -5,7 +5,7 @@
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "FUNCTIONS_V2_COMPATIBILITY_MODE":"true",
     "UlsDataStorage":"",
-    "defaultRedirectUrl":"https://azure.com"
-
+    "defaultRedirectUrl":"https://azure.com",
+    "customDomain":"https://c5m.ca"
   }
 }

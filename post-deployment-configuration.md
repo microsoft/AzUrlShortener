@@ -4,6 +4,9 @@
 
 Of course the beauty of a URL shortener is to have short link and this is done the best by a naked domain (domain.com). To realized this you would need to by an expensive certificate with a wild card, and this doesn't fit in the goals of this project. We will achieve it nervertheless by having a secure www.domain.com and doing a dynamic forward of domain.com to www.domain.com.
 
+[<img src="https://img.youtube.com/vi/srZv8aj3ZP8/maxresdefault.jpg" width="50%">](https://youtu.be/srZv8aj3ZP8)
+
+[https://youtu.be/srZv8aj3ZP8](https://youtu.be/srZv8aj3ZP8)
 ### 1- Assign a Domain to the Azure Function
 
 Let`s start by Adding a domain to the App Service.
@@ -92,7 +95,21 @@ The URL shortener is now completly configured, and your users will be pleased. T
 
 The TinyBlazorAdmin is the place to manage all your URLs. Create a new Page rule to redirect all call to your domain and the prefix of your choice. ( ex: admin.07f.ca, manager.07f.ca, new.07f.ca, etc)
 
+
+
+
+### 5- Add the new Custom Domain to the Settings file
+
+The last step is to update the `src\shortenerTools\settings.json`. This is the setting file for the Azure Function. Add (or edit if already present) `customDomain` and set it to your new domain.
+
+```
+ "customDomain":"https://c5m.ca"
+```
+
+
 Congradulation, you are all set!
+
+
 
 ---
 

@@ -60,14 +60,13 @@ namespace Cloud5mins.Function
                 }
                 else
                 {
-                    userId = principal.FindFirst(ClaimTypes.GivenName).Value;
-                    log.LogInformation("Authenticated user {user}.", userId);
+                   userId = principal.FindFirst(ClaimTypes.GivenName).Value;
+                   log.LogInformation("Authenticated user {user}.", userId);
                 }
 
                 result.UrlList = await stgHelper.GetAllShortUrlEntities();
                 result.UrlList = result.UrlList.Where(p => !(p.IsArchived ?? false)).ToList();
-                //var host = req.HttpContext.RequestUri.GetLeftPart(UriPartial.Authority);
-                var host = req.Host.Host;
+                var host = string.IsNullOrEmpty(config["customDomain"]) ? req.Host.Host: config["customDomain"].ToString();
                 foreach (ShortUrlEntity url in result.UrlList)
                 {
                     url.ShortUrl = Utility.GetShortUrl(host, url.RowKey);
