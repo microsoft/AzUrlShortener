@@ -27,7 +27,7 @@ namespace Cloud5mins.Function
             {
                 var config = new ConfigurationBuilder()
                     .SetBasePath(context.FunctionAppDirectory)
-                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile("settings.json", optional: true, reloadOnChange: true)
                     .AddEnvironmentVariables()
                     .Build();
 
