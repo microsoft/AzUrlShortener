@@ -75,6 +75,53 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "thefisk",
+      "name": "Nathan Fisk",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/39799908?v=4",
+      "profile": "https://github.com/thefisk",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "alsmyr",
+      "name": "Erik Alsmyr",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3719489?v=4",
+      "profile": "http://www.lexplore.com",
+      "contributions": [
+        "bug",
+        "doc"
+      ]
+    },
+    {
+      "login": "jawn",
+      "name": "Bernard Vander Beken",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1705112?v=4",
+      "profile": "https://jawn.net",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "IronManion",
+      "name": "IronManion",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/36028632?v=4",
+      "profile": "https://github.com/IronManion",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "jasonhand",
+      "name": "Jason Hand",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1173344?v=4",
+      "profile": "http://www.jasonhand.com",
+      "contributions": [
+        "doc",
+        "infra"
+      ]
     }
   ]
 }

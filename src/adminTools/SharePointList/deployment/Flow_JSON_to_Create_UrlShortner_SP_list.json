@@ -1,0 +1,46 @@
+{
+    "verb": "createSPList",
+    "listName": "UrlShortener",
+    "templateType": 100,
+    "subactions": [
+        {
+            "verb": "setTitle",
+            "title": "UrlShortener"
+        },
+        {
+            "verb": "setDescription",
+            "description": "UrlShortener admin list (UI) to create short url processed by AzUrlShortener"
+        },
+        {
+            "verb": "addSPFieldXml",
+            "addToDefaultView": true,
+            "description": "Long original URL",
+            "schemaXml": "<Field ID=\"{c532fcb9-cdb3-45c6-8247-c784dcd58e1a}\" Type=\"URL\" DisplayName=\"Url\" Required=\"TRUE\" Format=\"Hyperlink\" StaticName=\"Url\" Name=\"Url\"></Field>"
+        },
+        {
+            "verb": "addSPField",
+            "fieldType": "Text",
+            "displayName": "Vanity",
+            "internalName": "Vanity",
+            "description": "Vanity or own text as short url",
+            "addToDefaultView": true,
+            "id": "c532fcb9-cdb3-45c6-8247-c784dcd58e1b",
+            "isRequired": false
+        },
+        {
+            "verb": "addSPFieldXml",
+            "addToDefaultView": true,
+            "schemaXml": "<Field ID=\"{c532fcb9-cdb3-45c6-8247-c784dcd58e1c}\" Type=\"URL\" DisplayName=\"ShortUrl\" Required=\"FALSE\" Format=\"Hyperlink\" StaticName=\"ShortUrl\" Name=\"ShortUrl\"></Field>"
+        },
+        {
+            "verb": "addSPFieldXml",
+            "addToDefaultView": true,
+            "schemaXml": "<Field ID=\"{c532fcb9-cdb3-45c6-8247-c784dcd58e1d}\" Type=\"Choice\" DisplayName=\"IsArchive\" Required=\"FALSE\" Format=\"Dropdown\" StaticName=\"IsArchived\" Name=\"IsArchived\"><Default>false</Default><CHOICES><CHOICE>false</CHOICE><CHOICE>true</CHOICE></CHOICES></Field>"
+        },
+        {
+            "verb": "addSPFieldXml",
+            "addToDefaultView": true,
+            "schemaXml": "<Field ID=\"{c532fcb9-cdb3-45c6-8247-c784dcd58e1e}\" Type=\"Choice\" DisplayName=\"Archive\" Required=\"FALSE\" Format=\"RadioButtons\" StaticName=\"Archived\" Name=\"Archived\"><Default></Default><CHOICES><CHOICE>Yes</CHOICE></CHOICES></Field>"
+        }
+    ]
+}
