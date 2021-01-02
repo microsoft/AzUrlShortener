@@ -12,7 +12,7 @@ Input:
         // [Optional] the end of the URL. If nothing one will be generated for you.
         "vanity": "azFunc"
 
-        // [Optional] DateTime when to automaticly archive the
+        // [Optional] DateTime when to automaticly archive the short url.
         "expire": "2021-01-02T17:01:13Z"
     }
 
