@@ -1,0 +1,21 @@
+name: DEV CI-CD 
+
+on:
+  push:
+    branches: dev
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+    - uses: azure/arm-deploy@v1
+      with:
+        resourceGroupName: UrlShortnerDEV
+        template: ./deployment/azureDeploy.json
+        parameters: baseName=AzShorterDev,frontend=none,GitHubBranch=dev,OwnerName=Frank
+        
+  

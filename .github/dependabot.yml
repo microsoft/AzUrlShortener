@@ -7,6 +7,7 @@ version: 2
 updates:
   - package-ecosystem: "nuget" 
     directory: "/src/shortenerTools"
+    target-branch: "vnext"
     schedule:
       interval: "monthly"
     assignees: 
@@ -17,7 +18,8 @@ updates:
         - dependencies
         - Serverless-Backend      
   - package-ecosystem: "nuget" 
-    directory: "/src/adminTools/adminBlazorWebsite/src" 
+    directory: "/src/adminTools/adminBlazorWebsite/src"
+    target-branch: "vnext"
     schedule:
       interval: "monthly"
     assignees: 
