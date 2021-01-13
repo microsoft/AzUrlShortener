@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Microsoft.Azure.Cosmos.Table;
 
 namespace Cloud5mins.domain
