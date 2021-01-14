@@ -14,8 +14,10 @@ jobs:
         creds: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
     - uses: azure/arm-deploy@v1
       with:
+        scope: resourcegroup  
         resourceGroupName: UrlShortnerDEV
+        deploymentName: github-dev
         template: ./deployment/azureDeploy.json
-        parameters: baseName=AzShorterDev,frontend=none,GitHubBranch=dev,OwnerName=Frank
+        parameters: ./deployment/azureDeploy.params.dev.json
         
   
