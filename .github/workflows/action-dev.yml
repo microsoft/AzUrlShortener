@@ -18,6 +18,6 @@ jobs:
         resourceGroupName: UrlShortnerDEV
         deploymentName: github-dev
         template: ./deployment/azureDeploy.json
-        parameters: baseName=AzShorterDev frontend=none GitHubBranch=dev OwnerName=Frank
+        parameters: ./deployment/azureDeploy.params.dev.json
         
   
