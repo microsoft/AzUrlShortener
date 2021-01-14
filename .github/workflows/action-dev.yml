@@ -14,15 +14,14 @@ jobs:
       with:
         creds: ${{ secrets.GR_azUrlGitHubDev_CREDENTIALS }}
         
-#    - uses: azure/arm-deploy@v1
-#      id: deployARM
-#      with:
-#        scope: resourcegroup
-#        subscriptionId: ${{ secrets.GR_azUrlGitHubDev_CREDENTIALS.subscriptionId }}
-#        resourceGroupName: UrlShortnerDEV
-#        deploymentName: github-dev
-#        template: deployment/azureDeploy.json
-#        parameters: deployment/azureDeploy.params.dev.json
+    - uses: azure/arm-deploy@v1
+      id: deployARM
+      with:
+        scope: resourcegroup
+        resourceGroupName: UrlShortnerDEV
+        deploymentName: github-dev
+        template: ./deployment/azureDeploy.json
+        parameters: ./deployment/azureDeploy.params.dev.json
 
-    - run: |
-        az group deployment create -n github-dev -g UrlShortnerDEV --template-file deployment/azureDeploy.json --parameters "deployment/azureDeploy.params.dev.json"
+#    - run: |
+#        az group deployment create -n github-dev -g UrlShortnerDEV --template-file deployment/azureDeploy.json --parameters "deployment/azureDeploy.params.dev.json"
