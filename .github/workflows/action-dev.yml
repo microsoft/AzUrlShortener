@@ -8,16 +8,17 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v1
+
     - uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+        creds: ${{ secrets.GR_azUrlGitHubDev_CREDENTIALS }}
+        
     - uses: azure/arm-deploy@v1
+      id: deployARM
       with:
         scope: resourcegroup  
         resourceGroupName: UrlShortnerDEV
         deploymentName: github-dev
         template: deployment/azureDeploy.json
         parameters: deployment/azureDeploy.params.dev.json
-        
-  
