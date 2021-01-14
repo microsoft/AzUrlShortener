@@ -17,7 +17,7 @@ jobs:
     - uses: azure/arm-deploy@v1
       id: deployARM
       with:
-        scope: resourcegroup
+        deploymentMode: Validate
         resourceGroupName: UrlShortnerDEV
         deploymentName: github-dev
         template: ./deployment/azureDeploy.json
