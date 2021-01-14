@@ -17,7 +17,7 @@ jobs:
         scope: resourcegroup  
         resourceGroupName: UrlShortnerDEV
         deploymentName: github-dev
-        template: ./deployment/azureDeploy.json
-        parameters: ./deployment/azureDeploy.params.dev.json
+        template: deployment/azureDeploy.json
+        parameters: deployment/azureDeploy.params.dev.json
         
   
