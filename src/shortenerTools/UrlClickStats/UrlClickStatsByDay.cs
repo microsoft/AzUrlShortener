@@ -93,6 +93,7 @@ namespace Cloud5mins.Function
                 StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
 
                 var rawStats = await stgHelper.GetAllStatsByVanity(input.Vanity);
+                log.LogInformation("Fetching for {vanity}.", input.Vanity);
 
                 result.Items = rawStats.GroupBy( s => DateTime.Parse(s.Datetime).Date)
                                             .Select(stat => new ClickDate{
