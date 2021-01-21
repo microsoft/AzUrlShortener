@@ -74,9 +74,7 @@ namespace Cloud5mins.Function
 
             try
             {
-                log.LogInformation($"geeting body");
-                log.LogInformation($"Body is -->{req.Body}<--");
-                
+
                 using (var reader = new StreamReader(req.Body))
                 {
                     var strBody = reader.ReadToEnd();
@@ -95,14 +93,14 @@ namespace Cloud5mins.Function
 
                 StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
 
-                string searchingKey = "";
-                log.LogInformation($"Fetching for {input.Vanity}.");
-                if(!string.IsNullOrEmpty(input.Vanity)){
-                    searchingKey = input.Vanity;
-                }
-                log.LogInformation($"Now Looking for {searchingKey}.");
+                // string searchingKey = "";
+                // log.LogInformation($"Fetching for {input.Vanity}.");
+                // if(!string.IsNullOrEmpty(input.Vanity)){
+                //     searchingKey = input.Vanity;
+                // }
+                // log.LogInformation($"Now Looking for {searchingKey}.");
 
-                var rawStats = await stgHelper.GetAllStatsByVanity(searchingKey);
+                var rawStats = await stgHelper.GetAllStatsByVanity(input.Vanity);
                 
 
                 result.Items = rawStats.GroupBy( s => DateTime.Parse(s.Datetime).Date)
@@ -112,7 +110,7 @@ namespace Cloud5mins.Function
                                             }).OrderBy(s => DateTime.Parse(s.DateClicked).Date).ToList<ClickDate>(); 
 
                 var host = string.IsNullOrEmpty(config["customDomain"]) ? req.Host.Host: config["customDomain"].ToString();
-                result.Url = Utility.GetShortUrl(host, searchingKey);
+                result.Url = Utility.GetShortUrl(host, input.Vanity);
             }
             catch (Exception ex)
             {
