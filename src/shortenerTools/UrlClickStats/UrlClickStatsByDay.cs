@@ -92,8 +92,15 @@ namespace Cloud5mins.Function
 
                 StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
 
-                var rawStats = await stgHelper.GetAllStatsByVanity(input.Vanity);
-                log.LogInformation("Fetching for {vanity}.", input.Vanity);
+                string searchingKey = "";
+                log.LogInformation($"Fetching for {input.Vanity}.");
+                if(!string.IsNullOrEmpty(input.Vanity)){
+                    searchingKey = input.Vanity;
+                }
+                log.LogInformation($"Now Looking for {searchingKey}.");
+
+                var rawStats = await stgHelper.GetAllStatsByVanity(searchingKey);
+                
 
                 result.Items = rawStats.GroupBy( s => DateTime.Parse(s.Datetime).Date)
                                             .Select(stat => new ClickDate{
@@ -102,7 +109,7 @@ namespace Cloud5mins.Function
                                             }).OrderBy(s => DateTime.Parse(s.DateClicked).Date).ToList<ClickDate>(); 
 
                 var host = string.IsNullOrEmpty(config["customDomain"]) ? req.Host.Host: config["customDomain"].ToString();
-                result.Url = Utility.GetShortUrl(host, input.Vanity);
+                result.Url = Utility.GetShortUrl(host, searchingKey);
             }
             catch (Exception ex)
             {
