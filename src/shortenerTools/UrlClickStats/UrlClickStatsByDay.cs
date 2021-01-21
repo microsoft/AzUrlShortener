@@ -74,6 +74,9 @@ namespace Cloud5mins.Function
 
             try
             {
+                log.LogInformation($"geeting body");
+                log.LogInformation($"Body is -->{req.Body}<--");
+                
                 using (var reader = new StreamReader(req.Body))
                 {
                     var strBody = reader.ReadToEnd();
