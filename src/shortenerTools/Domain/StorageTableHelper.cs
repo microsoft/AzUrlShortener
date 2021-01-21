@@ -75,10 +75,15 @@ namespace Cloud5mins.domain
             var lstShortUrl = new List<ClickStatsEntity>();
             do
             {
-                // Retrieving all entities that are NOT the NextId entity 
-                // (it's the only one in the partion "KEY")
-                TableQuery<ClickStatsEntity> rangeQuery = new TableQuery<ClickStatsEntity>().Where(
+                TableQuery<ClickStatsEntity> rangeQuery;
+
+                if(string.IsNullOrEmpty(vanity)){
+                    rangeQuery = new TableQuery<ClickStatsEntity>();
+                }
+                else{
+                    rangeQuery = new TableQuery<ClickStatsEntity>().Where(
                     filter: TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, vanity));
+                }
 
                 var queryResult = await tblUrls.ExecuteQuerySegmentedAsync(rangeQuery, token);
                 lstShortUrl.AddRange(queryResult.Results as List<ClickStatsEntity>);
