@@ -1,3 +1,27 @@
+/*
+```c#
+Input:
+
+    {
+        // [Required] the end of the URL that you want statistics for.
+        "vanity": "azFunc"
+    }
+
+Output:
+    {
+    "items": [
+        {
+        "dateClicked": "2020-12-19",
+        "count": 1
+        },
+        {
+        "dateClicked": "2020-12-03",
+        "count": 2
+        }
+    ],
+    "url": ""https://c5m.ca/29"
+*/
+
 using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
@@ -12,12 +36,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using System.IO;
+using System.Linq;
 
 namespace Cloud5mins.Function
 {
-    public static class UrlClickStats
+    public static class UrlClickStatsByDay
     {
-        [FunctionName("UrlClickStats")]
+        [FunctionName("UrlClickStatsByDay")]
         public static async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
         ILogger log,
@@ -28,7 +53,7 @@ namespace Cloud5mins.Function
 
             string userId = string.Empty;
             UrlClickStatsRequest input;
-            var result = new ClickStatsEntityList();
+            var result = new ClickDateList();
 
             var invalidRequest = Utility.CatchUnauthorize(principal, log);
             if (invalidRequest != null)
@@ -49,6 +74,7 @@ namespace Cloud5mins.Function
 
             try
             {
+
                 using (var reader = new StreamReader(req.Body))
                 {
                     var strBody = reader.ReadToEnd();
@@ -67,7 +93,24 @@ namespace Cloud5mins.Function
 
                 StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
 
-                result.ClickStatsList = await stgHelper.GetAllStatsByVanity(input.Vanity);
+                // string searchingKey = "";
+                // log.LogInformation($"Fetching for {input.Vanity}.");
+                // if(!string.IsNullOrEmpty(input.Vanity)){
+                //     searchingKey = input.Vanity;
+                // }
+                // log.LogInformation($"Now Looking for {searchingKey}.");
+
+                var rawStats = await stgHelper.GetAllStatsByVanity(input.Vanity);
+                
+
+                result.Items = rawStats.GroupBy( s => DateTime.Parse(s.Datetime).Date)
+                                            .Select(stat => new ClickDate{
+                                                DateClicked = stat.Key.ToString("yyyy-MM-dd"),
+                                                Count = stat.Count()
+                                            }).OrderBy(s => DateTime.Parse(s.DateClicked).Date).ToList<ClickDate>(); 
+
+                var host = string.IsNullOrEmpty(config["customDomain"]) ? req.Host.Host: config["customDomain"].ToString();
+                result.Url = Utility.GetShortUrl(host, input.Vanity);
             }
             catch (Exception ex)
             {
