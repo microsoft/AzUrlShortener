@@ -13,7 +13,7 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.GR_azUrlGitHubDev_CREDENTIALS }}
-        
+       
 #    - uses: azure/arm-deploy@v1
 #      id: deployARM
 #      with:
