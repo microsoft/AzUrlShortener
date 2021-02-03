@@ -74,6 +74,7 @@ namespace Cloud5mins.Function
 
             try
             {
+
                 using (var reader = new StreamReader(req.Body))
                 {
                     var strBody = reader.ReadToEnd();
@@ -92,7 +93,15 @@ namespace Cloud5mins.Function
 
                 StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
 
+                // string searchingKey = "";
+                // log.LogInformation($"Fetching for {input.Vanity}.");
+                // if(!string.IsNullOrEmpty(input.Vanity)){
+                //     searchingKey = input.Vanity;
+                // }
+                // log.LogInformation($"Now Looking for {searchingKey}.");
+
                 var rawStats = await stgHelper.GetAllStatsByVanity(input.Vanity);
+                
 
                 result.Items = rawStats.GroupBy( s => DateTime.Parse(s.Datetime).Date)
                                             .Select(stat => new ClickDate{
