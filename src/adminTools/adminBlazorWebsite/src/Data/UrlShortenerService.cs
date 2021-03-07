@@ -45,7 +45,7 @@ namespace adminBlazorWebsite.Data
         {
             var url = GetFunctionUrl("UrlList");
 
-            CancellationToken cancellationToken;
+            CancellationToken cancellationToken = new CancellationToken();
 
             using (var client = new HttpClient())
             using (var request = new HttpRequestMessage(HttpMethod.Get, url))
@@ -66,7 +66,7 @@ namespace adminBlazorWebsite.Data
         {
             var url = GetFunctionUrl("UrlShortener");
 
-            CancellationToken cancellationToken;
+            CancellationToken cancellationToken = new CancellationToken();
 
             using (var client = new HttpClient())
             using (var request = new HttpRequestMessage(HttpMethod.Post, url))
@@ -90,7 +90,7 @@ namespace adminBlazorWebsite.Data
         {
             var url = GetFunctionUrl("UrlUpdate");
 
-            CancellationToken cancellationToken;
+            CancellationToken cancellationToken = new CancellationToken();
 
             using (var client = new HttpClient())
             using (var request = new HttpRequestMessage(HttpMethod.Post, url))
@@ -113,7 +113,7 @@ namespace adminBlazorWebsite.Data
         {
             var url = GetFunctionUrl("UrlArchive");
 
-            CancellationToken cancellationToken;
+            CancellationToken cancellationToken = new CancellationToken();
 
             using (var client = new HttpClient())
             using (var request = new HttpRequestMessage(HttpMethod.Post, url))

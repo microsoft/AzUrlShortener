@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Microsoft.Azure.Cosmos.Table;
+using Newtonsoft.Json;
 
 namespace Cloud5mins.domain
 {
@@ -26,8 +27,19 @@ namespace Cloud5mins.domain
         public int Clicks { get; set; }
 
         public bool? IsArchived { get; set; }
+        public string SchedulesPropertyRaw { get; set; }
 
-        public Schedule[] Schedules { get; set; }
+        [IgnoreProperty]
+        public Schedule[] Schedules { 
+            get{
+                if(String.IsNullOrEmpty(SchedulesPropertyRaw))
+                    return null;
+                return JsonConvert.DeserializeObject<Schedule[]>(SchedulesPropertyRaw);
+            } 
+            set{
+                SchedulesPropertyRaw = JsonConvert.SerializeObject(value); 
+            } 
+        }
 
         public ShortUrlEntity(){}
 
@@ -50,7 +62,7 @@ namespace Cloud5mins.domain
         {
             PartitionKey = endUrl.First().ToString();
             RowKey = endUrl;
-            _url = longUrl;
+            Url = longUrl;
             Title = title;
             Clicks = 0;
             IsArchived = false;
@@ -62,7 +74,7 @@ namespace Cloud5mins.domain
             {
                 PartitionKey = endUrl.First().ToString(),
                 RowKey = endUrl,
-                _url = longUrl,
+                Url = longUrl,
                 Title = title,
                 Schedules = schedules
             };
@@ -70,7 +82,9 @@ namespace Cloud5mins.domain
 
         private string GetUrl()
         {
-            return GetUrl(DateTime.UtcNow);
+            if(Schedules != null)
+                    return GetUrl(DateTime.UtcNow);
+            return _url;
         }
         private string GetUrl(DateTime pointInTime)
         {
