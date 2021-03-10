@@ -7,12 +7,14 @@ namespace Cloud5mins.domain
 {
     public class ShortUrlEntity : TableEntity
     {
-        //public string Id { get; set; }
         private string _url { get; set; }
+        private string _validatedUrl { get; set; }
 
         public string Url { 
             get{
-                return GetUrl();
+                if(String.IsNullOrEmpty(_validatedUrl) )
+                    _validatedUrl = GetUrl();
+                return _validatedUrl;
             }
             set {
                 _url = value;
@@ -89,7 +91,6 @@ namespace Cloud5mins.domain
         private string GetUrl(DateTime pointInTime)
         {
             var link = _url;
-            //var now = DateTime.UtcNow;
             var active = Schedules.Where(s =>
                 s.End > pointInTime && //hasn't ended
                 s.Start < pointInTime //already started
@@ -103,7 +104,6 @@ namespace Cloud5mins.domain
                     break;
                 }
             }
-
             return link;
         }
     }
