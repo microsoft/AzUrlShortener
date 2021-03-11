@@ -32,6 +32,7 @@ Admin tools for Azure Url Shortener using Blazor Single Page Application (webass
 
 More details [here](https://github.com/FBoucher/TinyBlazorAdmin).
 
+![Tiny Blazor Admin looks](medias/TinyBlazorAdmin.gif)
 
 ### 4- [PowerAutomate Flow](PowerAutomateFlow/README.md)
 Very simple PowerAutomate Flows (premium license required) to call the Azure Functions  
