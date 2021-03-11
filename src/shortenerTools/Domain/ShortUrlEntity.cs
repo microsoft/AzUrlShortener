@@ -7,17 +7,14 @@ namespace Cloud5mins.domain
 {
     public class ShortUrlEntity : TableEntity
     {
-        private string _url { get; set; }
-        private string _validatedUrl { get; set; }
+        public string Url { get; set; }
+        private string _activeUrl { get; set; }
 
-        public string Url { 
+        public string ActiveUrl { 
             get{
-                if(String.IsNullOrEmpty(_validatedUrl) )
-                    _validatedUrl = GetUrl();
-                return _validatedUrl;
-            }
-            set {
-                _url = value;
+                if(String.IsNullOrEmpty(_activeUrl) )
+                    _activeUrl = GetActiveUrl();
+                return _activeUrl;
             }
         }
 
@@ -82,15 +79,15 @@ namespace Cloud5mins.domain
             };
         }
 
-        private string GetUrl()
+        private string GetActiveUrl()
         {
             if(Schedules != null)
-                    return GetUrl(DateTime.UtcNow);
-            return _url;
+                    return GetActiveUrl(DateTime.UtcNow);
+            return Url;
         }
-        private string GetUrl(DateTime pointInTime)
+        private string GetActiveUrl(DateTime pointInTime)
         {
-            var link = _url;
+            var link = Url;
             var active = Schedules.Where(s =>
                 s.End > pointInTime && //hasn't ended
                 s.Start < pointInTime //already started
