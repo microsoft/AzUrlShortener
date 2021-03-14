@@ -41,11 +41,11 @@ namespace Cloud5mins.Function
 
                 if (newUrl != null)
                 {
-                    log.LogInformation($"Found it: {newUrl.Url}");
+                    //log.LogInformation($"Found it: {newUrl.Url}");
                     newUrl.Clicks++;
                     stgHelper.SaveClickStatsEntity(new ClickStatsEntity(newUrl.RowKey));
                     await stgHelper.SaveShortUrlEntity(newUrl);
-                    redirectUrl = WebUtility.UrlDecode(newUrl.Url);
+                    redirectUrl = WebUtility.UrlDecode(newUrl.ActiveUrl);
                 }
             }
             else
