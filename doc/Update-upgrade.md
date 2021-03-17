@@ -16,4 +16,4 @@ From the left panel, click on the **Deployment Center** (1), then the **Sync** b
 
 IF you are using the Admin Blazor Website, repeat the same operation but selecting the App Service with the name starting by "adm".
 
----
+[AzFunctionGitSync]: https://github.com/FBoucher/AzUrlShortener/raw/main/medias/AzFunctionGitSync.png
