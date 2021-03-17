@@ -79,6 +79,6 @@ To deploy YOUR version of **Azure Url Shortener** you could fork this repo, but 
 
 A good Url Shortener wouldn't be completed without a custom domain name. To know how to add it and other useful post-deployment configurations refer to the [post-deployment-configuration](https://github.com/FBoucher/AzUrlShortener/blob/main-v1/post-deployment-configuration.md) page.
 
-[createARM]: medias/createARM.png
-[ArmResult]: medias/ArmResult.png
-[Episode60_EN]: medias/Episode60_EN.png
+[createARM]: ../medias/createARM.png
+[ArmResult]: ../medias/ArmResult.png
+[Episode60_EN]: ../medias/Episode60_EN.png

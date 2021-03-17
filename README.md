@@ -31,7 +31,7 @@ We suggest to deploy it paired with [Tiny Blazor Admin](https://github.com/FBouc
 
 👉 **[Step by Step Deployment](https://github.com/FBoucher/TinyBlazorAdmin/blob/main/deployment.md)** 👈 documentation is available here. This will bring you on the TinyBlazorAdmin repository where you will deploying both projects.
 
-To have all alternative and previous version deployments, refer to the [Azure Function Deployment Details](https://github.com/FBoucher/AzUrlShortener/blob/main/azFunctions-deployment.md) page.
+To have all alternative and previous version deployments, refer to the [Azure Function Deployment Details](https://github.com/FBoucher/AzUrlShortener/blob/main/doc/azFunctions-deployment.md) page.
 
 If you want to **Update** or **Upgrade**, please refer to [this page](https://github.com/FBoucher/AzUrlShortener/blob/main/doc/Update-upgrade.md). 
 
@@ -52,7 +52,7 @@ Youtube: [https://youtu.be/fzXy2D77WMM](https://youtu.be/fzXy2D77WMM)
 
 ## How It Works
 
-If you are interested to learn more about what's under the hood, and get more details on each Azure Function, read the [How it works](how-it-works.md) page.
+If you are interested to learn more about what's under the hood, and get more details on each Azure Function, read the [How it works](doc/how-it-works.md) page.
 
 
 ---
