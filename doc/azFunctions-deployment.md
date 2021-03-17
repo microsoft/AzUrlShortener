@@ -65,8 +65,20 @@ There also a **blog post**: [Simplify your deployment with nested Azure Resource
 
 If you are interested to see the ARM templates before-after you can go in the [Tutorial Section](tutorials/optional-arm/Howto.md)
 
+---
+
+## How To Deploy Version 1
+
+To deploy YOUR version of **Azure Url Shortener** you could fork this repo, but if you are looking for the easy way just click on the "Deploy to Azure".
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/?WT.mc_id=dotnet-0000-frbouche#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFBoucher%2FAzUrlShortener%2Fmain-v1%2Fdeployment%2FazureDeploy.json)
 
 
-[createARM]: medias/createARM.png
-[ArmResult]: medias/ArmResult.png
-[Episode60_EN]: medias/Episode60_EN.png
+
+#### Post Deployment Configuration
+
+A good Url Shortener wouldn't be completed without a custom domain name. To know how to add it and other useful post-deployment configurations refer to the [post-deployment-configuration](https://github.com/FBoucher/AzUrlShortener/blob/main-v1/post-deployment-configuration.md) page.
+
+[createARM]: ../medias/createARM.png
+[ArmResult]: ../medias/ArmResult.png
+[Episode60_EN]: ../medias/Episode60_EN.png

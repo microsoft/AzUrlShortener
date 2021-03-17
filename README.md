@@ -8,7 +8,6 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 
-
 ![UrlShortener][UrlShortener]
 
 A simple and easy to use and to deploy budget-friendly Url Shortener for everyone. It runs in Azure (Microsoft cloud) in your subscription.  
@@ -17,66 +16,35 @@ A simple and easy to use and to deploy budget-friendly Url Shortener for everyon
 
 Features:
 
-- 1-Click deployment (currently only in [V1](https://github.com/FBoucher/AzUrlShortener/tree/main-v1)).
 - Create Edit and Delete short URL.
+- Redirect different destination base on schedules
 - Keep Statistics of your clicks.
 - Budget-friendly and 100% open-source.
+- Secure by Azure Active Directory AAD (Microsoft Identity)
+- Simple step by step deployment 
 
-**[Version 1](https://github.com/FBoucher/AzUrlShortener/tree/main-v1)**
-- A local database (file) is used for authentification.
+![Tiny Blazor Admin looks](/medias/TinyBlazorAdmin.gif)
 
-**[Version 2](https://github.com/FBoucher/AzUrlShortener/tree/vNext)**
-- Azure Active Directory AAD (Microsoft Identity) is used for authentification.
+## How To Deploy
 
-## How To Deploy Version 1
+We suggest to deploy it paired with [Tiny Blazor Admin](https://github.com/FBoucher/TinyBlazorAdmin); it's a static website. However also possible do deploy it headless (just the Azure Function), if you want.  
 
-To deploy YOUR version of **Azure Url Shortener** you could fork this repo, but if you are looking for the easy way just click on the "Deploy to Azure".
+👉 **[Step by Step Deployment](https://github.com/FBoucher/TinyBlazorAdmin/blob/main/deployment.md)** 👈 documentation is available here. This will bring you on the TinyBlazorAdmin repository where you will deploying both projects.
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/?WT.mc_id=dotnet-0000-frbouche#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFBoucher%2FAzUrlShortener%2Fmain-v1%2Fdeployment%2FazureDeploy.json)
+To have all alternative and previous version deployments, refer to the [Azure Function Deployment Details](https://github.com/FBoucher/AzUrlShortener/blob/main/doc/azFunctions-deployment.md) page.
 
-To have all details and alternative deployment refer to the [Deployment Details](https://github.com/FBoucher/AzUrlShortener/blob/main-v1/azFunctions-deployment.md) page.
-
-#### Post Deployment Configuration
-
-A good Url Shortener wouldn't be completed without a custom domain name. To know how to add it and other useful post-deployment configurations refer to the [post-deployment-configuration](https://github.com/FBoucher/AzUrlShortener/blob/main-v1/post-deployment-configuration.md) page.
-
-
-## How To Deploy Version 2
-
-Right now the deployment of the Version 2 is possible Headless (just the Azure Function) or paired with [TinyBlazorAdmin](https://github.com/FBoucher/TinyBlazorAdmin).  It's a static website written in C# webassembly and it's even more budget friendly then v1. However, we are still working at the automation of the deployment.
-
-Until we have a 1-Click deployment you should follow the documented To have all details and alternative deployment refer to the [Deployment Details](https://github.com/FBoucher/TinyBlazorAdmin/blob/main/deployment.md) page.
-
-
-## How to Update / Upgrade
-
-You deployed the Azure Url Shortener and it's now running in your Azure Subscription, but you would like to have the new feature(s). Updating your current version is in fact really simple.  
-
->Note: Currently there is breaking changes between **v1** and **v2**. It is possible to migrate without losing anything, it's just that the documentation is not done yet. See [Issue #196](https://github.com/FBoucher/AzUrlShortener/issues/196) for more details on the progress.
-
----
-
-### Update the Azure Functions
-
-Navigate to the Azure portal (azure.portal.com) and select the Azure Function instance, for this project.
-
-From the left panel, click on the **Deployment Center** (1), then the **Sync** button(2). This will start a synchronization between GitHub and the App Service (aka Azure Function) local Git. 
-
-![Steps to update the Azure Function doing a Git Sync][AzFunctionGitSync]
-
-IF you are using the Admin Blazor Website, repeat the same operation but selecting the App Service with the name starting by "adm".
-
----
-
+If you want to **Update** or **Upgrade**, please refer to [this page](https://github.com/FBoucher/AzUrlShortener/blob/main/doc/Update-upgrade.md). 
 
 ## How To Use It
 
-There are many different ways to manage your Url Shortener, from a direct HTTP call to a fancy website. 
-[See the complete list of admin frontends here](src/adminTools/README.md), with the instructions to deploy and use them. There is also instructions or [guidance](src/adminTools/README.md#how-to-add-a-new-frontend) if you would like to create a new one and collaborate to this project.
+There are many different ways to manage your Short Urls, from a direct HTTP call to a fancy website. 
+[See the complete list of admin frontends here](src/adminTools/README.md), with the instructions to deploy and use them. 
 
 There is also a video that does a quick tour of the project.
 
-[![YouTube thumbnail of the Az URL Shortener quick tour video][ThumbnailYTAzUrlShortener_EN]](https://youtu.be/fzXy2D77WMM)
+[![YouTube thumbnail of the Az URL Shortener quick tour video](https://img.youtube.com/vi/fzXy2D77WMM/hqdefault.jpg)](https://youtu.be/fzXy2D77WMM)
+
+Youtube: [https://youtu.be/fzXy2D77WMM](https://youtu.be/fzXy2D77WMM)
 
 
 ---
@@ -84,7 +52,7 @@ There is also a video that does a quick tour of the project.
 
 ## How It Works
 
-If you are interested to learn more about what's under the hood, and get more details on each Azure Function, read the [How it works](how-it-works.md) page.
+If you are interested to learn more about what's under the hood, and get more details on each Azure Function, read the [How it works](doc/how-it-works.md) page.
 
 
 ---
@@ -92,15 +60,18 @@ If you are interested to learn more about what's under the hood, and get more de
 
 ## What's Next?
 
-We are working on the **version 2.0** (ETA Summer 2020). This version will:
+We are always trying to make it better. See  the [GitKraken boards](https://app.gitkraken.com/glo/board/XnI94exk8AARj-ph) and [issues](https://github.com/FBoucher/AzUrlShortener/issues) to see the current progress. 
 
-- Use Azure Active Directory (AAD)
-- Client side website (more budget friendly) see GitHub project: [TinyBlazorAdmin](https://github.com/FBoucher/TinyBlazorAdmin) for more details.
-- Statistics
-- Better Grid to display the URL
+You are invited to go into the [Discussion](https://github.com/FBoucher/AzUrlShortener/discussions) tab to share your feedback, ask question, and suggest new feature!
+
+Current Backlog contains:
+- More Statistics
+- QR Code
+- More tracking information (like Country)
+- etc.
+
 
 ---
-
 
 
 ## Contributing
@@ -110,6 +81,8 @@ If you find a bug or would like to add a feature, check out those resources:
 - To see the current work in progress: [GLO boards 'kanban board'](https://app.gitkraken.com/glo/board/XnI94exk8AARj-ph) </br></br> [![AzUrlShortener Glo Board 'kanban board'][glo]](https://app.gitkraken.com/glo/board/XnI94exk8AARj-ph)
 
 Check out our [Code of Conduct](CODE_OF_CONDUCT.md) and [Contributing](CONTRIBUTING.md) docs. This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.  Contributions of any kind welcome!
+
+There is also instructions or [guidance](src/adminTools/README.md#how-to-add-a-new-frontend) if you would like to create a new one and collaborate to this project.
 
 
 ## Contributors ✨

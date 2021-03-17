@@ -143,16 +143,16 @@ And finally, click the **Copy** button to get the URL of your function _with the
 
 
 
-[getURL]: medias/getURL.png
-[AddCustomDomain]: medias/AddCustomDomain.png
-[AddCustomDomainDetails]: medias/AddCustomDomainDetails.png
-[domainProviderDNS]: medias/domainProviderDNS.png
-[domainValidated]: medias/domainValidated.png
+[getURL]: ../medias/getURL.png
+[AddCustomDomain]: ../medias/AddCustomDomain.png
+[AddCustomDomainDetails]: ../medias/AddCustomDomainDetails.png
+[domainProviderDNS]: ../medias/domainProviderDNS.png
+[domainValidated]: ../medias/domainValidated.png
 
 
-[cf_addSite]: medias/cf_addSite.png
-[cf_DNS_Rules]: medias/cf_DNS_Rules.png
-[cl_dns_details]: medias/cl_dns_details.png
-[cf_rules_details]: medias/cf_rules_details.png
-[Rule1]: medias/Rule1.png
+[cf_addSite]: ../medias/cf_addSite.png
+[cf_DNS_Rules]: ../medias/cf_DNS_Rules.png
+[cl_dns_details]: ../medias/cl_dns_details.png
+[cf_rules_details]: ../medias/cf_rules_details.png
+[Rule1]: ../medias/Rule1.png
 
