@@ -101,7 +101,8 @@ namespace Cloud5mins.Function
 
                 await stgHelper.SaveShortUrlEntity(newRow);
 
-                var host = req.RequestUri.GetLeftPart(UriPartial.Authority);
+                string host = req.Headers?.Referrer?.GetLeftPart(UriPartial.Authority);
+                if (string.IsNullOrEmpty(host)) { host = req.RequestUri.GetLeftPart(UriPartial.Authority); }
                 log.LogInformation($"-> host = {host}");
                 result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
 
