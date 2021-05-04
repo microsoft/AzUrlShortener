@@ -29,6 +29,8 @@ using System.Net;
 using System.Net.Http;
 using Cloud5mins.domain;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Cloud5mins.Function
 {
@@ -43,7 +45,7 @@ namespace Cloud5mins.Function
         ExecutionContext context)
         {
             log.LogInformation($"C# HTTP trigger function processed this request: {req}");
-
+            var x = req.RequestUri.GetLeftPart(UriPartial.Authority);
             // Validation of the inputs
             if (req == null)
             {
@@ -101,8 +103,14 @@ namespace Cloud5mins.Function
 
                 await stgHelper.SaveShortUrlEntity(newRow);
 
-                string host = req.Headers?.Referrer?.GetLeftPart(UriPartial.Authority);
-                if (string.IsNullOrEmpty(host)) { host = req.RequestUri.GetLeftPart(UriPartial.Authority); }
+                string host = null;
+                if (req.Headers.TryGetValues("X-Forwarded-Host", out IEnumerable<string> hosts))
+                {
+                    host = hosts.ToArray().First();
+                }
+
+                //string host = req.Headers.Referrer?.GetLeftPart(UriPartial.Authority);
+                //if (string.IsNullOrEmpty(host)) { host = req.RequestUri.GetLeftPart(UriPartial.Authority); }
                 log.LogInformation($"-> host = {host}");
                 result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
 
