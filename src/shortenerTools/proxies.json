@@ -1,6 +1,12 @@
 {
   "$schema": "http://json.schemastore.org/proxies",
   "proxies": {
+    "legacy forward": {
+      "matchCondition": {
+        "route": "/UrlShortenerService/UrlShortenerService.svc"
+      },
+      "backendUri": "http://legacy.beac.co/UrlShortenerService/UrlShortenerService.svc"
+    },
     "Domain Redirect": {
       "matchCondition": {
         "route": "/{shortUrl}"
@@ -9,6 +15,9 @@
     },
     "Root": {
       "matchCondition": {
+        "methods": [
+          "GET"
+        ],
         "route": "/"
       },
       "responseOverrides": {
