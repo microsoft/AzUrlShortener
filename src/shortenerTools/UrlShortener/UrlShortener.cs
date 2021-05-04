@@ -103,14 +103,14 @@ namespace Cloud5mins.Function
 
                 await stgHelper.SaveShortUrlEntity(newRow);
 
-                //string host = null;
-                //if (req.Headers.TryGetValues("X-Forwarded-Host", out IEnumerable<string> hosts))
-                //{
-                //    host = hosts.ToArray().First();
-                //}
-                string host = req.Headers.Host;
-                //string host = req.Headers.Referrer?.GetLeftPart(UriPartial.Authority);
-                //if (string.IsNullOrEmpty(host)) { host = req.RequestUri.GetLeftPart(UriPartial.Authority); }
+                string host = null;
+                if (req.Headers.TryGetValues("X-Forwarded-Host", out IEnumerable<string> hosts))
+                {
+                    var builder = new UriBuilder(req.RequestUri);
+                    builder.Host = hosts.ToArray().First();
+                    host = builder.Uri.GetLeftPart(UriPartial.Authority);
+                }
+                if (string.IsNullOrEmpty(host)) { host = req.RequestUri.GetLeftPart(UriPartial.Authority); }
                 log.LogInformation($"-> host = {host}");
                 result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
 
