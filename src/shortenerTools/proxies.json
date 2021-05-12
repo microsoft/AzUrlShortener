@@ -14,6 +14,7 @@
       "backendUri": "http://localhost/api/UrlRedirect/{shortUrl}"
     },
     "Root": {
+      "disabled":true,
       "matchCondition": {
         "methods": [
           "GET"
