@@ -25,11 +25,11 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using System.Net;
 using System.Net.Http;
 using Cloud5mins.domain;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cloud5mins.Function
 {
@@ -38,7 +38,7 @@ namespace Cloud5mins.Function
     {
 
         [FunctionName("UrlShortener")]
-        public static async Task<HttpResponseMessage> Run(
+        public static async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequestMessage req,
         ILogger log)
         {
@@ -47,26 +47,26 @@ namespace Cloud5mins.Function
             // Validation of the inputs
             if (req == null)
             {
-                return req.CreateResponse(HttpStatusCode.NotFound);
+                return new NotFoundResult();
             }
 
             ShortRequest input = await req.Content.ReadAsAsync<ShortRequest>();
             if (input == null)
             {
-                return req.CreateResponse(HttpStatusCode.NotFound);
+                return new NotFoundResult();
             }
 
 
             // If the Url parameter only contains whitespaces or is empty return with BadRequest.
             if (string.IsNullOrWhiteSpace(input.Url))
             {
-                return req.CreateErrorResponse(HttpStatusCode.BadRequest, "The url parameter can not be empty.");
+                return new BadRequestObjectResult("The url parameter can not be empty.");
             }
 
             // Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
             if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
             {
-                return req.CreateErrorResponse(HttpStatusCode.BadRequest, $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
+                return new BadRequestObjectResult($"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
             }
 
             var result = new ShortResponse();
@@ -86,7 +86,7 @@ namespace Cloud5mins.Function
                     newRow = new ShortUrlEntity(longUrl, vanity, title);
                     if (await stgHelper.IfShortUrlEntityExist(newRow))
                     {
-                        return req.CreateResponse(HttpStatusCode.Conflict, "This Short URL already exist.");
+                        return new ConflictObjectResult("This Short URL already exist.");
                     }
                 }
                 else
@@ -111,10 +111,10 @@ namespace Cloud5mins.Function
             catch (Exception ex)
             {
                 log.LogError(ex, "An unexpected error was encountered.");
-                return req.CreateResponse(HttpStatusCode.BadRequest, ex);
+                return new BadRequestObjectResult(ex);
             }
 
-            return req.CreateResponse(HttpStatusCode.OK, result);
+            return new OkObjectResult(result);
         }
     }
 }
