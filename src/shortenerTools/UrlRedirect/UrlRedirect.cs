@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Http;
 using Cloud5mins.domain;
-using Microsoft.Extensions.Configuration;
 
 namespace Cloud5mins.Function
 {
@@ -15,8 +14,7 @@ namespace Cloud5mins.Function
         [FunctionName("UrlRedirect")]
         public static async Task<HttpResponseMessage> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "UrlRedirect/{shortUrl}")] HttpRequestMessage req,
-            string shortUrl, 
-            ExecutionContext context,
+            string shortUrl,
             ILogger log)
         {
             log.LogInformation($"C# HTTP trigger function processed for Url: {shortUrl}");
@@ -25,23 +23,17 @@ namespace Cloud5mins.Function
 
             if (!String.IsNullOrWhiteSpace(shortUrl))
             {
-                var config = new ConfigurationBuilder()
-                    .SetBasePath(context.FunctionAppDirectory)
-                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                    .AddEnvironmentVariables()
-                    .Build();
+                redirectUrl = Environment.GetEnvironmentVariable("defaultRedirectUrl");
 
-                redirectUrl = config["defaultRedirectUrl"];
-
-                StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]); 
+                StorageTableHelper stgHelper = new StorageTableHelper(Environment.GetEnvironmentVariable("UlsDataStorage"));
 
                 var tempUrl = new ShortUrlEntity(string.Empty, shortUrl);
-                
+
                 var newUrl = await stgHelper.GetShortUrlEntity(tempUrl);
 
                 if (newUrl != null)
                 {
-                    log.LogInformation($"Found it: {newUrl.Url}");
+                    //log.LogInformation($"Found it: {newUrl.Url}");
                     newUrl.Clicks++;
                     stgHelper.SaveClickStatsEntity(new ClickStatsEntity(newUrl.RowKey));
                     await stgHelper.SaveShortUrlEntity(newUrl);
@@ -57,5 +49,5 @@ namespace Cloud5mins.Function
             res.Headers.Add("Location", redirectUrl);
             return res;
         }
-  }
+    }
 }
