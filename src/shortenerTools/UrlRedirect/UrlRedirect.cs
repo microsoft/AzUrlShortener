@@ -3,16 +3,16 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using System.Net;
 using System.Net.Http;
 using Cloud5mins.domain;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cloud5mins.Function
 {
     public static class UrlRedirect
     {
         [FunctionName("UrlRedirect")]
-        public static async Task<HttpResponseMessage> Run(
+        public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "UrlRedirect/{shortUrl}")] HttpRequestMessage req,
             string shortUrl,
             ILogger log)
@@ -45,9 +45,7 @@ namespace Cloud5mins.Function
                 log.LogInformation("Bad Link, resorting to fallback.");
             }
 
-            var res = req.CreateResponse(HttpStatusCode.Redirect);
-            res.Headers.Add("Location", redirectUrl);
-            return res;
+            return new RedirectResult(redirectUrl);
         }
     }
 }
