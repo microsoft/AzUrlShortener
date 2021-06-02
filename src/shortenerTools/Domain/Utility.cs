@@ -45,16 +45,25 @@ namespace Cloud5mins.domain
         //(not entirely secure but not sequential so generally not guessable)
         public static string GenerateUniqueRandomToken(int uniqueId)
         {
+            //Encode the unique id prefix (less characters and prevent displaying url count)
+            var s = string.Empty;
+            while (uniqueId > 0)
+            {
+                s += ConversionCode[uniqueId % Base];
+                uniqueId = uniqueId / Base;
+            }
+            var reversedId = string.Join(string.Empty, s.Reverse());
+
             using (var generator = new RNGCryptoServiceProvider())
             {
                 //minimum size I would suggest is 5, longer the better but we want short URLs!
                 var bytes = new byte[MinVanityCodeLength];
                 generator.GetBytes(bytes);
                 var chars = bytes
-                    .Select(b => ConversionCode[b % ConversionCode.Length]);
+                    .Select(b => ConversionCode[b % Base]);
                 var token = new string(chars.ToArray());
                 var reversedToken = string.Join(string.Empty, token.Reverse());
-                return uniqueId + reversedToken;
+                return reversedId + reversedToken;
             }
         }
     }
