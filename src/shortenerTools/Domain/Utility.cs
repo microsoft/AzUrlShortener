@@ -7,7 +7,7 @@ namespace Cloud5mins.domain
     public static class Utility
     {
         //reshuffled for randomisation, same unique characters just jumbled up, you can replace with your own version
-        private const string ConversionCode = "0buljhYkGQn-x8fiVXvLZ9epRFcEyIJz2Mgds3H_WmNC1D5OaStTr6ow4AKP7BUq";
+        private const string ConversionCode = "FjTG0s5dgWkbLf_8etOZqMzNhmp7u6lUJoXIDiQB9-wRxCKyrPcv4En3Y21aASHV";
         private static readonly int Base = ConversionCode.Length;
         //sets the length of the unique code to add to vanity
         private const int MinVanityCodeLength = 5;
@@ -52,7 +52,6 @@ namespace Cloud5mins.domain
                 s += ConversionCode[uniqueId % Base];
                 uniqueId = uniqueId / Base;
             }
-            var reversedId = string.Join(string.Empty, s.Reverse());
 
             using (var generator = new RNGCryptoServiceProvider())
             {
@@ -62,8 +61,7 @@ namespace Cloud5mins.domain
                 var chars = bytes
                     .Select(b => ConversionCode[b % Base]);
                 var token = new string(chars.ToArray());
-                var reversedToken = string.Join(string.Empty, token.Reverse());
-                return reversedId + reversedToken;
+                return string.Join(string.Empty, s.Reverse().Concat(token.Reverse()));
             }
         }
     }
