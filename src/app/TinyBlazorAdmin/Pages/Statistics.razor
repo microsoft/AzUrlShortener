@@ -6,7 +6,7 @@
 @using TinyBlazorAdmin.Data
 @using Microsoft.AspNetCore.Authorization
 @inject IJSRuntime JSRuntime;
-@attribute [Authorize] 
+@attribute [Authorize(Roles = "admin")] 
 
 @inject AzFuncClient azClient
 

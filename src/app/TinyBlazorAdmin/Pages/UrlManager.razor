@@ -6,7 +6,7 @@
 @inject IJSRuntime JSRuntime;
 @implements IDisposable
 @inject NavigationManager NavigationManager;
-@attribute [Authorize]
+@attribute [Authorize(Roles = "admin")]
 
 @inject AzFuncClient azClient
 
