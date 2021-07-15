@@ -1,0 +1,86 @@
+﻿
+@page "/statistics"
+@page "/statistics/{vanity}"
+
+@using Syncfusion.Blazor.Charts
+@using TinyBlazorAdmin.Data
+@using Microsoft.AspNetCore.Authorization
+@inject IJSRuntime JSRuntime;
+@attribute [Authorize] 
+
+@inject AzFuncClient azClient
+
+<h1>Click Statistics</h1>
+<h3>@subTitle</h3>
+<a href="/UrlManager/"> &lt;&lt; Back</a>
+<SfChart Title="Click Stats" DataSource="@clicksHistory" >
+    <ChartEvents/>
+    <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+    <ChartPrimaryXAxis  ValueType="Syncfusion.Blazor.Charts.ValueType.DateTime"  
+                        LabelFormat="y/M/d" 
+                        EdgeLabelPlacement="EdgeLabelPlacement.Shift" RangePadding="ChartRangePadding.Auto">
+        <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+    </ChartPrimaryXAxis>
+
+    <ChartPrimaryYAxis  LabelFormat="{value}" >
+            <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+            <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+    </ChartPrimaryYAxis>
+    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+
+    <ChartSeriesCollection>
+        <ChartSeries    DataSource="@clicksHistory" 
+                        Name="Click(s) by Day"
+                        XName="XValue" 
+                        YName="YValue" 
+                        Width="2"
+                        Opacity="1"
+                        Type="ChartSeriesType.Line">
+            <ChartMarker Visible="true" Width="10" Height="10"></ChartMarker>
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>
+<p>@((MarkupString)test)</p>
+
+@code {
+    [Parameter]
+    public string Vanity { get; set; }
+    private string subTitle = "";
+    private ClickDateList clickStatsList;
+    private List<ClickData> clicksHistory = new List<ClickData>();
+    private readonly Random _random = new Random(); 
+    private string test = "";
+
+    public class ClickData
+    {
+        public string XValue;
+        public int YValue;
+    }
+
+    private async Task UpdateUIList()
+    {
+        subTitle = (!String.IsNullOrEmpty(Vanity))? $"Clicks for: {Vanity}": "All clicks";
+        
+        clickStatsList = await azClient.GetClickStats(Vanity);
+
+        var temp = clickStatsList.Items.Select(s => new ClickData{
+                                                XValue = s.DateClicked,
+                                                YValue = s.Count
+                                        });                 
+        clicksHistory = temp.ToList();
+        test += "Day(s): " + clicksHistory.Count.ToString();
+        StateHasChanged();
+
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        //await UpdateUIList();
+    } 
+
+
+     protected override void OnInitialized()
+     {
+        UpdateUIList();
+    }
+}

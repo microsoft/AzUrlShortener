@@ -1,0 +1,62 @@
+@inherits LayoutComponentBase
+@using TinyBlazorAdmin.Data
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Navigations
+
+<div style="background-color:lightgrey;margin: 10px 5px 5px 5px;">
+    <div>
+        <label>Schedules</label><button class="btn btn-sm" type="button" @onclick="@( ( ) => AddScheduleClick() )">+</button>
+    </div>
+    
+    <SfAccordion ExpandMode="ExpandMode.Single">
+        <AccordionItems >
+            @foreach(var s in schedules)
+            {
+                <AccordionItem Expanded="true">
+                    <HeaderTemplate>
+                        <button class="btn btn-sm" type="button" @onclick="@( ( ) => DeleteSchedule( s ) )">🗑️</button>
+                        @s.Start.ToString("yyyy-MM-dd") &lt;                       
+                        @s.GetDisplayableUrl(25) &gt;
+                        @s.End.ToString("yyyy-MM-dd") 
+                    </HeaderTemplate>
+                    <ContentTemplate>
+                        <ScheduleComponent schedule=s></ScheduleComponent>
+                    </ContentTemplate>
+                </AccordionItem>
+            } 
+        </AccordionItems>
+    </SfAccordion>
+
+</div>
+
+
+<style>
+    .accordion-control-section {
+        margin: 0 5% 0 5%;
+    }
+    @@media screen and (max-width: 768px) {
+        .accordion-control-section {
+            margin: 0;
+        }
+    }
+</style>
+
+
+@code {
+
+    [Parameter]
+    public List<Schedule> schedules { get; set; }
+
+
+    private void AddScheduleClick(){
+
+        schedules.Add(new Schedule());
+        StateHasChanged();
+    }
+
+    private void DeleteSchedule(Schedule schedule){
+        schedules.Remove(schedule);
+        StateHasChanged();
+    }
+
+}

@@ -1,0 +1,296 @@
+@page "/urlmanager"
+@using TinyBlazorAdmin.Data
+@using Microsoft.AspNetCore.Authorization
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.Inputs
+@inject IJSRuntime JSRuntime;
+@implements IDisposable
+@inject NavigationManager NavigationManager;
+@attribute [Authorize]
+
+@inject AzFuncClient azClient
+
+<h1>URL Manager</h1>
+<h3>Create, Edit, Achives your URLs</h3>
+
+@if (UrlList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <button class="btn btn-primary"
+            @onclick="CreateShortUrl">
+        Add New Url
+    </button>
+
+    <div>
+        <SfGrid  @ref="@grdUrls" id="grdUrls" DataSource="@gridData" AllowPaging="true" AllowSorting="true" AllowFiltering="true" >
+            <GridPageSettings PageSize="15"></GridPageSettings>
+            <GridColumns>
+                <GridColumn Width="80">
+                    <Template>
+                        @{
+                            var url = (context as ShortUrlEntity);
+                            <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => CopyToClipboardAsync(url.ShortUrl))">Copy</button>
+                        }
+                    </Template>
+                </GridColumn>
+                <GridColumn HeaderText="Schedule(s)">
+                    <Template>
+                        @{
+                            var url = (context as ShortUrlEntity);
+                            if(url.Schedules != null){
+                                <span>@url.Schedules.Count</span>
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            };
+                        }
+                    </Template>
+                </GridColumn>
+                <GridColumn Field=@nameof(ShortUrlEntity.RowKey) HeaderText="Vanity">
+                    <Template>
+                        @{
+                            var url = (context as ShortUrlEntity);
+                            <a href="https://@url.ShortUrl" target="blank">@url.RowKey</a>
+                        }
+                    </Template>
+                </GridColumn>
+                <GridColumn Field=@nameof(ShortUrlEntity.Title) HeaderText="Title" ></GridColumn>
+                <GridColumn Field=@nameof(ShortUrlEntity.Url) HeaderText="Url" ></GridColumn>
+                <GridColumn Field=@nameof(ShortUrlEntity.Clicks) HeaderText="Clicks" >
+                    <Template>
+                        @{
+                            var url = (context as ShortUrlEntity);
+                            <span>@url.Clicks</span>   
+                            <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => NavigateToStats(url.RowKey))">📊</button>
+                        }
+                    </Template>
+                </GridColumn>
+                <GridColumn Width="70">
+                    <Template>
+                        @{
+                            var url = (context as ShortUrlEntity);
+                            <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => EditShortUrl(url))">Edit</button>
+                        }
+                    </Template>
+                </GridColumn>
+                <GridColumn Width="70">
+                    <Template>
+                        @{
+                            var url = (context as ShortUrlEntity);
+                            <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => ArchiveShortUrl(url))">Archive</button>
+                        }
+                    </Template>
+                </GridColumn>
+            </GridColumns>
+        </SfGrid>
+    </div>
+    <p>
+        <!-- Add a new ShortUrl -->
+        <button class="btn btn-primary"
+                @onclick="CreateShortUrl"> Add New Url
+        </button>
+    </p>
+   
+}
+
+@if (ShowCreatePopup)
+{
+    <div class="modal fade show" id="createPopup" style="display:block" aria-modal="true" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Short Url Request</h4>
+                    <button type="button" class="close" @onclick="@ClosePopup">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                        <EditForm Model="shortUrlRequest" OnValidSubmit="SaveShortUrl">
+                            <DataAnnotationsValidator />                        
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                                    <SfTextBox id="title" Placeholder="Title" FloatLabelType="@FloatLabelType.Auto" @bind-Value="shortUrlRequest.Title"></SfTextBox>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                                    <SfTextBox id="url" Placeholder="Url" FloatLabelType="@FloatLabelType.Auto" @bind-Value="shortUrlRequest.Url"></SfTextBox>
+                                    <ValidationMessage For="@(() => shortUrlRequest.Url)" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                                    <SfTextBox id="vanity" Placeholder="Vanity" FloatLabelType="@FloatLabelType.Auto" @bind-Value="shortUrlRequest.Vanity"></SfTextBox>
+                                </div>
+                            </div>
+
+                            <div>
+                                <SchedulesComponent schedules="shortUrlRequest.Schedules"></SchedulesComponent>
+                            </div>
+                        </EditForm>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn" @onclick="@ClosePopup">Cancel</button>
+                    <button type="button" class="btn btn-primary" @onclick=@SaveShortUrl>Save</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+}
+
+
+@if (ShowEditPopup)
+{
+    <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Confirm action</h4>
+                    <button type="button" class="close" @onclick="@ClosePopup">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <EditForm Model="editedUrl" OnValidSubmit="SaveUpdatedShortUrl">
+                        <DataAnnotationsValidator />
+                        <div>
+                            <label for="edit-title">Title</label>
+                            <InputText id="edit-title" class="form-control" placeholder="Title or description for this URL" @bind-Value="editedUrl.Title" />
+                            <ValidationMessage For="@(() => editedUrl.Title)" />
+                        </div>
+                        <br />
+                        <div>
+                            <label for="edit-url">The Url to redirect</label>
+                            <InputText id="edit-url" class="form-control" placeholder="The Url to redirect" @bind-Value="editedUrl.Url" />
+                            <ValidationMessage For="@(() => editedUrl.Url)" />
+                        </div>
+                        <div>
+                            <SchedulesComponent schedules="editedUrl.Schedules"></SchedulesComponent>
+                        </div>
+                    </EditForm>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn" @onclick="@ClosePopup">Cancel</button>
+                    <button type="button" class="btn btn-primary" @onclick=@SaveUpdatedShortUrl>Save</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+} 
+
+@code
+{
+    bool ShowCreatePopup = false;
+    bool ShowEditPopup = false;
+    ShortUrlRequest shortUrlRequest = new ShortUrlRequest();
+    ShortUrlEntity editedUrl;
+    ShortUrlList UrlList;
+    SfGrid<ShortUrlEntity> grdUrls;
+    public List<ShortUrlEntity> gridData { get; set; }
+
+    void ClosePopup()
+    {
+        ShowCreatePopup = false;
+        ShowEditPopup = false;
+    }
+
+    private async Task UpdateUIList() {
+        UrlList = await azClient.GetUrlList();
+        gridData = UrlList.UrlList;
+        StateHasChanged();
+    }
+
+    private async Task SaveShortUrl()
+    {
+        ShowCreatePopup = false;
+
+        await azClient.CreateShortUrl(shortUrlRequest);
+        await UpdateUIList();
+        grdUrls.ClearFiltering();
+        grdUrls.FilterByColumn("RowKey", "equal", shortUrlRequest.Vanity);
+    }
+
+    private async Task SaveUpdatedShortUrl()
+    {
+        ShowEditPopup = false;
+        await azClient.UpdateShortUrl(editedUrl);
+        await UpdateUIList();
+    }
+
+    private void NavigateToStats(string vanity){
+        NavigationManager.NavigateTo("/Statistics/" + vanity);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await UpdateUIList();
+
+        foreach (var u in UrlList.UrlList){
+            var temp = u.ShortUrl;
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        NavigationManager.LocationChanged += LocationChanged;
+        base.OnInitialized();
+    }
+
+    private void LocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        string navigationMethod = e.IsNavigationIntercepted ? "HTML" : "code";
+        System.Diagnostics.Debug.WriteLine($"Notified of navigation via {navigationMethod} to {e.Location}");
+    }
+
+    void IDisposable.Dispose()
+    {
+        // Unsubscribe from the event when our component is disposed
+        NavigationManager.LocationChanged -= LocationChanged;
+    }
+
+[Authorize(Roles = "admin")]
+void CreateShortUrl()
+{
+    shortUrlRequest = new ShortUrlRequest();
+    ShowCreatePopup = true;
+}
+
+
+[Authorize(Roles = "admin")]
+void EditShortUrl(ShortUrlEntity urlEntity)
+{
+    editedUrl = urlEntity;
+    ShowEditPopup = true;
+}
+
+[Authorize(Roles = "admin")]
+public async Task ArchiveShortUrl(ShortUrlEntity urlEntity)
+{
+    await azClient.ArchiveShortUrl(urlEntity);
+    await UpdateUIList();
+}
+
+
+[Inject] public IJSRuntime JsRuntime { get; set; }
+public async Task CopyToClipboardAsync(string url)
+{
+    await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", url);
+}
+
+}
