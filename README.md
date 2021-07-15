@@ -37,9 +37,6 @@ If you want to **Update** or **Upgrade**, please refer to [this page](https://gi
 
 ## How To Use It
 
-There are many different ways to manage your Short Urls, from a direct HTTP call to a fancy website. 
-[See the complete list of admin frontends here](src/adminTools/README.md), with the instructions to deploy and use them. 
-
 There is also a video that does a quick tour of the project.
 
 [![YouTube thumbnail of the Az URL Shortener quick tour video](https://img.youtube.com/vi/fzXy2D77WMM/hqdefault.jpg)](https://youtu.be/fzXy2D77WMM)
@@ -82,7 +79,6 @@ If you find a bug or would like to add a feature, check out those resources:
 
 Check out our [Code of Conduct](CODE_OF_CONDUCT.md) and [Contributing](CONTRIBUTING.md) docs. This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.  Contributions of any kind welcome!
 
-There is also instructions or [guidance](src/adminTools/README.md#how-to-add-a-new-frontend) if you would like to create a new one and collaborate to this project.
 
 
 ## Contributors ✨
