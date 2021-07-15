@@ -123,6 +123,15 @@
         "doc",
         "infra"
       ]
+    },
+    {
+      "login": "scottcate",
+      "name": "Scott Cate",
+      "avatar_url": "https://avatars.githubusercontent.com/u/617586?v=4",
+      "profile": "https://Microsoft.com",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }

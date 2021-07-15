@@ -226,4 +226,4 @@ The ClickStats table get a new entry at every call of the Azure Function **UrlRe
 
 The UrlDetails table has the information about all the URLs created. The Vanity, URL , and number of clicks.
 
-[globalDiagram]: medias/globalDiagram.png
+[globalDiagram]: ../medias/globalDiagram.png
