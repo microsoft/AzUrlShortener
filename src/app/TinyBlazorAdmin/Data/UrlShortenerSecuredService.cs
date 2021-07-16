@@ -19,34 +19,44 @@ namespace TinyBlazorAdmin.Data
         /// An <see cref="HttpClient"/> instance configured to securely access
         /// the functions endpoint.
         /// </summary>
-        private readonly HttpClient _client;
+        private HttpClient _httpClient; 
 
-        private static StringContent CreateHttpContent(object content)
-        {
-            StringContent httpContent = null;
+        private HttpClient Http { 
+            get{
+                if(_httpClient == null){
+                    _httpClient = new HttpClient();
+                }
+                return _httpClient;
+            } 
+        }    
 
-            if (content != null)
-            {
-                var jsonString = JsonConvert.SerializeObject(content);
-                httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
-            }
 
-            return httpContent;
-        }
+        // private static StringContent CreateHttpContent(object content)
+        // {
+        //     StringContent httpContent = null;
 
-        /// <summary>
-        /// Creates a new instance of the <see cref="UrlShortenerSecuredService"/> class.
-        /// </summary>
-        /// <param name="factory"></param>
-        public UrlShortenerSecuredService(IHttpClientFactory factory)
-        {
-            _client = factory.CreateClient(nameof(UrlShortenerSecuredService));
-        }
+        //     if (content != null)
+        //     {
+        //         var jsonString = JsonConvert.SerializeObject(content);
+        //         httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
+        //     }
+
+        //     return httpContent;
+        // }
+
+        // /// <summary>
+        // /// Creates a new instance of the <see cref="UrlShortenerSecuredService"/> class.
+        // /// </summary>
+        // /// <param name="factory"></param>
+        // public UrlShortenerSecuredService(IHttpClientFactory factory)
+        // {
+        //     _client = factory.CreateClient(nameof(UrlShortenerSecuredService));
+        // }
 
         public async Task<ShortUrlList> GetUrlList()
         {
             string result = string.Empty;
-            var resultList = await _client.GetFromJsonAsync<ShortUrlList>($"/api/UrlList");
+            var resultList = await  Http.GetFromJsonAsync<ShortUrlList>($"/api/UrlList");
             return resultList;
         }
 
@@ -54,7 +64,7 @@ namespace TinyBlazorAdmin.Data
         {
             CancellationToken cancellationToken = new CancellationToken();
 
-            var response = await _client.PostAsJsonAsync($"/api/UrlShortener", shortUrlRequest, cancellationToken);
+            var response = await Http.PostAsJsonAsync($"/api/UrlShortener", shortUrlRequest, cancellationToken);
 
             var resultList = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<ShortUrlList>(resultList);
@@ -64,7 +74,7 @@ namespace TinyBlazorAdmin.Data
         {
             CancellationToken cancellationToken = new CancellationToken();
 
-            var response = await _client.PostAsJsonAsync($"/api/UrlUpdate", editedUrl, cancellationToken);
+            var response = await Http.PostAsJsonAsync($"/api/UrlUpdate", editedUrl, cancellationToken);
 
             var resultList = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<ShortUrlEntity>(resultList);
@@ -74,7 +84,7 @@ namespace TinyBlazorAdmin.Data
         {
             CancellationToken cancellationToken = new CancellationToken();
 
-            var response = await _client.PostAsJsonAsync($"/api/UrlArchive", archivedUrl, cancellationToken);
+            var response = await Http.PostAsJsonAsync($"/api/UrlArchive", archivedUrl, cancellationToken);
 
             var resultList = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<ShortUrlEntity>(resultList);
@@ -85,7 +95,7 @@ namespace TinyBlazorAdmin.Data
             CancellationToken cancellationToken = new CancellationToken();
 
             string result = string.Empty;
-            var response = await _client.PostAsJsonAsync($"/api/UrlClickStatsByDay", new { Vanity = vanity }, cancellationToken);
+            var response = await Http.PostAsJsonAsync($"/api/UrlClickStatsByDay", new { Vanity = vanity }, cancellationToken);
             var resultList = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<ClickDateList>(resultList);;
 
