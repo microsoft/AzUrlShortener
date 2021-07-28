@@ -21,18 +21,16 @@ namespace Cloud5mins.Function
         {
             log.LogInformation($"C# HTTP trigger function processed for Url: {shortUrl}");
 
-            string redirectUrl = "https://azure.com";
-
-            if (!String.IsNullOrWhiteSpace(shortUrl))
-            {
-                var config = new ConfigurationBuilder()
+            var config = new ConfigurationBuilder()
                     .SetBasePath(context.FunctionAppDirectory)
                     .AddJsonFile("settings.json", optional: true, reloadOnChange: true)
                     .AddEnvironmentVariables()
                     .Build();
+            
+            string redirectUrl = config["defaultRedirectUrl"];
 
-                redirectUrl = config["defaultRedirectUrl"];
-
+            if (!String.IsNullOrWhiteSpace(shortUrl))
+            {
                 StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]); 
 
                 var tempUrl = new ShortUrlEntity(string.Empty, shortUrl);
