@@ -1,20 +1,18 @@
-﻿using Newtonsoft.Json;
-using System.IO;
+﻿using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace shortenerTools.Extensions
 {
     public static class StreamExtensions
     {
-        public static T DeserializeJsonFromStream<T>(this Stream stream)
+        public static async Task<T> DeserializeJsonFromStreamAsync<T>(this Stream stream)
         {
-            if (stream == null || !stream.CanRead)
+            if (!(stream is {CanRead: true}))
                 return default;
 
             using var sr = new StreamReader(stream);
-            using var jtr = new JsonTextReader(sr);
-            var js = new JsonSerializer();
-            var searchResult = js.Deserialize<T>(jtr);
+            var searchResult = await JsonSerializer.DeserializeAsync<T>(sr.BaseStream);
             return searchResult;
         }
 

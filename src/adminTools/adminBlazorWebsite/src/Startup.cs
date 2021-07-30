@@ -1,3 +1,5 @@
+using System;
+using adminBlazorWebsite.Abstractions;
 using adminBlazorWebsite.Areas.Identity;
 using adminBlazorWebsite.Data;
 using Microsoft.AspNetCore.Builder;
@@ -34,7 +36,10 @@ namespace adminBlazorWebsite
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.Configure<AppSettings>(Config.GetSection("AppSettings"));
-            services.AddSingleton<UrlShortenerService>();
+            services.AddHttpClient<IUrlShortenerService, UrlShortenerService>(client =>
+            {
+                client.BaseAddress = new Uri($"{Config["azFunctionUrl"]}/api/");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

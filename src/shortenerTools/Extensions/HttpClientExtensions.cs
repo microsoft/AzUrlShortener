@@ -32,7 +32,7 @@ namespace shortenerTools.Extensions
             var stream = await response.Content.ReadAsStreamAsync();
 
             if (response.IsSuccessStatusCode)
-                return stream.DeserializeJsonFromStream<TResponse>();
+                return await stream.DeserializeJsonFromStreamAsync<TResponse>();
 
             var content = await stream.StreamToStringAsync();
 

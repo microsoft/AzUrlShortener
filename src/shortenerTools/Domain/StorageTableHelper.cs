@@ -7,26 +7,19 @@ namespace Cloud5mins.domain
 {
     public class StorageTableHelper : IStorageTableHelper
     {
-        private string StorageConnectionString { get; set; }
-
-        public StorageTableHelper() { }
-
-        public StorageTableHelper(string storageConnectionString)
+        private readonly CloudTableClient _cloudTableClient;
+        
+        public StorageTableHelper(CloudTableClient cloudTableClient)
         {
-            StorageConnectionString = storageConnectionString;
+            _cloudTableClient = cloudTableClient;
         }
-
-        public CloudStorageAccount CreateStorageAccountFromConnectionString()
-        {
-            var storageAccount = CloudStorageAccount.Parse(this.StorageConnectionString);
-            return storageAccount;
-        }
-
+        
         private CloudTable GetStatsTable()
         {
             var table = GetTable("ClickStats");
             return table;
         }
+
         private CloudTable GetUrlsTable()
         {
             var table = GetTable("UrlsDetails");
@@ -35,9 +28,7 @@ namespace Cloud5mins.domain
 
         private CloudTable GetTable(string tableName)
         {
-            var storageAccount = this.CreateStorageAccountFromConnectionString();
-            var tableClient = storageAccount.CreateCloudTableClient(new TableClientConfiguration());
-            var table = tableClient.GetTableReference(tableName);
+            var table = _cloudTableClient.GetTableReference(tableName);
             table.CreateIfNotExists();
 
             return table;
@@ -89,7 +80,6 @@ namespace Cloud5mins.domain
             return lstShortUrl;
         }
 
-
         public async Task<bool> IfShortUrlEntityExist(ShortUrlEntity row)
         {
             var eShortUrl = await GetShortUrlEntity(row);
@@ -112,7 +102,6 @@ namespace Cloud5mins.domain
 
             return await SaveShortUrlEntity(originalUrl);
         }
-
 
         public async Task<ShortUrlEntity> SaveShortUrlEntity(ShortUrlEntity newShortUrl)
         {

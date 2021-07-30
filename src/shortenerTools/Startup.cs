@@ -1,4 +1,5 @@
 ﻿using Cloud5mins.domain;
+using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +34,10 @@ namespace shortenerTools
             builder.Services.AddSingleton<IStorageTableHelper, StorageTableHelper>(provider =>
             {
                 var config = provider.GetService<IConfiguration>();
-                return new StorageTableHelper(config.GetSection("UlsDataStorage").Value);
+                var storageAccount = CloudStorageAccount.Parse(config.GetSection("UlsDataStorage").Value);
+                var tableClient = storageAccount.CreateCloudTableClient(new TableClientConfiguration());
+                
+                return new StorageTableHelper(tableClient);
             });
         }
     }

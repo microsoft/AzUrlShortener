@@ -2,7 +2,6 @@ using Cloud5mins.domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -24,7 +23,7 @@ namespace shortenerTools.Abstractions
 
             if (req == null)
             {
-                return (false, new BadRequestObjectResult(new { StatusCode = HttpStatusCode.NotFound }), null);
+                return (false, new NotFoundResult(), null);
             }
 
             var result = await req.Content.ReadAsAsync<T>();

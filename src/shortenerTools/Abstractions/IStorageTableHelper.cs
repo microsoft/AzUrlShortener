@@ -1,5 +1,4 @@
 using Cloud5mins.domain;
-using Microsoft.Azure.Cosmos.Table;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,7 +6,6 @@ namespace shortenerTools.Abstractions
 {
     public interface IStorageTableHelper
     {
-        CloudStorageAccount CreateStorageAccountFromConnectionString();
         Task<ShortUrlEntity> GetShortUrlEntity(ShortUrlEntity row);
         Task<List<ShortUrlEntity>> GetAllShortUrlEntities();
         Task<List<ClickStatsEntity>> GetAllStatsByVanity(string vanity);
