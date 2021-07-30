@@ -62,7 +62,75 @@ namespace Cloud5mins.domain
             }
         }
 
-        public static IActionResult CatchUnauthorize(ClaimsPrincipal principal, ILogger log)
+        public static IActionResult CheckAuthRole(ClaimsPrincipal principal, ILogger log, string requiredRole)
+        {
+            if (principal == null)
+            {
+                log.LogWarning("No principal.");
+                return new UnauthorizedResult();
+            }
+
+            if (principal.Identity == null)
+            {
+                log.LogWarning("No identity.");
+                return new UnauthorizedResult();
+            }
+
+            if (!principal.Identity.IsAuthenticated)
+            {
+                log.LogWarning("Request was not authenticated.");
+                return new UnauthorizedResult();
+            }
+
+            bool isAppOnlyToken = IsAppOnlyToken(principal);
+
+            if (!isAppOnlyToken)
+            {
+                log.LogWarning("Request for user was denied.");
+                return new UnauthorizedResult();
+            }
+
+            log.LogInformation(string.Join(", ", principal.Claims));
+
+            const string ROLES_CLAIM = "roles";
+
+            var allRoles = principal.Claims.Where(
+                    c => c.Type == ROLES_CLAIM || c.Type == ClaimTypes.Role)
+                    .SelectMany(c => c.Value.Split(' '));
+
+            if (!allRoles.Any())
+            {
+                log.LogError("Role not found");
+
+                return new BadRequestObjectResult(new
+                {
+                    message = "Role not found",
+                    StatusCode = System.Net.HttpStatusCode.BadRequest
+                });
+            }
+
+            if (!allRoles.Contains(requiredRole))
+            {
+                log.LogError("Required role missing");
+                return new BadRequestObjectResult(new
+                {
+                    message = "Required role missing",
+                    StatusCode = System.Net.HttpStatusCode.BadRequest
+                });
+            }
+
+            return null;
+        }
+
+        public static bool IsAppOnlyToken(ClaimsPrincipal principal)
+        {
+            string oid = principal.FindFirst("oid")?.Value;
+            string sub = principal.FindFirst("sub")?.Value;
+            bool isAppOnlyToken = oid == sub;
+            return isAppOnlyToken;
+        }
+
+        public static IActionResult CheckUserImpersonatedAuth(ClaimsPrincipal principal, ILogger log)
         {
             if (principal == null)
             {

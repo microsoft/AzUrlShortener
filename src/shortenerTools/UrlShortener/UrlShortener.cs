@@ -33,6 +33,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Text.Json;
+using Microsoft.Azure.Documents;
 
 namespace Cloud5mins.Function
 {
@@ -48,22 +49,49 @@ namespace Cloud5mins.Function
         ClaimsPrincipal principal)
         {
             log.LogInformation($"C# HTTP trigger function processed this request: {req}");
-            string userId = string.Empty;
+
             ShortRequest input;
             var result = new ShortResponse();
 
+            var config = new ConfigurationBuilder()
+                    .SetBasePath(context.FunctionAppDirectory)
+                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                    .AddEnvironmentVariables()
+                    .Build();
+
             try
             {
-                var invalidRequest = Utility.CatchUnauthorize(principal, log);
+                IActionResult authActionResult;
+                bool apiAccessEnabled = config.GetValue<bool>("enableApiAccess");
 
-                if (invalidRequest != null)
+                if (apiAccessEnabled && Utility.IsAppOnlyToken(principal))
                 {
-                    return invalidRequest;
+                    string requiredRole = config.GetValue<string>("urlShortenApiRoleName");
+
+                    authActionResult = Utility.CheckAuthRole(principal, log, requiredRole);
                 }
                 else
                 {
-                    userId = principal.FindFirst(ClaimTypes.GivenName).Value;
-                    log.LogInformation("Authenticated user {user}.", userId);
+                    authActionResult = Utility.CheckUserImpersonatedAuth(principal, log);
+                }
+
+                if (authActionResult != null)
+                {
+                    return authActionResult;
+                }
+                else
+                {
+                    if (principal.FindFirst(ClaimTypes.GivenName) != null)
+                    {
+                        string userId = principal.FindFirst(ClaimTypes.GivenName).Value;
+                        log.LogInformation("Authenticated user {user}.", userId);
+
+                        
+                    }
+                    else if(principal.FindFirst(ClaimTypes.Role) != null)
+                    {
+                        log.LogInformation("Authenticated role.");
+                    }
                 }
 
                 // Validation of the inputs
@@ -97,12 +125,6 @@ namespace Cloud5mins.Function
                         Message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'."
                     });
                 }
-
-                var config = new ConfigurationBuilder()
-                    .SetBasePath(context.FunctionAppDirectory)
-                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                    .AddEnvironmentVariables()
-                    .Build();
 
                 StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
 

@@ -62,7 +62,7 @@ namespace Cloud5mins.Function
 
             try
             {
-                var invalidRequest = Utility.CatchUnauthorize(principal, log);
+                var invalidRequest = Utility.CheckUserImpersonatedAuth(principal, log);
 
                 if (invalidRequest != null)
                 {

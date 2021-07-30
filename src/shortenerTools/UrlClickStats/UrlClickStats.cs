@@ -30,7 +30,7 @@ namespace Cloud5mins.Function
             UrlClickStatsRequest input;
             var result = new ClickStatsEntityList();
 
-            var invalidRequest = Utility.CatchUnauthorize(principal, log);
+            var invalidRequest = Utility.CheckUserImpersonatedAuth(principal, log);
             if (invalidRequest != null)
             {
                 return invalidRequest;

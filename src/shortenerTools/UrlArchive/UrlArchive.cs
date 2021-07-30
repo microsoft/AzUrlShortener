@@ -57,7 +57,7 @@ namespace Cloud5mins.Function
             ShortUrlEntity result;
             try
             {
-                var invalidRequest = Utility.CatchUnauthorize(principal, log);
+                var invalidRequest = Utility.CheckUserImpersonatedAuth(principal, log);
                 if (invalidRequest != null)
                 {
                     return invalidRequest;
