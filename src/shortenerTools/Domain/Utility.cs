@@ -90,8 +90,6 @@ namespace Cloud5mins.domain
                 return new UnauthorizedResult();
             }
 
-            log.LogInformation(string.Join(", ", principal.Claims));
-
             const string ROLES_CLAIM = "roles";
 
             var allRoles = principal.Claims.Where(
@@ -124,8 +122,18 @@ namespace Cloud5mins.domain
 
         public static bool IsAppOnlyToken(ClaimsPrincipal principal)
         {
-            string oid = principal.FindFirst("oid")?.Value;
-            string sub = principal.FindFirst("sub")?.Value;
+            string oid = principal.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value;
+            if (string.IsNullOrEmpty(oid))
+            {
+                oid = principal.FindFirst("oid")?.Value;
+            }
+
+            string sub = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(sub))
+            {
+                sub = principal.FindFirst("sub")?.Value;
+            }
+
             bool isAppOnlyToken = oid == sub;
             return isAppOnlyToken;
         }
