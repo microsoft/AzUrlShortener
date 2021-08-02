@@ -12,7 +12,7 @@ az group deployment create  -g c5mShortDemo -n cloud5minsv1 --template-file "dep
 
 #debug adminBlazorWebsite
 
-az group deployment validate -g c5mShortDemo  --template-file "src/adminTools/adminBlazorWebsite/deployment/adminBlazorWebsite-deployAzure.json" --parameters "src/adminTools/adminBlazorWebsite/deployment/adminBlazorWebsite-deployAzure.params.json"  --verbose 
+#az group deployment validate -g c5mShortDemo  --template-file "src/adminTools/adminBlazorWebsite/deployment/adminBlazorWebsite-deployAzure.json" --parameters "src/adminTools/adminBlazorWebsite/deployment/adminBlazorWebsite-deployAzure.params.json"  --verbose 
 
 
 az group deployment create  -g c5mShortDemo -n cloud5minsv1 --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.json"  --verbose 

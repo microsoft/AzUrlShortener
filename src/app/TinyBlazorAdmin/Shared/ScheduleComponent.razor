@@ -1,0 +1,39 @@
+@inherits LayoutComponentBase
+@using TinyBlazorAdmin.Data
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.Inputs
+
+<div>
+     <div class="row">
+        <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+            <SfDateTimePicker TValue="DateTime"FloatLabelType="@FloatLabelType.Auto" @bind-Value="@schedule.Start" Placeholder="Starting From" ></SfDateTimePicker>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+            <SfDateTimePicker TValue="DateTime" FloatLabelType="@FloatLabelType.Auto" @bind-Value="@schedule.End" Placeholder="Ending at" ></SfDateTimePicker>
+        </div>
+    </div>  
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+            <SfTextBox id="AlternativeUrl" Placeholder="Alternative URL"  @bind-Value="schedule.AlternativeUrl" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+            <SfTextBox id="Cron" CssClass="e-rtl" Placeholder="Cron expression" FloatLabelType="@FloatLabelType.Auto" @bind-Value="schedule.Cron"></SfTextBox>
+            <span>Tool: <a href="https://crontab.guru/" target="blank">https://crontab.guru/</a> </span>
+        </div>
+    </div>  
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+            <SfNumericTextBox id="DurationMinutes" Placeholder="Duration (in minutes)" TValue="int" @bind-Value="@schedule.DurationMinutes" Min=0 Step=5 FloatLabelType="@FloatLabelType.Auto"></SfNumericTextBox>
+        </div>
+    </div>  
+</div> 
+
+
+@code {
+
+    [Parameter]
+    public Schedule schedule { get; set; }
+ 
+}

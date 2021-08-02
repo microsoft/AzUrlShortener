@@ -26,7 +26,8 @@
       "profile": "http://cloud5mins.com",
       "contributions": [
         "code",
-        "video"
+        "video",
+        "bug"
       ]
     },
     {
@@ -111,6 +112,25 @@
       "profile": "https://github.com/IronManion",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "jasonhand",
+      "name": "Jason Hand",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1173344?v=4",
+      "profile": "http://www.jasonhand.com",
+      "contributions": [
+        "doc",
+        "infra"
+      ]
+    },
+    {
+      "login": "scottcate",
+      "name": "Scott Cate",
+      "avatar_url": "https://avatars.githubusercontent.com/u/617586?v=4",
+      "profile": "https://Microsoft.com",
+      "contributions": [
+        "code"
       ]
     }
   ]

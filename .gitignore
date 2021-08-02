@@ -265,9 +265,5 @@ __pycache__/
 **/appsettings.[Dd]evelopment.json
 
 
-src/adminTools/adminBlazorWebsite/appsettings.Development.json
-
-src/adminTools/adminBlazorWebsite/src/appsettings.Development.json
-
 #Igniore VSCode User Setting
 **/.vscode/settings.json

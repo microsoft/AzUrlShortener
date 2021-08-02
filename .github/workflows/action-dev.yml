@@ -1,0 +1,27 @@
+name: DEV CI-CD 
+
+on:
+  push:
+    branches: dev
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.GR_azUrlGitHubDev_CREDENTIALS }}
+       
+#    - uses: azure/arm-deploy@v1
+#      id: deployARM
+#      with:
+#        deploymentMode: Validate
+#        resourceGroupName: UrlShortnerDEV
+#        deploymentName: github-dev
+#        template: ./deployment/azureDeploy.json
+#        parameters: ./deployment/azureDeploy.params.dev.json
+
+    - run: |
+        az group deployment create -n github-dev -g UrlShortnerDEV --template-file deployment/azureDeploy.json --parameters "deployment/azureDeploy.params.dev.json"
