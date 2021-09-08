@@ -6,11 +6,17 @@ using Microsoft.Extensions.Logging;
 using System.Net.Http;
 using Cloud5mins.domain;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.OpenApi.Models;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 
 namespace Cloud5mins.Function
 {
     public static class UrlRedirect
     {
+        //[OpenApiOperation(operationId: "UrlRedirect", tags: new[] { "Urls" }, Summary = "Redirect short url to long url", Description = "Creates the short version of a URL and returns the result. If no vanity is specified one will be automatically generated for you.", Visibility = OpenApiVisibilityType.Important)]
+        //[OpenApiParameter(name: "shortUrl", In = ParameterLocation.Path, Required = true, Type = typeof(string), Visibility = OpenApiVisibilityType.Important)]
+        //[OpenApiResponseWithoutBody(System.Net.HttpStatusCode.Redirect)]
         [FunctionName("UrlRedirect")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "UrlRedirect/{shortUrl}")] HttpRequestMessage req,

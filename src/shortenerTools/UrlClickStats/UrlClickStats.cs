@@ -7,11 +7,19 @@ using System.Net.Http;
 using Cloud5mins.domain;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.OpenApi.Models;
+using System.Net;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 
 namespace Cloud5mins.Function
 {
     public static class UrlClickStats
     {
+        //[OpenApiOperation(operationId: "UrlClickStats", tags: new[] { "Urls" }, Summary = "Get short URL click stats", Description = "Returns statistics for a specific short URL.", Visibility = OpenApiVisibilityType.Important)]
+        //[OpenApiRequestBody(contentType: "application/json", bodyType: typeof(UrlClickStatsRequest), Required = true)]
+        //[OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
+        //[OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ClickStatsEntityList))]
         [FunctionName("UrlClickStats")]
         public static async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequestMessage req, 

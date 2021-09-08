@@ -30,6 +30,10 @@ using Cloud5mins.domain;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.OpenApi.Models;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
+using System.Net;
 
 namespace Cloud5mins.Function
 {
@@ -37,6 +41,10 @@ namespace Cloud5mins.Function
     public static class UrlShortener
     {
 
+        [OpenApiOperation(operationId: "UrlShortener", tags: new[] { "Urls" }, Summary = "Shorten a URL", Description = "Creates the short version of a URL and returns the result. If no vanity is specified one will be automatically generated for you.", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(ShortRequest), Required = true)]
+        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ShortResponse))]
         [FunctionName("UrlShortener")]
         public static async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequestMessage req,
