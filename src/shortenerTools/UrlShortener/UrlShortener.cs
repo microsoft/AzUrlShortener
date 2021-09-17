@@ -94,7 +94,7 @@ namespace Cloud5mins.Function
                     return new BadRequestObjectResult(new
                     {
                         StatusCode = HttpStatusCode.BadRequest,
-                        Message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'."
+                        Message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'https://'."
                     });
                 }
 
