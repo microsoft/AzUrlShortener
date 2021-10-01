@@ -6,7 +6,7 @@
             "defaultValue": "ShortenerTools",
             "type": "string",
             "metadata": {
-                "description": "Name use as base-template to named the resources to be deployed in Azure."
+                "description": "Name used as base-template to name the resources to be deployed in Azure."
             }
         },
         "frontend": {
@@ -24,7 +24,7 @@
             "defaultValue": "https://azure.com",
             "type": "string",
             "metadata": {
-                "description": "Default URL use when the key pass by the user is not found."
+                "description": "Default URL use when key is passed by the user is not found."
             }
         },
         "GitHubURL": {
