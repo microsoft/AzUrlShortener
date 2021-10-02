@@ -17,11 +17,11 @@ A simple and easy to use and to deploy budget-friendly Url Shortener for everyon
 Features:
 
 - Create Edit and Delete short URL.
-- Redirect different destination base on schedules
+- Redirect different destination base on schedules.
 - Keep Statistics of your clicks.
 - Budget-friendly and 100% open-source.
 - Secure by Azure Active Directory AAD (Microsoft Identity)
-- Simple step by step deployment 
+- Simple step by step deployment.
 
 ![Tiny Blazor Admin looks](/medias/TinyBlazorAdmin.gif)
 
