@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -29,12 +30,15 @@ namespace Cloud5mins.domain
 
         public static async Task<string> GetValidEndUrl(StorageTableHelper stgHelper)
         {
-            var newKey = await stgHelper.GetNextTableId();
-            string getCode() => Encode(newKey);
-            if (await stgHelper.IfShortUrlEntityExistByVanity(getCode()))
-                return await GetValidEndUrl(stgHelper);
+			static string getCode(int key) => Encode(key);
 
-            return string.Join(string.Empty, getCode());
+			int newKey;
+            do
+			{
+                newKey = await stgHelper.GetNextTableId();
+            } while (await stgHelper.IfShortUrlEntityExistByVanity(getCode(newKey)));
+
+            return string.Join(string.Empty, getCode(newKey));
         }
 
         public static string Encode(int i)
