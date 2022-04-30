@@ -102,5 +102,11 @@ namespace Cloud5mins.domain
             }
             return null;
         }
+
+        public static string Sanitize(this string input)
+        {
+            string output = input ?? string.Empty;
+            return output.Trim();
+        }
     }
 }

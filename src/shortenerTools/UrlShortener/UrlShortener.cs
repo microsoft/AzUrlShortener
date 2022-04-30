@@ -106,25 +106,18 @@ namespace Cloud5mins.Function
 
                 StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]);
 
-
-                string longUrl = input.Url.Trim();
-                string vanity = string.IsNullOrWhiteSpace(input.Vanity) ? "" : input.Vanity.Trim();
-                string title = string.IsNullOrWhiteSpace(input.Title) ? "" : input.Title.Trim();
-
-
                 ShortUrlEntity newRow;
-
-                if (!string.IsNullOrEmpty(vanity))
+                if (!string.IsNullOrWhiteSpace(input.Vanity))
                 {
-                    newRow = new ShortUrlEntity(longUrl, vanity, title, input.Schedules);
+                    newRow = new ShortUrlEntity(input.Url, input.Vanity, input.Title, input.Schedules);
                     if (await stgHelper.IfShortUrlEntityExist(newRow))
                     {
-                        return new ConflictObjectResult(new{ Message = "This Short URL already exist."});
+                        return new ConflictObjectResult(new { Message = "This Short URL already exist." });
                     }
                 }
                 else
                 {
-                    newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, stgHelper), title, input.Schedules);
+                    newRow = new ShortUrlEntity(input.Url, await Utility.GetValidEndUrl(stgHelper), input.Title, input.Schedules);
                 }
 
                 await stgHelper.SaveShortUrlEntity(newRow);

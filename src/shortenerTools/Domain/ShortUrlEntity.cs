@@ -18,7 +18,6 @@ namespace Cloud5mins.domain
             }
         }
 
-
         public string Title { get; set; }
 
         public string ShortUrl { get; set; }
@@ -26,6 +25,7 @@ namespace Cloud5mins.domain
         public int Clicks { get; set; }
 
         public bool? IsArchived { get; set; }
+
         public string SchedulesPropertyRaw { get; set; }
 
         [IgnoreProperty]
@@ -42,19 +42,17 @@ namespace Cloud5mins.domain
 
         public ShortUrlEntity(){}
 
-        public ShortUrlEntity(string longUrl, string endUrl)
+        public ShortUrlEntity(string longUrl, string endUrl) : this(longUrl, endUrl, string.Empty, null)
         {
-            Initialize(longUrl, endUrl, string.Empty, null);
         }
 
-        public ShortUrlEntity(string longUrl, string endUrl, Schedule[] schedules)
+        public ShortUrlEntity(string longUrl, string endUrl, Schedule[] schedules) : this(longUrl, endUrl, string.Empty, schedules)
         {
-            Initialize(longUrl, endUrl, string.Empty, schedules);
         }
 
         public ShortUrlEntity(string longUrl, string endUrl, string title, Schedule[] schedules)
         {
-            Initialize(longUrl, endUrl, title, schedules);
+            Initialize(longUrl.Sanitize(), endUrl.Sanitize(), title.Sanitize(), schedules);
         }
 
         private void Initialize(string longUrl, string endUrl, string title, Schedule[] schedules)
@@ -68,21 +66,15 @@ namespace Cloud5mins.domain
             Schedules = schedules;
         }
 
-        public static ShortUrlEntity GetEntity(string longUrl, string endUrl, string title, Schedule[] schedules){
-            return new ShortUrlEntity
-            {
-                PartitionKey = endUrl.First().ToString(),
-                RowKey = endUrl,
-                Url = longUrl,
-                Title = title,
-                Schedules = schedules
-            };
+        public static ShortUrlEntity GetEntity(string longUrl, string endUrl, string title, Schedule[] schedules)
+        {
+            return new ShortUrlEntity(longUrl, endUrl, title, schedules);
         }
 
         private string GetActiveUrl()
         {
             if(Schedules != null)
-                    return GetActiveUrl(DateTime.UtcNow);
+                return GetActiveUrl(DateTime.UtcNow);
             return Url;
         }
         private string GetActiveUrl(DateTime pointInTime)
