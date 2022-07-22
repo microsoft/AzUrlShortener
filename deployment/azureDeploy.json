@@ -24,7 +24,7 @@
             "defaultValue": "https://azure.com",
             "type": "string",
             "metadata": {
-                "description": "Default URL use when key is passed by the user is not found."
+                "description": "Default URL used when key passed by the user is not found."
             }
         },
         "GitHubURL": {
