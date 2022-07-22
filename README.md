@@ -10,15 +10,15 @@
 
 ![UrlShortener][UrlShortener]
 
-A simple and easy to use and to deploy budget-friendly Url Shortener for everyone. It runs in Azure (Microsoft cloud) in your subscription.  
+A simple, easy to use, easy to deploy and budget-friendly Url Shortener for everyone. It runs in Azure (Microsoft cloud) in your subscription.  
 
 > If you don't own an Azure subscription already, you can create your **free** account today. It comes with 200$ credit, so you can experience almost everything without spending a dime. [Create your free Azure account today](https://azure.microsoft.com/free?WT.mc_id=dotnet-0000-frbouche)
 
 Features:
 
-- Create Edit and Delete short URL.
+- Create, Edit and Delete short URL.
 - Redirect different destination base on schedules
-- Keep Statistics of your clicks.
+- Keep statistics of your clicks.
 - Budget-friendly and 100% open-source.
 - Secure by Azure Active Directory AAD (Microsoft Identity)
 - Simple step by step deployment 
@@ -27,9 +27,9 @@ Features:
 
 ## How To Deploy
 
-We suggest to deploy it paired with [Tiny Blazor Admin](https://github.com/FBoucher/TinyBlazorAdmin); it's a static website. However also possible do deploy it headless (just the Azure Function), if you want.  
+We suggest deploying it paired with [Tiny Blazor Admin](https://github.com/FBoucher/TinyBlazorAdmin); it's a static website. However it's also possible to deploy it headless (just the Azure Function), if you want.  
 
-👉 **[Step by Step Deployment](https://github.com/FBoucher/TinyBlazorAdmin/blob/main/deployment.md)** 👈 documentation is available here. This will bring you on the TinyBlazorAdmin repository where you will deploying both projects.
+👉 **[Step by Step Deployment](https://github.com/FBoucher/TinyBlazorAdmin/blob/main/deployment.md)** 👈 documentation is available here. This will bring you to the TinyBlazorAdmin repository where you will deploying both projects.
 
 To have all alternative and previous version deployments, refer to the [Azure Function Deployment Details](https://github.com/FBoucher/AzUrlShortener/blob/main/doc/azFunctions-deployment.md) page.
 
@@ -52,7 +52,7 @@ Youtube: [https://youtu.be/fzXy2D77WMM](https://youtu.be/fzXy2D77WMM)
 
 ## How It Works
 
-If you are interested to learn more about what's under the hood, and get more details on each Azure Function, read the [How it works](doc/how-it-works.md) page.
+If you would like to learn more about what's under the hood, and get more details on each Azure Function, read the [How it works](doc/how-it-works.md) page.
 
 
 ---
@@ -60,7 +60,7 @@ If you are interested to learn more about what's under the hood, and get more de
 
 ## What's Next?
 
-We are always trying to make it better. See  the [GitKraken boards](https://app.gitkraken.com/glo/board/XnI94exk8AARj-ph) and [issues](https://github.com/FBoucher/AzUrlShortener/issues) to see the current progress. 
+We are always trying to make improvements. See the [GitKraken boards](https://app.gitkraken.com/glo/board/XnI94exk8AARj-ph) and [issues](https://github.com/FBoucher/AzUrlShortener/issues) to see the current progress. 
 
 You are invited to go into the [Discussion](https://github.com/FBoucher/AzUrlShortener/discussions) tab to share your feedback, ask question, and suggest new feature!
 
