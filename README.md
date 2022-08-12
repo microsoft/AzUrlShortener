@@ -22,9 +22,7 @@ Features:
 
 ## How To Deploy
 
-We suggest to deploy it paired with [Tiny Blazor Admin](https://github.com/FBoucher/TinyBlazorAdmin); it's a static website. However also possible do deploy it headless (just the Azure Function), if you want.  
-
-![Tiny Blazor Admin looks](/medias/TinyBlazorAdmin.gif)
+One click deployment - In progress
 
 👉 **[Step by Step Deployment](https://github.com/FBoucher/TinyBlazorAdmin/blob/main/deployment.md)** 👈 documentation is available here. This will bring you on the TinyBlazorAdmin repository where you will deploying both projects.
 
@@ -34,14 +32,15 @@ If you want to **Update** or **Upgrade**, please refer to [this page](https://gi
 
 ## How To Use It
 
-There are many different ways to manage your Short Urls, from a direct HTTP call to a fancy website. 
-[See the complete list of admin frontends here](src/adminTools/README.md), with the instructions to deploy and use them. 
+AzUrlShortener is an API that doesn't have any admin UI by default.  There are many different ways to manage your Short Urls, from a direct HTTP call to a fancy website. 
+[See the complete list of admin tools here](src/adminTools/README.md), with the instructions to deploy and use them. 
 
-There is also a video that does a quick tour of the project.
+We suggest [Tiny Blazor Admin](https://github.com/FBoucher/TinyBlazorAdmin); it's a static website. 
 
-[![YouTube thumbnail of the Az URL Shortener quick tour video](https://img.youtube.com/vi/fzXy2D77WMM/hqdefault.jpg)](https://youtu.be/fzXy2D77WMM)
+![Tiny Blazor Admin looks](/medias/TinyBlazorAdmin.gif)
 
-Youtube: [https://youtu.be/fzXy2D77WMM](https://youtu.be/fzXy2D77WMM)
+By default, without any specific Admin tool, we recommand [Azure Storage Explorer](https://azure.microsoft.com/en-us/products/storage/storage-explorer/).
+
 
 
 ---
@@ -78,6 +77,12 @@ If you find a bug or would like to add a feature, check out those resources:
 Check out our [Code of Conduct](CODE_OF_CONDUCT.md) and [Contributing](CONTRIBUTING.md) docs. This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.  Contributions of any kind welcome!
 
 There is also instructions or [guidance](src/adminTools/README.md#how-to-add-a-new-frontend) if you would like to create a new one and collaborate to this project.
+
+There is also a video that does a quick tour of the project.
+
+[![YouTube thumbnail of the Az URL Shortener quick tour video](https://img.youtube.com/vi/fzXy2D77WMM/hqdefault.jpg)](https://youtu.be/fzXy2D77WMM)
+
+Youtube: [https://youtu.be/fzXy2D77WMM](https://youtu.be/fzXy2D77WMM)
 
 ## Contributors ✨
 
