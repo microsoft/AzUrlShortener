@@ -33,13 +33,13 @@ If you want to **Update** or **Upgrade**, please refer to [this page](https://gi
 ## How To Use It
 
 AzUrlShortener is an API that doesn't have any admin UI by default.  There are many different ways to manage your Short Urls, from a direct HTTP call to a fancy website. 
-[See the complete list of admin tools here](src/adminTools/README.md), with the instructions to deploy and use them. 
+[See the complete list of admin tools here](doc/admin-tool-list.md), with the instructions to deploy and use them. 
 
 We suggest [Tiny Blazor Admin](https://github.com/FBoucher/TinyBlazorAdmin); it's a static website. 
 
 ![Tiny Blazor Admin looks](/medias/TinyBlazorAdmin.gif)
 
-By default, without any specific Admin tool, we recommand [Azure Storage Explorer](https://azure.microsoft.com/en-us/products/storage/storage-explorer/).
+By default, without any specific Admin tool, we recommand using [Azure Storage Explorer](https://azure.microsoft.com/en-us/products/storage/storage-explorer/).
 
 
 
