@@ -14,6 +14,8 @@ Free tool to conveniently manage your Azure cloud storage resources (aka your sh
 
 [Learn about how to use it to manage your URls here](/doc/howto-use-azure-storage-explorer.md).
 
+![Azure Storage Explorer interface](/medias/azure-storage-explorer.png)
+
 
 
 ###  [TinyBlazorAdmin Website](https://github.com/FBoucher/TinyBlazorAdmin)
