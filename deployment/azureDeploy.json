@@ -9,17 +9,6 @@
                 "description": "Name use as base-template to named the resources to be deployed in Azure."
             }
         },
-        "frontend": {
-           "type": "string",
-           "allowedValues": [
-               "none",
-               "adminBlazorWebsite"
-           ],
-           "defaultValue": "adminBlazorWebsite",
-           "metadata": {
-                "description": "Select the frontend that will be deploy. Select 'none', if you don't want any. Frontend available: adminBlazorWebsite, none. "
-            }
-        },
         "defaultRedirectUrl": {
             "defaultValue": "https://azure.com",
             "type": "string",
@@ -54,20 +43,6 @@
             "metadata": {
                 "description": "Owner of this deployment, person to contact for question."
             }
-        },
-        "frontend-AdminEMail": {
-           "type": "string",
-           "defaultValue": "",
-           "metadata": {
-                "description": "(Required only if frontend = adminBlazorWebsite) The EMail use to connect into the admin Blazor Website."
-            }
-        },
-        "frontend-AdminPassword": {
-           "type": "securestring",
-           "defaultValue": "",
-           "metadata": {
-                "description": "(Required only if frontend = adminBlazorWebsite) Password use to connect into the admin Blazor Website. It MOST have: an uppercase character,a lowercase character, a digit, a non-alphanumeric character, must be at least six (6) characters long."
-            }
         }
     },
     "variables":{
@@ -77,14 +52,7 @@
         "funcHhostingPlanName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), 'plan')]",
         "insightsAppName":"[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), '-meta')]",
         "functionProjectFolder": "src/shortenerTools",
-        "UrlsStorageAccountName": "[concat('urldata', variables('suffix'), 'stg')]",
-        "frontendInfo": {
-            "adminBlazorWebsite": { 
-                "armTemplateUrl": "[concat('https://raw.githubusercontent.com/FBoucher/AzUrlShortener/', parameters('GitHubBranch'), '/src/adminTools/adminBlazorWebsite/deployment/adminBlazorWebsite-deployAzure.json')]"
-            }
-        }
-            
-        
+        "UrlsStorageAccountName": "[concat('urldata', variables('suffix'), 'stg')]"
     },
     "resources": [
         {
@@ -109,11 +77,11 @@
                     "appSettings": [
                         {
                             "name": "FUNCTIONS_EXTENSION_VERSION",
-                            "value": "~3"
+                            "value": "~4"
                         },
                         {
                             "name": "FUNCTIONS_WORKER_RUNTIME",
-                            "value": "dotnet"
+                            "value": "dotnet-isolated"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -175,7 +143,7 @@
             ]
         },
         {
-            "apiVersion": "2018-11-01",
+            "apiVersion": "2021-03-01",
             "name": "[variables('funcHhostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
             "location": "[resourceGroup().location]",
@@ -235,53 +203,6 @@
             "sku": {
                 "name": "Standard_LRS",
                 "tier": "Standard"
-            }
-        },
-        {
-            "name": "FrontendDeployment",
-            "type": "Microsoft.Resources/deployments",
-            "condition": "[not(equals(parameters('frontend'), 'none'))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]",
-                "[resourceId('Microsoft.Web/sites/sourcecontrols', variables('funcAppName'), 'web')]"
-            ],
-            "resourceGroup": "[resourceGroup().name]",
-            "apiVersion": "2019-10-01",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('frontendInfo')[parameters('frontend')].armTemplateUrl]"
-                },
-                "parameters": {
-                    "basename": {
-                        "value" : "[concat('adm', parameters('baseName'))]"
-                    },
-                    "AdminEMail": {
-                        "value" : "[parameters('frontend-AdminEMail')]"
-                    },
-                    "AdminPassword": {
-                        "value" : "[parameters('frontend-AdminPassword')]"
-                    },
-                    "AzureFunctionUrl": {
-                        "value" : "[concat('https://', reference(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '2018-02-01').hostNames[0])]"
-                    },
-                    "SecurityCode": {
-                        "value" : "[listkeys(concat(resourceId('Microsoft.Web/sites/', variables('funcAppName')), '/host/default/'),'2016-08-01').functionKeys.default]"
-                    },
-                    "GitHubURL": {
-                        "value" : "[parameters('GitHubURL')]"
-                    },
-                    "GitHubBranch": {
-                        "value" : "[parameters('GitHubBranch')]"
-                    },
-                    "ExpireOn": {
-                        "value" : "[parameters('ExpireOn')]"
-                    },
-                    "OwnerName": {
-                        "value" : "[parameters('OwnerName')]"
-                    }
-
-                }
             }
         }
     ],

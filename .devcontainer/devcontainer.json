@@ -12,7 +12,8 @@
 	"extensions": [
 		"ms-azuretools.vscode-azurefunctions",
 		"ms-dotnettools.csharp",
-		"eamodio.gitlens"
+		"eamodio.gitlens",
+		"ms-vscode.azurecli"
 	],
 
 	// Use 'postCreateCommand' to run commands after the container is created.

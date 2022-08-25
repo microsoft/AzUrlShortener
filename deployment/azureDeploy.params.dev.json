@@ -13,9 +13,6 @@
         },
         "defaultRedirectUrl": {
             "value": "https://frankysnotes.com"
-        },
-        "frontend": {
-            "value": "none"
         }
     }
 }
