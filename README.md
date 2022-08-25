@@ -39,7 +39,7 @@ We suggest [Tiny Blazor Admin](https://github.com/FBoucher/TinyBlazorAdmin); it'
 
 ![Tiny Blazor Admin looks](/medias/TinyBlazorAdmin.gif)
 
-By default, without any specific Admin tool, we recommand using [Azure Storage Explorer](https://azure.microsoft.com/en-us/products/storage/storage-explorer/).
+By default, without any specific Admin tool, we recommand using [Azure Storage Explorer](/doc/howto-use-azure-storage-explorer.md).
 
 
 
@@ -56,7 +56,7 @@ If you are interested to learn more about what's under the hood, and get more de
 
 ## What's Next?
 
-We are always trying to make it better. See  the [GitKraken boards](https://app.gitkraken.com/glo/board/XnI94exk8AARj-ph) and [issues](https://github.com/FBoucher/AzUrlShortener/issues) to see the current progress. 
+We are always trying to make it better. See the [AzUrlShortener project](https://github.com/users/FBoucher/projects/6/views/4) page and [issues](https://github.com/FBoucher/AzUrlShortener/issues) to see the current progress. 
 
 You are invited to go into the [Discussion](https://github.com/FBoucher/AzUrlShortener/discussions) tab to share your feedback, ask question, and suggest new feature!
 

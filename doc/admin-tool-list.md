@@ -10,6 +10,12 @@ Here, you will find the list of all available frontend with the instructions to 
 
 ###  [Azure Storage Explorer](https://azure.microsoft.com/en-us/products/storage/storage-explorer/)
 
+Free tool to conveniently manage your Azure cloud storage resources (aka your short URLs) from your desktop. It's cross platform and can be download [here](https://azure.microsoft.com/en-us/products/storage/storage-explorer/).
+
+[Learn about how to use it to manage your URls here](/doc/howto-use-azure-storage-explorer.md).
+
+![Azure Storage Explorer interface](/medias/azure-storage-explorer.png)
+
 
 
 ###  [TinyBlazorAdmin Website](https://github.com/FBoucher/TinyBlazorAdmin)
