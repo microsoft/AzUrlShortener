@@ -4,7 +4,7 @@ This page describes step by step how to deploy the Azure URL Shortener. To learn
 
 ## Deployment with the `Deploy to Azure` Button
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/?WT.mc_id=urlshortener-github-frbouche#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFBoucher%2FAzUrlShortener%2Fmain%2Fdeployment%2FazureDeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/?WT.mc_id=urlshortener-github-frbouche#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFBoucher%2FAzUrlShortener%2Fvnext-v3%2Fdeployment%2FazureDeploy.json)
 
 This will open the Azure Portal (portal.azure.com) in your subscription and create the required resources.
 
