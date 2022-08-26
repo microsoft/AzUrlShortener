@@ -3,10 +3,11 @@
 az group create -n c5mShortDemo -l eastus
 
 ## validate with Parameter file
-az group deployment validate -g c5mShortDemo  --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.json"  --verbose 
+az group deployment validate -g c5mShortDemo  --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.dev.json"  --verbose 
 
 ## deploy it
-az group deployment create  -g c5mShortDemo -n cloud5minsv1 --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.json"  --verbose 
+az group deployment create  -g c5mShortDemo -n cloud5minsv1 --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.dev.json"  --verbose
+
 
 
 

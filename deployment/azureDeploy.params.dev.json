@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "baseName": {
-            "value": "AzShorterDev"
+            "value": "franktestv3"
         },
         "OwnerName": {
             "value": "Frank"
         },
         "GitHubBranch": {
-            "value": "dev"
+            "value": "vnext-v3"
         },
         "defaultRedirectUrl": {
             "value": "https://frankysnotes.com"
