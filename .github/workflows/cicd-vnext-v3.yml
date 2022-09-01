@@ -1,6 +1,7 @@
 name: vnext-v3 CI-CD 
 
 on:
+  workflow_dispatch:
   push:
     branches: vnext-v3
 
