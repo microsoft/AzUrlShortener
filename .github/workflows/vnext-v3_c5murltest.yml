@@ -26,9 +26,9 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-        - name: Rename local.setting.sexample.json to local.settings.json
-          run: mv local.settings.example.json local.settings.json
-          working-directory: ${{ env.AZURE_FUNCTION_PROJ_PATH }}
+      - name: Rename local.setting.sexample.json to local.settings.json
+        run: mv local.settings.example.json local.settings.json
+        working-directory: ${{ env.AZURE_FUNCTION_PROJ_PATH }}
 
       - name: 'Resolve Project Dependencies Using Dotnet'
         working-directory: ${{ env.AZURE_FUNCTION_PROJ_PATH }}
