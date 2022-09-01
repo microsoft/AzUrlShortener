@@ -12,6 +12,7 @@ on:
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '6.0.x' # set this to the dotnet version to use
+  AZURE_FUNCTION_PROJ_PATH: src
 
 jobs:
   build-and-deploy:
@@ -25,7 +26,12 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
+        - name: Rename local.setting.sexample.json to local.settings.json
+          run: mv local.settings.example.json local.settings.json
+          working-directory: ${{ env.AZURE_FUNCTION_PROJ_PATH }}
+
       - name: 'Resolve Project Dependencies Using Dotnet'
+        working-directory: ${{ env.AZURE_FUNCTION_PROJ_PATH }}
         shell: pwsh
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
@@ -33,6 +39,7 @@ jobs:
           popd
 
       - name: 'Run Azure Functions Action'
+        working-directory: ${{ env.AZURE_FUNCTION_PROJ_PATH }}
         uses: Azure/functions-action@v1
         id: fa
         with:
