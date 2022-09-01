@@ -39,7 +39,6 @@ jobs:
           popd
 
       - name: 'Run Azure Functions Action'
-        working-directory: ${{ env.AZURE_FUNCTION_PROJ_PATH }}
         uses: Azure/functions-action@v1
         id: fa
         with:
