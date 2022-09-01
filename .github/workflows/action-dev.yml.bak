@@ -1,8 +1,8 @@
-name: DEV CI-CD 
+name: vnext-v3 CI-CD 
 
 on:
   push:
-    branches: dev
+    branches: vnext-v3
 
 jobs:
   build-and-deploy:
@@ -13,15 +13,9 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.GR_azUrlGitHubDev_CREDENTIALS }}
+        
+    - name: Rename local.setting.sexample.json to local.settings.json
+      run: mv src/local.settings.example.json src/local.settings.json
        
-#    - uses: azure/arm-deploy@v1
-#      id: deployARM
-#      with:
-#        deploymentMode: Validate
-#        resourceGroupName: UrlShortnerDEV
-#        deploymentName: github-dev
-#        template: ./deployment/azureDeploy.json
-#        parameters: ./deployment/azureDeploy.params.dev.json
-
     - run: |
-        az group deployment create -n github-dev -g UrlShortnerDEV --template-file deployment/azureDeploy.json --parameters "deployment/azureDeploy.params.dev.json"
+        az deployment group create -n github-dev -g UrlShortnerDEV --template-file deployment/azureDeploy.json --parameters "deployment/azureDeploy.params.dev.json"
