@@ -46,3 +46,4 @@ jobs:
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FC5660D46F8D4F8D9BD3E87DB6C51C50 }}
+          working-directory:  ${{ env.AZURE_FUNCTION_PROJ_PATH }}
