@@ -13,3 +13,7 @@ az deployment  group create  -g c5mShortDemo  -n cloud5minsv1 --template-file "d
 
 ## deploy it
 az deployment  group create  -g c5mShortDemo  -n cloud5minsv1 --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.dev.json"  --verbose 
+
+
+## update setting
+az functionapp config appsettings set --name c5murltest --resource-group c5mShortDemo --settings "FUNCTIONS_WORKER_RUNTIME=dotnet-isolated"
