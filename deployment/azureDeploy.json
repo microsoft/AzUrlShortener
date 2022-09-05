@@ -56,7 +56,7 @@
     },
     "resources": [
         {
-            "apiVersion": "2018-11-01",
+            "apiVersion": "2022-03-01",
             "name": "[variables('funcAppName')]",
             "type": "Microsoft.Web/sites",
             "kind": "functionapp",
@@ -127,7 +127,7 @@
             },
             "resources": [
                 {
-                    "apiVersion": "2018-11-01",
+                    "apiVersion": "2022-03-01",
                     "type":"sourcecontrols",
                     "name": "web",
                     "dependsOn": [
