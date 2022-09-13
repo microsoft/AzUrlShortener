@@ -82,6 +82,42 @@
                     "minimumElasticInstanceCount": 0,
                     "appSettings": [
                         {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~4"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').ConnectionString]"
+                        },
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('funcStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('funcStorageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('funcStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('funcStorageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[concat(variables('funcAppName'), 'ba91')]"
+                        },
+                        {
+                            "name": "PROJECT",
+                            "value": "[variables('functionProjectFolder')]"
+                        },
+                        {
+                            "name": "FUNCTIONS_V2_COMPATIBILITY_MODE",
+                            "value": "true"
+                        },
+                        {
                             "name": "UlsDataStorage",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('UrlsStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('UrlsStorageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
                         },
@@ -111,108 +147,23 @@
                 "redundancyMode": "None",
                 "storageAccountRequired": false,
                 "keyVaultReferenceIdentity": "SystemAssigned"
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/config",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(variables('funcAppName'), '/web')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]"
-            ],
-            "tags": {
-                "Owner": "[parameters('OwnerName')]",
-                "ExpireOn": "[parameters('ExpireOn')]"
             },
-            "properties": {
-                "numberOfWorkers": 1,
-                "defaultDocuments": [
-                    "Default.htm",
-                    "Default.html"
-                ],
-                "netFrameworkVersion": "v6.0",
-                "requestTracingEnabled": false,
-                "remoteDebuggingEnabled": false,
-                "remoteDebuggingVersion": "VS2019",
-                "httpLoggingEnabled": false,
-                "acrUseManagedIdentityCreds": false,
-                "logsDirectorySizeLimit": 35,
-                "detailedErrorLoggingEnabled": false,
-                "publishingUsername": "[variables('funcAppName')]",
-                "scmType": "GitHubAction",
-                "use32BitWorkerProcess": true,
-                "webSocketsEnabled": false,
-                "alwaysOn": false,
-                "managedPipelineMode": "Integrated",
-                "virtualApplications": [
-                    {
-                        "virtualPath": "/src",
-                        "physicalPath": "site\\wwwroot",
-                        "preloadEnabled": false
-                    }
-                ],
-                "loadBalancing": "LeastRequests",
-                "experiments": {
-                    "rampUpRules": []
-                },
-                "autoHealEnabled": false,
-                "vnetRouteAllEnabled": false,
-                "vnetPrivatePortsCount": 0,
-                "cors": {
-                    "allowedOrigins": [
-                        "https://portal.azure.com"
+            "resources": [
+                {
+                    "apiVersion": "2022-03-01",
+                    "type":"sourcecontrols",
+                    "name": "web",
+                    "dependsOn": [
+                      "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
                     ],
-                    "supportCredentials": false
-                },
-                "localMySqlEnabled": false,
-                "ipSecurityRestrictions": [
-                    {
-                        "ipAddress": "Any",
-                        "action": "Allow",
-                        "priority": 2147483647,
-                        "name": "Allow all",
-                        "description": "Allow all access"
+                    "properties": {
+                        "repoUrl": "[parameters('GitHubURL')]",
+                        "branch": "[parameters('GitHubBranch')]",
+                        "publishRunbook": true,
+                        "IsManualIntegration": true
                     }
-                ],
-                "scmIpSecurityRestrictions": [
-                    {
-                        "ipAddress": "Any",
-                        "action": "Allow",
-                        "priority": 2147483647,
-                        "name": "Allow all",
-                        "description": "Allow all access"
-                    }
-                ],
-                "scmIpSecurityRestrictionsUseMain": false,
-                "http20Enabled": false,
-                "minTlsVersion": "1.2",
-                "scmMinTlsVersion": "1.2",
-                "ftpsState": "FtpsOnly",
-                "preWarmedInstanceCount": 0,
-                "functionAppScaleLimit": 200,
-                "functionsRuntimeScaleMonitoringEnabled": false,
-                "minimumElasticInstanceCount": 0,
-                "azureStorageAccounts": {}
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/functions",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(variables('funcAppName'), '/UrlRedirect')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]"
-            ],
-            "properties": {
-                "script_href": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/admin/vfs/site/wwwroot/shortenerTools.dll')]",
-                "test_data_href": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/admin/vfs/data/Functions/sampledata/UrlRedirect.dat')]",
-                "href": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/admin/functions/UrlRedirect')]",
-                "config": {},
-                "invoke_url_template": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/api/urlredirect/{shorturl}'])",
-                "language": "dotnet-isolated",
-                "isDisabled": false
-            }
+                }
+            ]
         },
         {
             "apiVersion": "2021-03-01",
