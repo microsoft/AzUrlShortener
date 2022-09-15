@@ -113,6 +113,30 @@
             }
         },
         {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(variables('funcAppName'), '/ftp')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(variables('funcAppName'), '/scm')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
             "type": "Microsoft.Web/sites/config",
             "apiVersion": "2022-03-01",
             "name": "[concat(variables('funcAppName'), '/web')]",
@@ -208,8 +232,8 @@
                 "test_data_href": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/admin/vfs/data/Functions/sampledata/UrlRedirect.dat')]",
                 "href": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/admin/functions/UrlRedirect')]",
                 "config": {},
-                "invoke_url_template": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/api/urlredirect/{shorturl}'])",
-                "language": "dotnet",
+                "invoke_url_template": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/api/urlredirect/{shorturl}')]",
+                "language": "dotnet-isolated",
                 "isDisabled": false
             }
         },
