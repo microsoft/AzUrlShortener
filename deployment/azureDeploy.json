@@ -191,10 +191,11 @@
                 "Owner": "[parameters('OwnerName')]",
                 "ExpireOn": "[parameters('ExpireOn')]"
             },
-            "kind": "web",
+            "kind": "",
             "properties": {
                 "Application_Type": "web",
-                "ApplicationId": "[variables('funcAppName')]"
+                "ApplicationId": "[variables('funcAppName')]",
+                "Request_Source": "rest"
             }
         },
         {
