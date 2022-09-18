@@ -129,7 +129,23 @@
                 "redundancyMode": "None",
                 "storageAccountRequired": false,
                 "keyVaultReferenceIdentity": "SystemAssigned"
-            }
+            },
+            "resources": [
+                {
+                    "apiVersion": "2021-03-01",
+                    "type":"sourcecontrols",
+                    "name": "web",
+                    "dependsOn": [
+                      "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
+                    ],
+                    "properties": {
+                        "repoUrl": "[parameters('GitHubURL')]",
+                        "branch": "[parameters('GitHubBranch')]",
+                        "publishRunbook": true,
+                        "IsManualIntegration": true
+                    }
+                }
+            ]
         },
         {
             "type": "Microsoft.Web/sites/config",
@@ -146,19 +162,6 @@
                 "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]",
                 "[resourceId('Microsoft.Web/sites/sourcecontrols', variables('funcAppName'), 'web')]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('funcStorageAccountName'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/sourcecontrols",
-            "apiVersion": "2021-03-01",
-            "name": "[format('{0}/{1}', variables('funcAppName'), 'web')]",
-            "properties": {
-                "repoUrl": "[parameters('GitHubURL')]",
-                "branch": "[parameters('GitHubBranch')]",
-                "isManualIntegration": true
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]"
             ]
         },
         {
