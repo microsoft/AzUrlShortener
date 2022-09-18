@@ -82,26 +82,6 @@
                     "minimumElasticInstanceCount": 0,
                     "appSettings": [
                         {
-                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                            "value": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').InstrumentationKey]"
-                        },
-                        {
-                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            "value": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').ConnectionString]"
-                        },
-                        {
-                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('funcStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('funcStorageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
-                        },
-                        {
-                            "name": "WEBSITE_CONTENTSHARE",
-                            "value": "[concat(variables('funcAppName'), 'ba91')]"
-                        },
-                        {
-                            "name": "PROJECT",
-                            "value": "[variables('functionProjectFolder')]"
-                        },
-                        {
                             "name": "UlsDataStorage",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('UrlsStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('UrlsStorageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
                         },
@@ -124,6 +104,7 @@
                 "clientCertEnabled": false,
                 "clientCertMode": "Required",
                 "hostNamesDisabled": false,
+                "containerSize": 1536,
                 "dailyMemoryTimeQuota": 0,
                 "httpsOnly": true,
                 "redundancyMode": "None",
@@ -132,40 +113,136 @@
             }
         },
         {
-            "type": "Microsoft.Web/sites/config",
-            "apiVersion": "2021-03-01",
-            "name": "[format('{0}/{1}', variables('funcAppName'), 'appsettings')]",
-            "properties": {
-                "AzureWebJobsStorage": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}', variables('funcStorageAccountName'), listKeys(variables('funcStorageAccountName'), '2021-09-01').keys[0].value)]",
-                "AzureWebJobsDashboard": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}', variables('funcStorageAccountName'), listKeys(variables('funcStorageAccountName'), '2021-09-01').keys[0].value)]",
-                "FUNCTIONS_EXTENSION_VERSION": "~4",
-                "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-                "Project": "[variables('functionProjectFolder')]"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]",
-                "[resourceId('Microsoft.Web/sites/sourcecontrols', variables('funcAppName'), 'web')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('funcStorageAccountName'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/sourcecontrols",
-            "apiVersion": "2021-03-01",
-            "name": "[format('{0}/{1}', variables('funcAppName'), 'web')]",
-            "properties": {
-                "repoUrl": "[parameters('GitHubURL')]",
-                "branch": "[parameters('GitHubBranch')]",
-                "isManualIntegration": true
-            },
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(variables('funcAppName'), '/ftp')]",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]"
-            ]
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(variables('funcAppName'), '/scm')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(variables('funcAppName'), '/web')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]"
+            ],
+            "tags": {
+                "Owner": "[parameters('OwnerName')]",
+                "ExpireOn": "[parameters('ExpireOn')]"
+            },
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html"
+                ],
+                "netFrameworkVersion": "v6.0",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "remoteDebuggingVersion": "VS2019",
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "[variables('funcAppName')]",
+                "scmType": "ExternalGit",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/src",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "cors": {
+                    "allowedOrigins": [
+                        "https://portal.azure.com"
+                    ],
+                    "supportCredentials": false
+                },
+                "localMySqlEnabled": false,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "functionAppScaleLimit": 200,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/functions",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(variables('funcAppName'), '/UrlRedirect')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]"
+            ],
+            "properties": {
+                "script_href": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/admin/vfs/site/wwwroot/shortenerTools.dll')]",
+                "test_data_href": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/admin/vfs/data/Functions/sampledata/UrlRedirect.dat')]",
+                "href": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/admin/functions/UrlRedirect')]",
+                "config": {},
+                "invoke_url_template": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/api/urlredirect/{shorturl}')]",
+                "language": "dotnet-isolated",
+                "isDisabled": false
+            }
         },
         {
             "apiVersion": "2021-03-01",
             "name": "[variables('funcHhostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
             "location": "[resourceGroup().location]",
+            "kind": "",
             "tags": {
                 "Owner": "[parameters('OwnerName')]",
                 "ExpireOn": "[parameters('ExpireOn')]"
@@ -176,14 +253,11 @@
             },
             "sku": {
                 "Tier": "Dynamic",
-                "Name": "Y1",
-                "size": "Y1",
-                "family": "Y",
-                "capacity": 0
+                "Name": "Y1"
             }
         },
         {
-            "apiVersion": "2021-09-01",
+            "apiVersion": "2015-05-01",
             "name": "[variables('insightsAppName')]",
             "type": "microsoft.insights/components",
             "location": "[resourceGroup().location]",
@@ -191,7 +265,7 @@
                 "Owner": "[parameters('OwnerName')]",
                 "ExpireOn": "[parameters('ExpireOn')]"
             },
-            "kind": "web",
+            "kind": "",
             "properties": {
                 "Application_Type": "web",
                 "ApplicationId": "[variables('funcAppName')]",
@@ -199,11 +273,10 @@
             }
         },
         {
-            "apiVersion": "2021-09-01",
+            "apiVersion": "2019-06-01",
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[variables('funcStorageAccountName')]",
             "location": "[resourceGroup().location]",
-            "kind": "StorageV2",
             "sku": {
                 "name": "Standard_LRS",
                 "tier": "Standard"
@@ -215,9 +288,8 @@
         {
             "name": "[variables('UrlsStorageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2021-09-01",
+            "apiVersion": "2019-06-01",
             "location": "[resourceGroup().location]",
-            "kind": "StorageV2",
             "tags": {
                 "displayName": "[variables('UrlsStorageAccountName')]",
                 "Owner": "[parameters('OwnerName')]",
