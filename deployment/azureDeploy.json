@@ -104,10 +104,6 @@
                             "value": "[concat(variables('funcAppName'), 'ba91')]"
                         },
                         {
-                            "name": "PROJECT",
-                            "value": "[variables('functionProjectFolder')]"
-                        },
-                        {
                             "name": "UlsDataStorage",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('UrlsStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('UrlsStorageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
                         },
@@ -133,24 +129,7 @@
                     "properties": {
                         "repoUrl": "[parameters('GitHubURL')]",
                         "branch": "[parameters('GitHubBranch')]",
-                        "IsManualIntegration": false,
-                        "deploymentRollbackEnabled": false,
-                        "isMercurial": false,
-                        "isGitHubAction": true,
-                        "gitHubActionConfiguration": {
-                            "generateWorkflowFile": true,
-                            "workflowSettings": {
-                                "appType": "functionapp",
-                                "publishType": "code",
-                                "os": "windows",
-                                "runtimeStack": "dotnet",
-                                "workflowApiVersion": "2020-12-01",
-                                "slotName": "production",
-                                "variables": {
-                                    "runtimeVersion": "6.0.x"
-                                }
-                            }
-                        }
+                        "IsManualIntegration": true
                     }
                 }
             ]
