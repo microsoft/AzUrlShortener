@@ -108,10 +108,6 @@
                             "value": "[variables('functionProjectFolder')]"
                         },
                         {
-                            "name": "FUNCTIONS_V2_COMPATIBILITY_MODE",
-                            "value": "true"
-                        },
-                        {
                             "name": "UlsDataStorage",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('UrlsStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('UrlsStorageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
                         },
@@ -122,7 +118,8 @@
                     ]
                 },
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('funcHhostingPlanName'))]",                
-                "hostingEnvironment": "",
+                "use32BitWorkerProcess": true,
+                "netFrameworkVersion": "v6.0",
                 "clientAffinityEnabled": true
             },
             "resources": [
@@ -136,8 +133,24 @@
                     "properties": {
                         "repoUrl": "[parameters('GitHubURL')]",
                         "branch": "[parameters('GitHubBranch')]",
-                        "publishRunbook": true,
-                        "IsManualIntegration": true
+                        "IsManualIntegration": false,
+                        "deploymentRollbackEnabled": false,
+                        "isMercurial": false,
+                        "isGitHubAction": true,
+                        "gitHubActionConfiguration": {
+                            "generateWorkflowFile": true,
+                            "workflowSettings": {
+                                "appType": "functionapp",
+                                "publishType": "code",
+                                "os": "windows",
+                                "runtimeStack": "dotnet",
+                                "workflowApiVersion": "2020-12-01",
+                                "slotName": "production",
+                                "variables": {
+                                    "runtimeVersion": "6.0.x"
+                                }
+                            }
+                        }
                     }
                 }
             ]
