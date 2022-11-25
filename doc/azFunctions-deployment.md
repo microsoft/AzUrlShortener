@@ -4,7 +4,7 @@ This page describes step by step how to deploy the Azure URL Shortener. To learn
 
 ## Deployment with the `Deploy to Azure` Button
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/?WT.mc_id=urlshortener-github-frbouche#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFBoucher%2FAzUrlShortener%2Fmain%2Fdeployment%2FazureDeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/?WT.mc_id=urlshortener-github-frbouche#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFBoucher%2FAzUrlShortener%2Fvnext-v3%2Fdeployment%2FazureDeploy.json)
 
 This will open the Azure Portal (portal.azure.com) in your subscription and create the required resources.
 
@@ -32,7 +32,7 @@ This will open the Azure Portal (portal.azure.com) in your subscription and crea
 
 Once all the resources are created you will end-up with: 
 
-- Azure Function: Where the code from the project [src/shortenerTools](src/shortenerTools) will be copy.
+- Azure Function: Where the code from the project [src](src) will be copy.
 - Service Plan: Dynamic service plan (aka. [Consumption Plan](https://azure.microsoft.com/en-us/pricing/details/functions/?WT.mc_id=azurlshortener-github-frbouche)) to make sure you are only charged on a per-second granularity.
 - Application Insights: To get some metric/ usage of our function. (In the future we could Frontend that information in a friendly web UI)
 - 2 Storage account: 1 for the Azure Function, the second use as Data Storage leveraging the [Azure Table storage](https://azure.microsoft.com/en-us/services/storage/tables/?WT.mc_id=azurlshortener-github-frbouche).

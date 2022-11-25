@@ -9,19 +9,10 @@
             "value": "Frank"
         },
         "GitHubBranch": {
-            "value": "feature/deploy-it-all"
+            "value": "vnext-v3"
         },
         "defaultRedirectUrl": {
             "value": "https://azure.com"
-        },
-        "frontend": {
-            "value": "adminBlazorWebsite"
-        },
-        "frontend-AdminEMail": {
-            "value": "test@test.com"
-        },
-        "frontend-AdminPassword": {
-            "value": "Supernewt42!"
         }
     }
 }

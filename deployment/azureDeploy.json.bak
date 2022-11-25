@@ -6,14 +6,14 @@
             "defaultValue": "ShortenerTools",
             "type": "string",
             "metadata": {
-                "description": "Name used as base-template to name the resources to be deployed in Azure."
+                "description": "Name use as base-template to named the resources to be deployed in Azure."
             }
         },
         "defaultRedirectUrl": {
             "defaultValue": "https://azure.com",
             "type": "string",
             "metadata": {
-                "description": "Default URL used when key passed by the user is not found."
+                "description": "Default URL use when the key pass by the user is not found."
             }
         },
         "GitHubURL": {
@@ -74,6 +74,12 @@
             "properties": {
                 "name": "[variables('funcAppName')]",
                 "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 200,
+                    "minimumElasticInstanceCount": 0,
                     "appSettings": [
                         {
                             "name": "FUNCTIONS_EXTENSION_VERSION",
@@ -81,7 +87,7 @@
                         },
                         {
                             "name": "FUNCTIONS_WORKER_RUNTIME",
-                            "value": "dotnet-isolated"
+                            "value": "dotnet"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -104,6 +110,14 @@
                             "value": "[concat(variables('funcAppName'), 'ba91')]"
                         },
                         {
+                            "name": "PROJECT",
+                            "value": "[variables('functionProjectFolder')]"
+                        },
+                        {
+                            "name": "FUNCTIONS_V2_COMPATIBILITY_MODE",
+                            "value": "true"
+                        },
+                        {
                             "name": "UlsDataStorage",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('UrlsStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('UrlsStorageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
                         },
@@ -114,9 +128,25 @@
                     ]
                 },
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('funcHhostingPlanName'))]",                
-                "use32BitWorkerProcess": true,
-                "netFrameworkVersion": "v6.0",
-                "clientAffinityEnabled": true
+                "enabled": true,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "customDomainVerificationId": "17419F0A8C6FEB4FEBF71224501152B60D0BF50096E43165069249A292AE4220",
+                "containerSize": 1536,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
             },
             "resources": [
                 {
@@ -129,6 +159,7 @@
                     "properties": {
                         "repoUrl": "[parameters('GitHubURL')]",
                         "branch": "[parameters('GitHubBranch')]",
+                        "publishRunbook": true,
                         "IsManualIntegration": true
                     }
                 }

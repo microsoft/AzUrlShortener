@@ -100,7 +100,7 @@ The TinyBlazorAdmin is the place to manage all your URLs. Create a new Page rule
 
 ### 5- Add the new Custom Domain to the Settings file
 
-The last step is to update the `src\shortenerTools\settings.json`. This is the setting file for the Azure Function. Add (or edit if already present) `customDomain` and set it to your new domain.
+The last step is to update the `src\settings.json`. This is the setting file for the Azure Function. Add (or edit if already present) `customDomain` and set it to your new domain.
 
 ```
  "customDomain":"https://c5m.ca"
