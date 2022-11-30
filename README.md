@@ -24,9 +24,7 @@ Features:
 
 One click deployment - In progress
 
-👉 **[Step by Step Deployment](https://github.com/FBoucher/TinyBlazorAdmin/blob/main/deployment.md)** 👈 documentation is available here. This will bring you on the TinyBlazorAdmin repository where you will deploying both projects.
-
-To have all alternative and previous version deployments, refer to the [Azure Function Deployment Details](https://github.com/FBoucher/AzUrlShortener/blob/main/doc/azFunctions-deployment.md) page.
+👉 **[Step by Step Deployment](/doc/azFunctions-deployment.md)** 👈 documentation is available here. If you would like to used the TinyBlazorAdmin as frontend (suggested) here the the [steps to follow for TinyBlazorAdmin]()https://github.com/FBoucher/TinyBlazorAdmin/blob/main/deployment.md.
 
 If you want to **Update** or **Upgrade**, please refer to [this page](https://github.com/FBoucher/AzUrlShortener/blob/main/doc/Update-upgrade.md). 
 
