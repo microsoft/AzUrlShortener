@@ -24,7 +24,7 @@ Features:
 
 One click deployment - In progress
 
-👉 **[Step by Step Deployment](/doc/azFunctions-deployment.md)** 👈 documentation is available here. If you would like to used the TinyBlazorAdmin as frontend (suggested) here the the [steps to follow for TinyBlazorAdmin]()https://github.com/FBoucher/TinyBlazorAdmin/blob/main/deployment.md.
+👉 **[Step by Step Deployment](/doc/azFunctions-deployment.md)** 👈 documentation is available here. If you would like to used the TinyBlazorAdmin as frontend (suggested) here the the [steps to follow for TinyBlazorAdmin](https://github.com/FBoucher/TinyBlazorAdmin/blob/main/deployment.md).
 
 If you want to **Update** or **Upgrade**, please refer to [this page](https://github.com/FBoucher/AzUrlShortener/blob/main/doc/Update-upgrade.md). 
 
