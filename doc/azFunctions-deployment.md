@@ -1,14 +1,12 @@
+👉👉 New version of this page in the wiki [Wiki](https://github.com/FBoucher/AzUrlShortener/wiki/Deployment-with-the-Deploy-to-Azure-button) 👈👈
+
 # Deployment Details
 
 This page describes step by step how to deploy the Azure URL Shortener. To learn more  about how the deployment was built see the section [below](#how-the-deployment-works)
 
-## Deployment with the `Deploy to Azure` Button
-
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/?WT.mc_id=urlshortener-github-frbouche#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFBoucher%2FAzUrlShortener%2Fmain%2Fdeployment%2FazureDeploy.json)
+<s>## Deployment with the `Deploy to Azure` Button
 
 This will open the Azure Portal (portal.azure.com) in your subscription and create the required resources.
-
-![createARM][createARM]
 
 - **Resource group**: Logical group where your resources will be created.
 - **Location**: Select a location (usually closer of your users)
@@ -36,9 +34,7 @@ Once all the resources are created you will end-up with:
 - Service Plan: Dynamic service plan (aka. [Consumption Plan](https://azure.microsoft.com/en-us/pricing/details/functions/?WT.mc_id=azurlshortener-github-frbouche)) to make sure you are only charged on a per-second granularity.
 - Application Insights: To get some metric/ usage of our function. (In the future we could Frontend that information in a friendly web UI)
 - 2 Storage account: 1 for the Azure Function, the second use as Data Storage leveraging the [Azure Table storage](https://azure.microsoft.com/en-us/services/storage/tables/?WT.mc_id=azurlshortener-github-frbouche).
-
-![ArmResult][ArmResult]
-
+  </s>
 
 ---
 
