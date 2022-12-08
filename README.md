@@ -24,14 +24,13 @@ Features:
 
 One click deployment - In progress
 
-👉 **[Step by Step Deployment](/doc/azFunctions-deployment.md)** 👈 documentation is available here. If you would like to used the TinyBlazorAdmin as frontend (suggested) here the the [steps to follow for TinyBlazorAdmin](https://github.com/FBoucher/TinyBlazorAdmin/blob/main/deployment.md).
+👉 **[Step by Step Deployment](https://github.com/FBoucher/AzUrlShortener/wiki/How-to-deploy-your-AzUrlShortener)** (wiki pages) 👈 documentation is available here. If you would like to used the TinyBlazorAdmin as frontend (suggested) here the the [steps to follow for TinyBlazorAdmin](https://github.com/FBoucher/TinyBlazorAdmin/wiki/Deployment).
 
-If you want to **Update** or **Upgrade**, please refer to [this page](https://github.com/FBoucher/AzUrlShortener/blob/main/doc/Update-upgrade.md). 
+If you want to **Update** or **Upgrade**, please refer to [this page](https://github.com/FBoucher/AzUrlShortener/wiki/How-to-Update---Upgrade) (wiki pages). 
 
 ## How To Use It
 
-AzUrlShortener is an API that doesn't have any admin UI by default.  There are many different ways to manage your Short Urls, from a direct HTTP call to a fancy website. 
-[See the complete list of admin tools here](doc/admin-tool-list.md), with the instructions to deploy and use them. 
+AzUrlShortener is an API that doesn't have any admin UI by default. There are many different ways to manage your Short Urls, from a direct HTTP call to a fancy website. 
 
 We suggest [Tiny Blazor Admin](https://github.com/FBoucher/TinyBlazorAdmin); it's a static website. 
 
@@ -39,10 +38,7 @@ We suggest [Tiny Blazor Admin](https://github.com/FBoucher/TinyBlazorAdmin); it'
 
 By default, without any specific Admin tool, we recommand using [Azure Storage Explorer](/doc/howto-use-azure-storage-explorer.md).
 
-
-
 ---
-
 
 ## How It Works
 
