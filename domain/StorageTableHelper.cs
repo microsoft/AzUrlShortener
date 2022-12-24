@@ -64,5 +64,11 @@ namespace Cloud5mins.domain
 			ShortUrlEntity eShortUrl = result.Result as ShortUrlEntity;
 			return eShortUrl;
 		}
+
+		public  void CreateTables()
+		{
+			GetTable("UrlsDetails");
+			GetTable("UrlsDetails");
+		}
 	}
 }
