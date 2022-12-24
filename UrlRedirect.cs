@@ -32,7 +32,8 @@ namespace Cloud5mins.Function
 
             if (!String.IsNullOrWhiteSpace(shortUrl))
             {
-                redirectUrl = _shortenerSettings.defaultRedirectUrl;
+                if(!String.IsNullOrEmpty(_shortenerSettings.defaultRedirectUrl))
+                    redirectUrl = _shortenerSettings.defaultRedirectUrl;
 
                 StorageTableHelper stgHelper = new StorageTableHelper(_shortenerSettings.UlsDataStorage);
 
