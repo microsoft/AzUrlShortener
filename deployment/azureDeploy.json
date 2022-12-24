@@ -115,7 +115,7 @@
                 },
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('funcHhostingPlanName'))]",                
                 "use32BitWorkerProcess": true,
-                "netFrameworkVersion": "v6.0",
+                "netFrameworkVersion": "v7.0",
                 "clientAffinityEnabled": true
             },
             "resources": [

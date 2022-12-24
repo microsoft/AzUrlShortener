@@ -2,6 +2,42 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "build",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/src/shortenerTools.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "publish",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "publish",
+        "${workspaceFolder}/src/shortenerTools.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "watch",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "watch",
+        "run",
+        "--project",
+        "${workspaceFolder}/src/shortenerTools.csproj"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
       "label": "clean (functions)",
       "command": "dotnet",
       "args": [
@@ -10,10 +46,7 @@
         "/consoleloggerparameters:NoSummary"
       ],
       "type": "process",
-      "problemMatcher": "$msCompile",
-      "options": {
-        "cwd": "${workspaceFolder}/src"
-      }
+      "problemMatcher": "$msCompile"
     },
     {
       "label": "build (functions)",
@@ -29,10 +62,7 @@
         "kind": "build",
         "isDefault": true
       },
-      "problemMatcher": "$msCompile",
-      "options": {
-        "cwd": "${workspaceFolder}/src"
-      }
+      "problemMatcher": "$msCompile"
     },
     {
       "label": "clean release (functions)",
@@ -45,10 +75,7 @@
         "/consoleloggerparameters:NoSummary"
       ],
       "type": "process",
-      "problemMatcher": "$msCompile",
-      "options": {
-        "cwd": "${workspaceFolder}/src"
-      }
+      "problemMatcher": "$msCompile"
     },
     {
       "label": "publish (functions)",
@@ -62,56 +89,17 @@
       ],
       "type": "process",
       "dependsOn": "clean release (functions)",
-      "problemMatcher": "$msCompile",
-      "options": {
-        "cwd": "${workspaceFolder}/src"
-      }
+      "problemMatcher": "$msCompile"
     },
     {
       "type": "func",
       "dependsOn": "build (functions)",
       "options": {
-        "cwd": "${workspaceFolder}/src/bin/Debug/net6.0"
+        "cwd": "${workspaceFolder}/bin/Debug/net7.0"
       },
       "command": "host start",
       "isBackground": true,
       "problemMatcher": "$func-dotnet-watch"
-    },
-    {
-        "label": "build",
-        "command": "dotnet",
-        "type": "process",
-        "args": [
-            "build",
-            "${workspaceFolder}/src/shortenerTools.csproj",
-            "/property:GenerateFullPaths=true",
-            "/consoleloggerparameters:NoSummary"
-        ],
-        "problemMatcher": "$msCompile"
-    },
-    {
-        "label": "publish",
-        "command": "dotnet",
-        "type": "process",
-        "args": [
-            "publish",
-            "${workspaceFolder}/src/shortenerTools.csproj",
-            "/property:GenerateFullPaths=true",
-            "/consoleloggerparameters:NoSummary"
-        ],
-        "problemMatcher": "$msCompile"
-    },
-    {
-        "label": "watch",
-        "command": "dotnet",
-        "type": "process",
-        "args": [
-            "watch",
-            "run",
-            "--project",
-            "${workspaceFolder}/src/shortenerTools.csproj"
-        ],
-        "problemMatcher": "$msCompile"
     }
   ]
 }
