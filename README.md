@@ -72,11 +72,13 @@ Check out our [Code of Conduct](CODE_OF_CONDUCT.md) and [Contributing](CONTRIBUT
 
 There is also instructions or [guidance](src/adminTools/README.md#how-to-add-a-new-frontend) if you would like to create a new one and collaborate to this project.
 
-There is also a video that does a quick tour of the project.
+There is also a videos that explains a bit how things works and does a quick tour of the project.
 
-[![YouTube thumbnail of the Az URL Shortener quick tour video](https://img.youtube.com/vi/fzXy2D77WMM/hqdefault.jpg)](https://youtu.be/fzXy2D77WMM)
+| Cloud 5 Mins | Azure Friday |
+| ---          | --- |
+| [![Tiny Blazor Admin looks](/medias/AzUrlShortener_preview.gif)](https://youtu.be/fzXy2D77WMM) | [![Azure Friday](/medias/AzureFriday_preview.gif)](https://learn.microsoft.com/en-us/shows/azure-friday/azurlshortener-an-open-source-budget-friendly-url-shortener)  |
 
-Youtube: [https://youtu.be/fzXy2D77WMM](https://youtu.be/fzXy2D77WMM)
+
 
 ## Contributors ✨
 
