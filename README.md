@@ -36,13 +36,19 @@ We suggest [Tiny Blazor Admin](https://github.com/FBoucher/TinyBlazorAdmin); it'
 
 ![Tiny Blazor Admin looks](/medias/TinyBlazorAdmin.gif)
 
-By default, without any specific Admin tool, we recommand using [Azure Storage Explorer](/doc/howto-use-azure-storage-explorer.md).
+By default, without any specific Admin tool, we recommend using [Azure Storage Explorer](/doc/howto-use-azure-storage-explorer.md).
 
 ---
 
 ## How It Works
 
-If you are interested to learn more about what's under the hood, and get more details on each Azure Function, read the [How it works](doc/how-it-works.md) page.
+If you are interested to learn more about what's under the hood, and get more details on each Azure Function, read the [How it works](https://github.com/FBoucher/AzUrlShortener/wiki/how-it-works) page.
+
+There is also a videos that explains a bit how things works and does a quick tour of the project.
+
+| Cloud 5 Mins | Azure Friday |
+| ---          | --- |
+| [![Tiny Blazor Admin looks](/medias/AzUrlShortener_preview.gif)](https://youtu.be/fzXy2D77WMM) | [![Azure Friday](/medias/AzureFriday_preview.gif)](https://learn.microsoft.com/en-us/shows/azure-friday/azurlshortener-an-open-source-budget-friendly-url-shortener)  |
 
 
 ---
@@ -69,16 +75,6 @@ Current Backlog contains:
 If you find a bug or would like to add a feature, check out those resources:
 
 Check out our [Code of Conduct](CODE_OF_CONDUCT.md) and [Contributing](CONTRIBUTING.md) docs. This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.  Contributions of any kind welcome!
-
-There is also instructions or [guidance](src/adminTools/README.md#how-to-add-a-new-frontend) if you would like to create a new one and collaborate to this project.
-
-There is also a videos that explains a bit how things works and does a quick tour of the project.
-
-| Cloud 5 Mins | Azure Friday |
-| ---          | --- |
-| [![Tiny Blazor Admin looks](/medias/AzUrlShortener_preview.gif)](https://youtu.be/fzXy2D77WMM) | [![Azure Friday](/medias/AzureFriday_preview.gif)](https://learn.microsoft.com/en-us/shows/azure-friday/azurlshortener-an-open-source-budget-friendly-url-shortener)  |
-
-
 
 ## Contributors ✨
 
