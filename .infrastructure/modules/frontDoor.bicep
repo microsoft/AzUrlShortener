@@ -72,4 +72,7 @@ resource frontDoorRoute 'Microsoft.Cdn/profiles/afdEndpoints/routes@2022-11-01-p
     linkToDefaultDomain: 'Enabled'
     httpsRedirect: 'Enabled'
   }
+  dependsOn: [
+    frontDoorOrigin
+  ]
 }
