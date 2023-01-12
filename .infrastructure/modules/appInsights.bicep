@@ -1,14 +1,26 @@
 param appInsightsName string
 param location string
 
-resource insightsApp 'microsoft.insights/components@2015-05-01' = {
+resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
+  name: '${appInsightsName}-la'
+  location: location
+  properties: {
+    sku: {
+      name: 'PerGB2018'
+    }
+  }
+}
+
+resource insightsApp 'Microsoft.Insights/components@2020-02-02' ={
   name: appInsightsName
   location: location
-  kind: ''
+  kind: 'web'
   properties: {
     Application_Type: 'web'
     Request_Source: 'rest'
+    WorkspaceResourceId: logAnalytics.id
   }
 }
 
 output name string = insightsApp.name
+output id string = insightsApp.id

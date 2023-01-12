@@ -5,16 +5,6 @@ param urlsStorageAccountName string
 param defaultRedirectUrl string
 param location string
 
-resource insightsApp 'microsoft.insights/components@2015-05-01' = {
-  name: appInsightsName
-  location: location
-  kind: ''
-  properties: {
-    Application_Type: 'web'
-    Request_Source: 'rest'
-  }
-}
-
 resource funcStorageAccount 'Microsoft.Storage/storageAccounts@2019-06-01' = {
   name: storageAccountName
   location: location

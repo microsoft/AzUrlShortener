@@ -15,8 +15,11 @@
             "westeurope"
         ]
       },
-      "urlStorageLocation": {
+      "sharedResourceRegion": {
         "value": "eastus"
+      },
+      "frontDoorName": {
+        "value": "cmh-urlshortern-afd"
       }
     }
   }
