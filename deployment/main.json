@@ -1,0 +1,224 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.13.1.58284",
+      "templateHash": "283402075586160401"
+    }
+  },
+  "parameters": {
+    "baseName": {
+      "type": "string",
+      "defaultValue": "ShortenerTools",
+      "metadata": {
+        "description": "Name used as base-template to name the resources to be deployed in Azure."
+      }
+    },
+    "defaultRedirectUrl": {
+      "type": "string",
+      "defaultValue": "https://azure.com",
+      "metadata": {
+        "description": "Default URL used when key passed by the user is not found."
+      }
+    },
+    "regions": {
+      "type": "array",
+      "defaultValue": [
+        "eastus"
+      ],
+      "metadata": {
+        "description": "An array of locations that the Function App will be deployed to.  Defaults to one region, East US"
+      }
+    },
+    "urlStorageLocation": {
+      "type": "string",
+      "defaultValue": "eastus",
+      "metadata": {
+        "description": "The location of the storage account that will be used to store the URL data."
+      }
+    }
+  },
+  "variables": {
+    "suffix": "[substring(toLower(uniqueString(resourceGroup().id, resourceGroup().location)), 0, 5)]",
+    "UrlsStorageAccountName": "[format('urldata{0}stg', variables('suffix'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2019-06-01",
+      "name": "[variables('UrlsStorageAccountName')]",
+      "location": "[parameters('urlStorageLocation')]",
+      "kind": "StorageV2",
+      "sku": {
+        "name": "Standard_LRS"
+      }
+    },
+    {
+      "copy": {
+        "name": "functionApp",
+        "count": "[length(parameters('regions'))]"
+      },
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "[format('{0}-{1}-{2}', parameters('baseName'), parameters('regions')[copyIndex()], uniqueString(concat(parameters('baseName'), parameters('regions')[copyIndex()])))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "functionAppName": {
+            "value": "[format('{0}-{1}-{2}', parameters('baseName'), parameters('regions')[copyIndex()], uniqueString(concat(parameters('baseName'), parameters('regions')[copyIndex()])))]"
+          },
+          "storageAccountName": {
+            "value": "[format('{0}{1}{2}', parameters('baseName'), parameters('regions')[copyIndex()], uniqueString(concat(parameters('baseName'), parameters('regions')[copyIndex()])))]"
+          },
+          "appInsightsName": {
+            "value": "[format('{0}-{1}-{2}-ai', parameters('baseName'), parameters('regions')[copyIndex()], uniqueString(concat(parameters('baseName'), parameters('regions')[copyIndex()])))]"
+          },
+          "urlsStorageAccountName": {
+            "value": "[variables('UrlsStorageAccountName')]"
+          },
+          "defaultRedirectUrl": {
+            "value": "[parameters('defaultRedirectUrl')]"
+          },
+          "location": {
+            "value": "[parameters('regions')[copyIndex()]]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.13.1.58284",
+              "templateHash": "2839754553536543298"
+            }
+          },
+          "parameters": {
+            "functionAppName": {
+              "type": "string"
+            },
+            "storageAccountName": {
+              "type": "string"
+            },
+            "appInsightsName": {
+              "type": "string"
+            },
+            "urlsStorageAccountName": {
+              "type": "string"
+            },
+            "defaultRedirectUrl": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Insights/components",
+              "apiVersion": "2015-05-01",
+              "name": "[parameters('appInsightsName')]",
+              "location": "[parameters('location')]",
+              "kind": "",
+              "properties": {
+                "Application_Type": "web",
+                "Request_Source": "rest"
+              }
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts",
+              "apiVersion": "2019-06-01",
+              "name": "[parameters('storageAccountName')]",
+              "location": "[parameters('location')]",
+              "kind": "StorageV2",
+              "sku": {
+                "name": "Standard_LRS"
+              },
+              "properties": {
+                "supportsHttpsTrafficOnly": true
+              }
+            },
+            {
+              "type": "Microsoft.Web/serverfarms",
+              "apiVersion": "2021-03-01",
+              "name": "[format('{0}-asp-{1}', parameters('functionAppName'), parameters('location'))]",
+              "location": "[parameters('location')]",
+              "kind": "functionapp",
+              "properties": {},
+              "sku": {
+                "tier": "Dynamic",
+                "name": "Y1"
+              }
+            },
+            {
+              "type": "Microsoft.Web/sites",
+              "apiVersion": "2022-03-01",
+              "name": "[format('{0}-{1}', parameters('functionAppName'), parameters('location'))]",
+              "kind": "functionapp",
+              "location": "[parameters('location')]",
+              "properties": {
+                "name": "[format('{0}-{1}', parameters('functionAppName'), parameters('location'))]",
+                "siteConfig": {
+                  "appSettings": [
+                    {
+                      "name": "FUNCTIONS_EXTENSION_VERSION",
+                      "value": "~4"
+                    },
+                    {
+                      "name": "FUNCTIONS_WORKER_RUNTIME",
+                      "value": "dotnet-isolated"
+                    },
+                    {
+                      "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                      "value": "[reference(format('microsoft.insights/components/{0}', parameters('appInsightsName')), '2015-05-01').InstrumentationKey]"
+                    },
+                    {
+                      "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                      "value": "[reference(format('microsoft.insights/components/{0}', parameters('appInsightsName')), '2015-05-01').ConnectionString]"
+                    },
+                    {
+                      "name": "AzureWebJobsStorage",
+                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageAccountName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value)]"
+                    },
+                    {
+                      "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageAccountName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value)]"
+                    },
+                    {
+                      "name": "WEBSITE_CONTENTSHARE",
+                      "value": "[format('{0}ba91', parameters('functionAppName'))]"
+                    },
+                    {
+                      "name": "UlsDataStorage",
+                      "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('urlsStorageAccountName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('urlsStorageAccountName')), '2019-06-01').keys[0].value)]"
+                    },
+                    {
+                      "name": "defaultRedirectUrl",
+                      "value": "[parameters('defaultRedirectUrl')]"
+                    }
+                  ]
+                },
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', format('{0}-asp-{1}', parameters('functionAppName'), parameters('location')))]",
+                "use32BitWorkerProcess": true,
+                "netFrameworkVersion": "v6.0",
+                "clientAffinityEnabled": true
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', format('{0}-asp-{1}', parameters('functionAppName'), parameters('location')))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+              ]
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('UrlsStorageAccountName'))]"
+      ]
+    }
+  ]
+}
