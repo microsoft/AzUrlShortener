@@ -9,7 +9,10 @@ param regions array = [
   'eastus'
 ]
 
-param frontDoorName string
+@description('Name of the Azure Front Door resource to deploy')
+param frontDoorName string = '${baseName}-afd}'
+
+param deployFrontDoor bool = false
 
 param deploymentTime string = utcNow('yyyy-MM-dd-HH-mm-ss')
 
@@ -52,7 +55,7 @@ module functionApps './modules/functionApp.bicep' = [for (location, i) in region
   }
 }]
 
-module frontDooor './modules/frontDoor.bicep' = {
+module frontDooor './modules/frontDoor.bicep' = if (deployFrontDoor) {
   name: frontDoorDeploymentName
   params: {
     frontDoorName: frontDoorName

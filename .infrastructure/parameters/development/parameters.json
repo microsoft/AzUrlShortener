@@ -20,6 +20,9 @@
       },
       "frontDoorName": {
         "value": "cmh-urlshortern-afd"
+      },
+      "deployFrontDoor": {
+        "value": true
       }
     }
   }
