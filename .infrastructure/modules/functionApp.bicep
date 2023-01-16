@@ -1,9 +1,13 @@
 param functionAppName string
 param storageAccountName string
 param appInsightsName string
-param urlsStorageAccountName string
+// param urlsStorageAccountName string
 param defaultRedirectUrl string
+param cosmosDbResourceId string
+param cosmosDbApiVersion string
 param location string
+
+var cosmosDbConnectionString = listKeys(cosmosDbResourceId, cosmosDbApiVersion).primaryConnectionString
 
 resource funcStorageAccount 'Microsoft.Storage/storageAccounts@2019-06-01' = {
   name: storageAccountName
@@ -64,9 +68,13 @@ resource funcApp 'Microsoft.Web/sites@2022-03-01' = {
           name: 'WEBSITE_CONTENTSHARE'
           value: '${functionAppName}ba91'
         }
+        // {
+        //   name: 'UlsDataStorage'
+        //   value: 'DefaultEndpointsProtocol=https;AccountName=${urlsStorageAccountName};AccountKey=${listKeys(resourceId('Microsoft.Storage/storageAccounts', urlsStorageAccountName), '2019-06-01').keys[0].value};EndpointSuffix=core.windows.net'
+        // }
         {
           name: 'UlsDataStorage'
-          value: 'DefaultEndpointsProtocol=https;AccountName=${urlsStorageAccountName};AccountKey=${listKeys(resourceId('Microsoft.Storage/storageAccounts', urlsStorageAccountName), '2019-06-01').keys[0].value};EndpointSuffix=core.windows.net'
+          value: cosmosDbConnectionString
         }
         {
           name: 'defaultRedirectUrl'

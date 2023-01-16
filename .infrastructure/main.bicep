@@ -52,9 +52,10 @@ module functionApps './modules/functionApp.bicep' = [for (location, i) in region
     functionAppName: functionAppNames[i]
     storageAccountName: '${baseName}${location}'
     appInsightsName: appInsights.outputs.name
-    urlsStorageAccountName: UrlsStorageAccount.name
     defaultRedirectUrl: defaultRedirectUrl
     location: location
+    cosmosDbApiVersion: cosmosDb.outputs.apiVersion
+    cosmosDbResourceId: cosmosDb.outputs.id
   }
 }]
 
