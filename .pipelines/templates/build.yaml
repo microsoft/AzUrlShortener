@@ -16,6 +16,12 @@ jobs:
       inlineScript: |
         az bicep build -f ./.infrastructure/main.bicep
 
+  - task: UseDotNet@2
+    displayName: Set .Net Core Version
+    inputs:
+      packageType: 'sdk'
+      version: '6.x'
+
   - script: |
       dotnet restore
       dotnet build '--configuration Release'
