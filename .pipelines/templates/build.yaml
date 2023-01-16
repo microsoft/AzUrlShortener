@@ -15,9 +15,27 @@ jobs:
       scriptLocation: 'inlineScript'
       inlineScript: |
         az bicep build -f ./.infrastructure/main.bicep
+
+  
+  - task: DotNetCoreCLI@2
+    displayName: 'Build Function App'
+    inputs:
+      command: 'build'
+      projects: '**/*.csproj'
+      arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)/FunctionApp'
+      publishWebProjects: false
+      modifyOutputPath: false
+      zipAfterPublish: false
+      workingDirectory: './src/FunctionApp'
     
   - task: PublishPipelineArtifact@1
     displayName: 'Publish Infrastructure Artifact'
     inputs:
       artifactName: 'infrastructure'
       targetPath: './.infrastructure/'
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish Function App Artifact'
+    inputs:
+      artifactName: 'functionapp'
+      targetPath: '$(Build.ArtifactStagingDirectory)/FunctionApp/'
