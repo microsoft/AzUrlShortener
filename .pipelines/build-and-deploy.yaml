@@ -18,6 +18,12 @@ stages:
  - stage: Build
    displayName: Build Infra and Code
    jobs:
-   - template: templates/build.yml
+   - template: templates/build.yaml
      parameters:
        serviceConnectionName: ${{ parameters.serviceConnectionName }}
+
+ - template: templates/deploy.yaml
+   parameters:
+     serviceConnectionName: ${{ parameters.serviceConnectionName }}
+     environmentName: 'development'
+     resourceGroupName: 'URL-SHORTENER''
