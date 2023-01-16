@@ -2,6 +2,7 @@ parameters:
 - name: serviceConnectionName
   displayName: Azure DevOps Service Connection Name
   type: string
+  default: 'Christopher House - Internal Demo Sub'
 
 trigger:
   branches:
