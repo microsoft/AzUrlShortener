@@ -38,6 +38,26 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-08-15' = {
         backupStorageRedundancy: 'Local'
       }
     }
+    ipRules: [
+      {
+        ipAddressOrRange: '104.42.195.92'
+      }
+      {
+        ipAddressOrRange: '40.76.54.131'
+      }
+      {
+        ipAddressOrRange: '52.176.6.30'
+      }
+      {
+        ipAddressOrRange: '52.169.50.45'
+      }
+      {
+        ipAddressOrRange: '52.187.184.26'
+      }
+      {
+        ipAddressOrRange: '0.0.0.0'
+      }
+    ]
   }
 }
 

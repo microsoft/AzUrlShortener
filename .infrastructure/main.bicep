@@ -12,6 +12,7 @@ param regions array = [
 @description('Name of the Azure Front Door resource to deploy')
 param frontDoorName string = '${baseName}-afd}'
 
+@description('Set to true to deploy the Azure Front Door resource, otherwise false to not deploy AFD')
 param deployFrontDoor bool = false
 
 param deploymentTime string = utcNow('yyyy-MM-dd-HH-mm-ss')
@@ -25,6 +26,8 @@ var functionAcount = length(regions)
 var appInsightsDeploymentName = '${baseName}--${sharedResourceRegion}-ai-${deploymentTime}'
 var functionAppNames = [for location in regions: '${baseName}-${location}-${uniqueString('${baseName}${location}')}']
 var frontDoorDeploymentName= '${baseName}--${frontDoorName}-fd-${deploymentTime}'
+var cosmosAccountName = '${baseName}-cdb-${suffix}'
+var cosmosDeploymentName = '${cosmosAccountName}-${deploymentTime}'
 
 resource UrlsStorageAccount 'Microsoft.Storage/storageAccounts@2019-06-01' = {
   name: UrlsStorageAccountName
@@ -64,6 +67,14 @@ module frontDooor './modules/frontDoor.bicep' = if (deployFrontDoor) {
   dependsOn: [
     functionApps
   ]
+}
+
+module cosmosDb './modules/cosmosDb.bicep' = {
+  name: cosmosDeploymentName
+  params: {
+    cosmosAccountName: cosmosAccountName
+    regions: regions
+  }
 }
 
 output functionAppNames array = [for i in range(0, functionAcount): '${functionApps[i].name}']
