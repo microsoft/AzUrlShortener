@@ -24,7 +24,7 @@ jobs:
 
   - script: |
       dotnet restore
-      dotnet build '--configuration Release'
+      dotnet build -c Release
     displayName: 'Build Function App'
 
   - task: DotNetCoreCLI@2
