@@ -5,32 +5,27 @@ parameters:
   type: string
 - name: resourceGroupName
   type: string
+- name: appServiceNames
+  type: object
+  default: []
 
 stages:
  - stage: Deploy
    displayName: Deploy
 
    jobs:
-   - deployment: Deploy
+   - job: Deploy
      displayName: Deploy
-     environment: ${{ parameters.environmentName }}
      variables: 
        infraTemplate: $(Pipeline.Workspace)/infrastructure/main.json
        parameterFile: '@$(Pipeline.Workspace)/infrastructure/parameters/${{ parameters.environmentName }}/parameters.json'
-     strategy:
-       runOnce:
-         deploy:
-           steps:
-           - download: current
-             artifact: infrastructure
-             displayName: 'Download Infrastructure Artifact'
-
-           - task: AzureCLI@2
-             displayName: 'Deploy Infrastructure'
-             inputs:
-               azureSubscription: ${{ parameters.serviceConnectionName }}
-               scriptType: 'bash'
-               scriptLocation: 'inlineScript'
-               inlineScript: |
-                 DEPLOYMENT_NAME=$(Build.BuildId)
-                 az deployment group create -n $DEPLOYMENT_NAME --template-file $(infraTemplate) -g ${{ parameters.resourceGroupName }} --parameters $(parameterFile)
+     steps:
+     - ${{ each appServiceName in parameters.appServiceNames }}:
+       - task: AzureResourceGroupDeployment@2
+         displayName: Deploy ${{ appServiceName }} to ${{ parameters.environmentName }}
+         inputs:
+           azureSubscription: ${{ parameters.serviceConnectionName }}
+           resourceGroupName: ${{ parameters.resourceGroupName }}
+           csmFile: $(infraTemplate)
+           csmParametersFile: $(parameterFile)
+           overrideParameters: '-appServiceName ${{ appServiceName }}'

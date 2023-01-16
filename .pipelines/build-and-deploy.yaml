@@ -27,3 +27,4 @@ stages:
      serviceConnectionName: ${{ parameters.serviceConnectionName }}
      environmentName: 'development'
      resourceGroupName: 'URL-SHORTENER'
+     appServiceNames: ['url-shortener-dev']
