@@ -21,11 +21,12 @@ stages:
        parameterFile: '@$(Pipeline.Workspace)/infrastructure/parameters/${{ parameters.environmentName }}/parameters.json'
      steps:
      - ${{ each appServiceName in parameters.appServiceNames }}:
-       - task: AzureResourceGroupDeployment@2
-         displayName: Deploy ${{ appServiceName }} to ${{ parameters.environmentName }}
+      # Deploy function app
+       - task: AzureCLI@2
+         displayName: Deploy Function to ${{ appServiceName }}
          inputs:
            azureSubscription: ${{ parameters.serviceConnectionName }}
-           resourceGroupName: ${{ parameters.resourceGroupName }}
-           csmFile: $(infraTemplate)
-           csmParametersFile: $(parameterFile)
-           overrideParameters: '-appServiceName ${{ appServiceName }}'
+           scriptType: bash
+           scriptLocation: inlineScript
+           inlineScript: |
+             az functionapp deployment source config-zip -g ${{ parameters.resourceGroupName }} -n ${{ appServiceName }} --src $(Pipeline.Workspace)/functionapp/functionapp.zip
