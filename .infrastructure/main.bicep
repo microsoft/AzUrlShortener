@@ -54,6 +54,7 @@ module functionApps './modules/functionApp.bicep' = [for (location, i) in region
     appInsightsName: appInsights.outputs.name
     defaultRedirectUrl: defaultRedirectUrl
     location: location
+    cosmosDbAccountName: cosmosAccountName
     cosmosDbApiVersion: cosmosDb.outputs.apiVersion
     cosmosDbResourceId: cosmosDb.outputs.id
   }
