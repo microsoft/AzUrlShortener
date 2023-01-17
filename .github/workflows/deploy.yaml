@@ -1,0 +1,43 @@
+name: Deploy DotNet project to Azure Function App
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AZURE_FUNCTIONAPP_NAME: "Dev-STORIS-URL-Shortener"
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: "."
+  DOTNET_VERSION: "6.0.x"
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+    environment: dev
+    steps:
+      - name: "Checkout GitHub Action"
+        uses: actions/checkout@v3
+
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
+
+      - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: "Resolve Project Dependencies Using Dotnet"
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          dotnet build --configuration Release --output ./output
+          popd
+
+      - name: "Run Azure Functions Action"
+        uses: Azure/functions-action@v1
+        id: fa
+        with:
+          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+          package: "${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output"
