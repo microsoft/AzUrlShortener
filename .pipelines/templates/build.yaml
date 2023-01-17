@@ -8,7 +8,7 @@ jobs:
   displayName: 'Build Bicep and Function App'
   steps:
   - task: AzureCLI@2
-    displayName: 'Build Bicep'
+    displayName: 'Build Bicep Template'
     inputs:
       azureSubscription: ${{ parameters.serviceConnectionName }}
       scriptType: 'bash'
