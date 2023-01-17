@@ -19,6 +19,7 @@ stages:
      variables: 
        infraTemplate: $(Pipeline.Workspace)/infrastructure/main.json
        parameterFile: '@$(Pipeline.Workspace)/infrastructure/parameters/${{ parameters.environmentName }}/parameters.json'
+       appServiceNames: []
      steps:
      - download: current
        artifact: infrastructure
