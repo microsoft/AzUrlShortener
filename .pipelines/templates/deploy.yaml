@@ -20,6 +20,12 @@ stages:
        infraTemplate: $(Pipeline.Workspace)/infrastructure/main.json
        parameterFile: '@$(Pipeline.Workspace)/infrastructure/parameters/${{ parameters.environmentName }}/parameters.json'
      steps:
+     - download: current
+       artifact: infrastructure
+       displayName: Download Infrastructure
+     - download: current
+       artifact: functionapp
+       displayName: Download Function App
      - script: |
          REGIONS=$(jq -r .parameters.regions.value $(Pipeline.Workspace)/infrastructure/parameters/${{ parameters.environmentName }}/parameters.json)
          echo $REGIONS
