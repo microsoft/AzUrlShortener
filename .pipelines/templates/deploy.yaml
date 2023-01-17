@@ -41,9 +41,9 @@ stages:
      dependsOn: PreDeploy
      displayName: Deploy
      strategy:
-      matrix: $[ dependencies.PreDeploy.outputs['PreDeploy.setTargets.appServiceNames']
+      matrix: $[ dependencies.PreDeploy.outputs['PreDeploy.setTargets.appServiceNames'] ]
      variables:
-      targets: $[ dependencies.PreDeploy.outputs['PreDeploy.setTargets.appServiceNames']
+      targets: $[ dependencies.PreDeploy.outputs['PreDeploy.setTargets.appServiceNames'] ]
      steps:
      - script:
         echo "Hello from the "Hello from the matrix"
