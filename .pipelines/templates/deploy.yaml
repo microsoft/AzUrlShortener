@@ -28,14 +28,10 @@ stages:
        displayName: Download Function App
      - script: |
          REGIONS=$(jq -r .parameters.regions.value $(Pipeline.Workspace)/infrastructure/parameters/${{ parameters.environmentName }}/parameters.json)
-         echo $REGIONS
-
          BASE_NAME=$(jq -r .parameters.baseName.value $(Pipeline.Workspace)/infrastructure/parameters/${{ parameters.environmentName }}/parameters.json)
-         echo $BASE_NAME
-
          APP_SERVICE_NAMES=$(jq -r --arg baseName "$BASE_NAME" '.parameters.regions.value | map($baseName + . + "fa")' $(Pipeline.Workspace)/infrastructure/parameters/${{ parameters.environmentName }}/parameters.json)
          echo $APP_SERVICE_NAMES
-         echo "##vso[task.setvariable variable=appServiceNames]$APP_SERVICE_NAMES"
+         echo "##vso[task.setvariable variable=appServiceNames;isoutput=true]$APP_SERVICE_NAMES"
        displayName: Set Regions
      - script: |
          echo $(appServiceNames)
