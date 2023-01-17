@@ -38,7 +38,7 @@ stages:
          echo "##vso[task.setvariable variable=appServiceNames]$APP_SERVICE_NAMES"
        displayName: Set Regions
      - script: |
-         echo $appServiceNames
+         echo $(appServiceNames)
        displayName: Print ASNs
      - ${{ each appServiceName in variables.appServiceNames }}:
       # Deploy function app
