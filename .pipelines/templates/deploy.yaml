@@ -36,8 +36,10 @@ stages:
          APP_SERVICE_NAMES=$(jq -r --arg baseName "$BASE_NAME" '.parameters.regions.value | map($baseName + . + "fa")' $(Pipeline.Workspace)/infrastructure/parameters/${{ parameters.environmentName }}/parameters.json)
          echo $APP_SERVICE_NAMES
          echo "##vso[task.setvariable variable=appServiceNames]$APP_SERVICE_NAMES"
-         echo $(appServiceNames)
        displayName: Set Regions
+     - script: |
+         echo $appServiceNames
+       displayName: Print ASNs
      - ${{ each appServiceName in variables.appServiceNames }}:
       # Deploy function app
        - task: AzureCLI@2
