@@ -46,7 +46,7 @@ stages:
       targets: $[ dependencies.PreDeploy.outputs['PreDeploy.setTargets.appServiceNames'] ]
      steps:
      - script: |
-        echo $(dependencies.PreDeploy.outputs['PreDeploy.setTargets.appServiceNames']'])
+        echo $(dependencies.PreDeploy.outputs['PreDeploy.setTargets.appServiceNames'] ])
         echo "Hello from the matrix"
         echo $(baseName)
         echo $(region)
