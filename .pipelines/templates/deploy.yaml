@@ -34,7 +34,7 @@ stages:
          echo "##vso[task.setvariable variable=appServiceNames;isoutput=true]$APP_SERVICE_NAMES"
        displayName: setTargets
      - script: |
-         echo $(appServiceNames)
+         echo $(setTargets.appServiceNames)
        displayName: Print ASNs
      
    - job: Deploy
