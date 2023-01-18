@@ -31,22 +31,22 @@ stages:
          BASE_NAME=$(jq -r .parameters.baseName.value $(Pipeline.Workspace)/infrastructure/parameters/${{ parameters.environmentName }}/parameters.json)
          APP_SERVICE_NAMES=$(jq -r --arg baseName "$BASE_NAME" '.parameters.regions.value | map({(.): {baseName: $baseName, region: .}}) | add' $(Pipeline.Workspace)/infrastructure/parameters/${{ parameters.environmentName }}/parameters.json)
          echo $APP_SERVICE_NAMES
-         echo "##vso[task.setvariable variable=appServiceNames;isOutput=true]$APP_SERVICE_NAMES"
+         echo "##vso[task.setvariable variable=targets;isOutput=true]$APP_SERVICE_NAMES"
        displayName: setTargets
      - script: |
-         echo $(setTargets.appServiceNames)
+         echo $(setTargets.targets)
        displayName: Print ASNs
      
    - job: Deploy
      dependsOn: PreDeploy
      displayName: Deploy
      strategy:
-      matrix: $[ dependencies.PreDeploy.outputs['PreDeploy.setTargets.appServiceNames'] ]
+      matrix: $[ dependencies.PreDeploy.outputs['PreDeploy.setTargets.targets'] ]
      variables:
-      targets: $[ dependencies.PreDeploy.outputs['PreDeploy.setTargets.appServiceNames'] ]
+      targets: $[ dependencies.PreDeploy.outputs['PreDeploy.setTargets.targets'] ]
      steps:
      - script: |
-        echo $(dependencies.PreDeploy.outputs['PreDeploy.setTargets.appServiceNames'] ])
+        echo $(dependencies.PreDeploy.outputs['PreDeploy.setTargets.targets'] ])
         echo "Hello from the matrix"
         echo $(targets)
         echo $(baseName)
