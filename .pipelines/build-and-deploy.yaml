@@ -27,6 +27,5 @@ stages:
      serviceConnectionName: ${{ parameters.serviceConnectionName }}
      environmentName: 'development'
      resourceGroupName: 'URL-SHORTENER'
-     appServiceNames: ['url-shortener-dev']
      baseName: 'cmhurl'
-     regions: ['eastus', 'westus', 'westeurope']
+     regions: ['eastus', 'westus', 'westeurope', 'australiaeast']

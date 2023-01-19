@@ -5,9 +5,6 @@ parameters:
   type: string
 - name: resourceGroupName
   type: string
-- name: appServiceNames
-  type: object
-  default: []
 - name: baseName
   type: string
   default: ''
@@ -32,26 +29,18 @@ stages:
      - download: current
        artifact: functionapp
        displayName: Download Function App
-     - script: |
-        #  REGIONS=$(jq -r .parameters.regions.value $(Pipeline.Workspace)/infrastructure/parameters/${{ parameters.environmentName }}/parameters.json)
-        #  BASE_NAME=$(jq -r .parameters.baseName.value $(Pipeline.Workspace)/infrastructure/parameters/${{ parameters.environmentName }}/parameters.json)
-        #  APP_SERVICE_NAMES=$(jq -r --arg baseName "$BASE_NAME" '.parameters.regions.value | map({(.): {baseName: $baseName, region: .}}) | add' $(Pipeline.Workspace)/infrastructure/parameters/${{ parameters.environmentName }}/parameters.json)
-        #  echo $APP_SERVICE_NAMES
-        APP_SERVICE_NAMES="{ 'eastus': { 'baseName': 'cmhurl', 'region': 'eastus' }, 'westus': { 'baseName': 'cmhurl', 'region': 'westus' }, 'westeurope': { 'baseName': 'cmhurl', 'region': 'westeurope' } }"
-         echo "##vso[task.setvariable variable=targets;isOutput=true]$APP_SERVICE_NAMES"
-       displayName: setTargets
-     - script: |
-         echo $(setTargets.targets)
-       displayName: Print ASNs
-     
-  #  - job: Deploy
-  #    dependsOn: PreDeploy
-  #    displayName: Deploy
-  #    strategy:
-  #     matrix: ${{ parameters.regions }}
-  #    steps:
-  #    - script: |
-  #        echo ${{ parameters.baseName }}
+
+     - task: AzureResourceManagerTemplateDeployment@3
+       displayName: Deploy Infrastructure
+       inputs:
+         deploymentScope: Resource Group
+         azureResourceManagerConnection: ${{ parameters.serviceConnectionName }}
+         resourceGroupName: ${{ parameters.resourceGroupName }}
+         location: 'West Europe'
+         csmFile: $(infraTemplate)
+         csmParametersFile: $(parameterFile)
+         deploymentMode: Incremental
+         deploymentName: ${{ parameters.baseName }}-infra
       
      - ${{ each region in parameters.regions }}:
       # Deploy function app
