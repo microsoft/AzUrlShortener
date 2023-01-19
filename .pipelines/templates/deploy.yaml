@@ -8,6 +8,12 @@ parameters:
 - name: appServiceNames
   type: object
   default: []
+- name: baseName
+  type: string
+  default: ''
+- name: regions
+  type: object
+  default: []
 
 stages:
  - stage: Deploy
@@ -42,16 +48,10 @@ stages:
      dependsOn: PreDeploy
      displayName: Deploy
      strategy:
-      matrix: $[ dependencies.PreDeploy.outputs['PreDeploy.setTargets.targets'] ]
-     variables:
-      targets: $[ dependencies.PreDeploy.outputs['PreDeploy.setTargets.targets'] ]
+      matrix: ${{ parameters.regions }}
      steps:
      - script: |
-        echo $(dependencies.PreDeploy.outputs['PreDeploy.setTargets.targets'] ])
-        echo "Hello from the matrix"
-        echo $(targets)
-        echo $(baseName)
-        echo $(region)
+         echo ${{ parameters.baseName }}
       
     #  - ${{ each appServiceName in variables.appServiceNames }}:
     #   # Deploy function app

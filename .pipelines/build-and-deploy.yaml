@@ -28,3 +28,5 @@ stages:
      environmentName: 'development'
      resourceGroupName: 'URL-SHORTENER'
      appServiceNames: ['url-shortener-dev']
+     baseName: 'cmhurl'
+     regions: ['eastus', 'westus', 'westeurope']
