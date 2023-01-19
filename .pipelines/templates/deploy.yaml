@@ -44,22 +44,22 @@ stages:
          echo $(setTargets.targets)
        displayName: Print ASNs
      
-   - job: Deploy
-     dependsOn: PreDeploy
-     displayName: Deploy
-     strategy:
-      matrix: ${{ parameters.regions }}
-     steps:
-     - script: |
-         echo ${{ parameters.baseName }}
+  #  - job: Deploy
+  #    dependsOn: PreDeploy
+  #    displayName: Deploy
+  #    strategy:
+  #     matrix: ${{ parameters.regions }}
+  #    steps:
+  #    - script: |
+  #        echo ${{ parameters.baseName }}
       
-    #  - ${{ each appServiceName in variables.appServiceNames }}:
-    #   # Deploy function app
-    #    - task: AzureCLI@2
-    #      displayName: Deploy Function to ${{ appServiceName }}
-    #      inputs:
-    #        azureSubscription: ${{ parameters.serviceConnectionName }}
-    #        scriptType: bash
-    #        scriptLocation: inlineScript
-    #        inlineScript: |
-    #          az functionapp deployment source config-zip -g ${{ parameters.resourceGroupName }} -n ${{ appServiceName }} --src $(Pipeline.Workspace)/functionapp/functionapp.zip
+     - ${{ each region in parameters.regions }}:
+      # Deploy function app
+       - task: AzureCLI@2
+         displayName: Deploy Function to ${{ region }}
+         inputs:
+           azureSubscription: ${{ parameters.serviceConnectionName }}
+           scriptType: bash
+           scriptLocation: inlineScript
+           inlineScript: |
+             az functionapp deployment source config-zip -g ${{ parameters.resourceGroupName }} -n ${{ parameters.baseName }}-${{ region }}-fa --src $(Pipeline.Workspace)/functionapp/functionapp.zip
