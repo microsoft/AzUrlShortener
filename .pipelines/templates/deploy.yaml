@@ -21,7 +21,7 @@ stages:
      displayName: Pre-Deploy
      variables: 
        infraTemplate: $(Pipeline.Workspace)/infrastructure/main.json
-       parameterFile: '@$(Pipeline.Workspace)/infrastructure/parameters/${{ parameters.environmentName }}/parameters.json'
+       parameterFile: '$(Pipeline.Workspace)/infrastructure/parameters/${{ parameters.environmentName }}/parameters.json'
      steps:
      - download: current
        artifact: infrastructure
