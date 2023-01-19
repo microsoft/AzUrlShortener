@@ -29,6 +29,9 @@ stages:
      - download: current
        artifact: functionapp
        displayName: Download Function App
+     - script: |
+         echo $(infraTemplate)
+         echo $(parameterFile)
 
      - task: AzureResourceManagerTemplateDeployment@3
        displayName: Deploy Infrastructure
