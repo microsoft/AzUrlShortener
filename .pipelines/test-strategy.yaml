@@ -1,0 +1,23 @@
+trigger: none
+
+stages:
+- stage: Test
+  jobs:
+  - job: JobA
+    steps:
+    - pwsh: |
+        $json="{'job1': {'Work': 'work1'}, 'job2': {'Work': 'work2'}}"
+        Write-Host "##vso[task.setvariable variable=targets;isOutput=true]$json"
+      name: setTargets
+    - script: echo $(setTargets.targets)
+      name: echovar
+
+  - job: buildSrc
+    dependsOn: JobA
+    strategy:
+      matrix: $[ dependencies.JobA.outputs['setTargets.targets'] ]
+    variables:
+      targets: $[ dependencies.JobA.outputs['setTargets.targets'] ]
+    steps:
+    - pwsh: Write-Host "${{ convertToJson(variables) }}"
+    displayName: 'Print all variables via expression'

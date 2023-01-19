@@ -1,0 +1,31 @@
+parameters:
+- name: serviceConnectionName
+  displayName: Azure DevOps Service Connection Name
+  type: string
+  default: 'Christopher House - Internal Demo Sub'
+
+trigger:
+  branches:
+    include:
+    - main
+    - pipeline
+pr: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+ - stage: Build
+   displayName: Build Infra and Code
+   jobs:
+   - template: templates/build.yaml
+     parameters:
+       serviceConnectionName: ${{ parameters.serviceConnectionName }}
+
+ - template: templates/deploy.yaml
+   parameters:
+     serviceConnectionName: ${{ parameters.serviceConnectionName }}
+     environmentName: 'development'
+     resourceGroupName: 'URL-SHORTENER'
+     baseName: 'cmhurl'
+     regions: ['eastus', 'westus', 'westeurope', 'australiaeast']

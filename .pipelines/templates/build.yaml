@@ -1,0 +1,51 @@
+parameters:
+- name: 'serviceConnectionName'
+  type: string
+jobs:
+- job: Build
+  pool: 
+    vmImage: 'ubuntu-latest'
+  displayName: 'Build Bicep and Function App'
+  steps:
+  - task: AzureCLI@2
+    displayName: 'Build Bicep Template'
+    inputs:
+      azureSubscription: ${{ parameters.serviceConnectionName }}
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az bicep build -f ./.infrastructure/main.bicep
+
+  - task: UseDotNet@2
+    displayName: Set .Net Core Version
+    inputs:
+      packageType: 'sdk'
+      version: '6.x'
+
+  - script: |
+      dotnet restore
+      dotnet build --configuration Release
+    displayName: 'Build Function App'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Publish Function App'
+    inputs:
+      command: 'publish'
+      projects: '**/*.csproj'
+      arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)/functionapp'
+      publishWebProjects: false
+      modifyOutputPath: false
+      zipAfterPublish: true
+      workingDirectory: './'
+    
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish Infrastructure Artifact'
+    inputs:
+      artifactName: 'infrastructure'
+      targetPath: './.infrastructure/'
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish Function App Artifact'
+    inputs:
+      artifactName: 'functionapp'
+      targetPath: '$(Build.ArtifactStagingDirectory)/functionapp/'

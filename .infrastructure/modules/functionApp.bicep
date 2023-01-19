@@ -24,7 +24,7 @@ resource funcStorageAccount 'Microsoft.Storage/storageAccounts@2019-06-01' = {
 }
 
 resource funcHhostingPlan 'Microsoft.Web/serverfarms@2021-03-01' ={
-  name: '${functionAppName}-asp-${location}'
+  name: '${functionAppName}-asp'
   location: location
   kind: 'functionapp'
   properties: {
@@ -36,7 +36,7 @@ resource funcHhostingPlan 'Microsoft.Web/serverfarms@2021-03-01' ={
 }
 
 resource funcApp 'Microsoft.Web/sites@2022-03-01' = {
-  name: '${functionAppName}-${location}'
+  name: '${functionAppName}-fa'
   kind: 'functionapp'
   location: location
   properties: {

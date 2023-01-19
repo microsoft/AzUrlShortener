@@ -12,7 +12,8 @@
         "value": [
             "eastus",
             "westus",
-            "westeurope"
+            "westeurope",
+            "australiaeast"
         ]
       },
       "sharedResourceRegion": {

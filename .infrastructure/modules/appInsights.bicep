@@ -1,8 +1,9 @@
 param appInsightsName string
+param logAnalyticsWorkspaceName string
 param location string
 
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
-  name: '${appInsightsName}-la'
+  name: logAnalyticsWorkspaceName
   location: location
   properties: {
     sku: {

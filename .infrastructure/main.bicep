@@ -20,13 +20,12 @@ param deploymentTime string = utcNow('yyyy-MM-dd-HH-mm-ss')
 @description('The location of the storage account that will be used to store the URL data.')
 param sharedResourceRegion string = 'eastus'
 
-var suffix = substring(toLower(uniqueString(resourceGroup().id, resourceGroup().location)), 0, 5)
-var UrlsStorageAccountName = 'urldata${suffix}stg'
+var UrlsStorageAccountName = '${baseName}urlstorage'
 var functionAcount = length(regions)
-var appInsightsDeploymentName = '${baseName}--${sharedResourceRegion}-ai-${deploymentTime}'
-var functionAppNames = [for location in regions: '${baseName}-${location}-${uniqueString('${baseName}${location}')}']
-var frontDoorDeploymentName= '${baseName}--${frontDoorName}-fd-${deploymentTime}'
-var cosmosAccountName = '${baseName}-cdb-${suffix}'
+var appInsightsDeploymentName = '${baseName}-${sharedResourceRegion}-ai-${deploymentTime}'
+var functionAppNames = [for location in regions: '${baseName}-${location}']
+var frontDoorDeploymentName= '${baseName}-${frontDoorName}-fd-${deploymentTime}'
+var cosmosAccountName = '${baseName}-cdb'
 var cosmosDeploymentName = '${cosmosAccountName}-${deploymentTime}'
 
 resource UrlsStorageAccount 'Microsoft.Storage/storageAccounts@2019-06-01' = {
@@ -41,16 +40,17 @@ resource UrlsStorageAccount 'Microsoft.Storage/storageAccounts@2019-06-01' = {
 module appInsights './modules/appInsights.bicep' = {
   name: appInsightsDeploymentName
   params: {
-    appInsightsName: '${baseName}-${sharedResourceRegion}-${uniqueString('${baseName}${sharedResourceRegion}')}-ai'
+    appInsightsName: '${baseName}-ai'
+    logAnalyticsWorkspaceName: '${baseName}-la'
     location: sharedResourceRegion
   }
 }
 
 module functionApps './modules/functionApp.bicep' = [for (location, i) in regions: {
-  name: '${baseName}-${location}-${uniqueString('${baseName}${location}')}'
+  name: '${baseName}-${location}-fa-${deploymentTime}'
   params: {
     functionAppName: functionAppNames[i]
-    storageAccountName: '${baseName}${location}'
+    storageAccountName: '${baseName}fa${location}'
     appInsightsName: appInsights.outputs.name
     defaultRedirectUrl: defaultRedirectUrl
     location: location
