@@ -50,6 +50,7 @@ stages:
               deploymentMode: Incremental
               deploymentName: $(Build.BuildId)
               location: ${{ parameters.resourceGroupRegion }}
+              overrideParameters: '-buildId $(Build.BuildId)'
 
           - ${{ each region in parameters.regions }}:
             # Deploy function app

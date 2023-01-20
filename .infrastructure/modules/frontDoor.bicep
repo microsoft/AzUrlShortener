@@ -5,7 +5,7 @@ var profileName = '${frontDoorName}-profile'
 var endpointName = '${frontDoorName}-endpoint'
 var originName = '${frontDoorName}-origingroup'
 
-var hostNames = [for functionApp in functionAppHostNames: '${functionApp}.azurewebsites.net']
+var hostNames = [for functionApp in functionAppHostNames: '${functionApp}-fa.azurewebsites.net']
 
 resource frontDoorProfile 'Microsoft.Cdn/profiles@2022-11-01-preview' = {
   name: profileName
@@ -71,8 +71,13 @@ resource frontDoorRoute 'Microsoft.Cdn/profiles/afdEndpoints/routes@2022-11-01-p
     forwardingProtocol: 'HttpOnly'
     linkToDefaultDomain: 'Enabled'
     httpsRedirect: 'Enabled'
+    cacheConfiguration: {
+      queryStringCachingBehavior: 'IgnoreQueryString'
+    }
   }
   dependsOn: [
     frontDoorOrigin
   ]
 }
+
+output frontDoorId string = frontDoorProfile.properties.frontDoorId
