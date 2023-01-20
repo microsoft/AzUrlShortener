@@ -11,47 +11,60 @@ parameters:
 - name: regions
   type: object
   default: []
+- name: resourceGroupRegion
+  type: string
+  default: ''
 
 stages:
- - stage: Deploy
-   displayName: Deploy
-
+ - stage: Deploy_To_${{ parameters.environmentName }}
+   displayName: Deploy to ${{ parameters.environmentName }}
    jobs:
-   - job: PreDeploy
-     displayName: Pre-Deploy
+   - deployment: Deploy
+     displayName: Deploy
+     pool:
+      vmImage: 'ubuntu-latest'
+     environment: ${{ parameters.environmentName }}
      variables: 
        infraTemplate: $(Pipeline.Workspace)/infrastructure/main.json
        parameterFile: '$(Pipeline.Workspace)/infrastructure/parameters/${{ parameters.environmentName }}/parameters.json'
-     steps:
-     - download: current
-       artifact: infrastructure
-       displayName: Download Infrastructure
-     - download: current
-       artifact: functionapp
-       displayName: Download Function App
-     - script: |
-         echo $(infraTemplate)
-         echo $(parameterFile)
+     strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: infrastructure
+            displayName: Download Infrastructure
 
-     - task: AzureResourceManagerTemplateDeployment@3
-       displayName: Deploy Infrastructure
-       inputs:
-         deploymentScope: Resource Group
-         azureResourceManagerConnection: ${{ parameters.serviceConnectionName }}
-         resourceGroupName: ${{ parameters.resourceGroupName }}
-         location: 'West Europe'
-         csmFile: $(infraTemplate)
-         csmParametersFile: $(parameterFile)
-         deploymentMode: Incremental
-         deploymentName: ${{ parameters.baseName }}-infra
-      
-     - ${{ each region in parameters.regions }}:
-      # Deploy function app
-       - task: AzureCLI@2
-         displayName: Deploy Function to ${{ region }}
-         inputs:
-           azureSubscription: ${{ parameters.serviceConnectionName }}
-           scriptType: bash
-           scriptLocation: inlineScript
-           inlineScript: |
-             az functionapp deployment source config-zip -g ${{ parameters.resourceGroupName }} -n ${{ parameters.baseName }}-${{ region }}-fa --src $(Pipeline.Workspace)/functionapp/functionapp.zip
+          - download: current
+            artifact: functionapp
+            displayName: Download Function App
+  
+          - task: AzureResourceManagerTemplateDeployment@3
+            displayName: Deploy Infrastructure
+            inputs:
+              deploymentScope: Resource Group
+              azureResourceManagerConnection: ${{ parameters.serviceConnectionName }}
+              resourceGroupName: ${{ parameters.resourceGroupName }}
+              csmFile: $(infraTemplate)
+              csmParametersFile: $(parameterFile)
+              deploymentMode: Incremental
+              deploymentName: $(Build.BuildId)
+              location: ${{ parameters.resourceGroupRegion }}
+
+          - ${{ each region in parameters.regions }}:
+            # Deploy function app
+            - task: AzureFunctionApp@1
+              displayName: Deploy Function to ${{ region }}
+              inputs:
+                azureSubscription: ${{ parameters.serviceConnectionName }}
+                appType: functionApp
+                appName: ${{ parameters.baseName }}-${{ region }}-fa
+                package: $(Pipeline.Workspace)/functionapp/functionapp.zip
+            # - task: AzureCLI@2
+            #   displayName: Deploy Function to ${{ region }}
+            #   inputs:
+            #     azureSubscription: ${{ parameters.serviceConnectionName }}
+            #     scriptType: bash
+            #     scriptLocation: inlineScript
+            #     inlineScript: |
+            #      az functionapp deployment source config-zip -g ${{ parameters.resourceGroupName }} -n ${{ parameters.baseName }}-${{ region }}-fa --src $(Pipeline.Workspace)/functionapp/functionapp.zip

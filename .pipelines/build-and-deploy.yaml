@@ -7,8 +7,7 @@ parameters:
 trigger:
   branches:
     include:
-    - main
-    - pipeline
+    - '*'
 pr: none
 
 pool:
@@ -26,6 +25,25 @@ stages:
    parameters:
      serviceConnectionName: ${{ parameters.serviceConnectionName }}
      environmentName: 'development'
-     resourceGroupName: 'URL-SHORTENER'
-     baseName: 'cmhurl'
-     regions: ['eastus', 'westus', 'westeurope', 'australiaeast']
+     resourceGroupName: 'URL-SHORTENER-DEV'
+     baseName: 'cmhurldev'
+     regions: ['eastus', 'westeurope']
+     resourceGroupRegion: 'eastus'
+
+ - template: templates/deploy.yaml
+   parameters:
+     serviceConnectionName: ${{ parameters.serviceConnectionName }}
+     environmentName: 'qa'
+     resourceGroupName: 'URL-SHORTENER-QA'
+     baseName: 'cmhurlqa'
+     regions: ['eastus', 'westeurope']
+     resourceGroupRegion: 'eastus'
+
+ - template: templates/deploy.yaml
+   parameters:
+     serviceConnectionName: ${{ parameters.serviceConnectionName }}
+     environmentName: 'production'
+     resourceGroupName: 'URL-SHORTENER-PRD'
+     baseName: 'cmhurlprd'
+     regions: ['eastus', 'westeurope']
+     resourceGroupRegion: 'eastus'

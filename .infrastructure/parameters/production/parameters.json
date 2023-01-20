@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "baseName": {
-        "value": "cmhurldev"
+        "value": "cmhurlprd"
       },
       "defaultRedirectUrl": {
         "value": "https://azure.com"
@@ -18,7 +18,7 @@
         "value": "eastus"
       },
       "frontDoorName": {
-        "value": "cmh-urlshortern-afd-dev"
+        "value": "cmh-urlshortern-afd-prd"
       },
       "deployFrontDoor": {
         "value": true
