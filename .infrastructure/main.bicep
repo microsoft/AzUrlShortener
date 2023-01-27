@@ -63,7 +63,7 @@ module functionApps './modules/functionApp.bicep' = [for (location, i) in region
   }
 }]
 
-module frontDoor './modules/frontDoor.bicep' = if (loadBalancerOption == 'FrontDoorStandard' || loadBalancerOption == 'FrontDoorPremium') {
+module frontDoor './modules/frontDoor.bicep' = if (loadBalancerOption == 'Premium_AzureFrontDoor' || loadBalancerOption == 'Standard_AzureFrontDoor') {
   name: frontDoorDeploymentName
   params: {
     frontDoorName: frontDoorName
