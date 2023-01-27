@@ -17,11 +17,8 @@
       "sharedResourceRegion": {
         "value": "eastus"
       },
-      "frontDoorName": {
-        "value": "cmh-urlshortern-afd-qa"
-      },
-      "deployFrontDoor": {
-        "value": true
+      "loadBalancerOption": {
+        "value": "TrafficManager"
       }
     }
   }

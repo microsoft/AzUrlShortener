@@ -9,12 +9,12 @@ param regions array = [
   'eastus'
 ]
 
-@description('Name of the Azure Front Door resource to deploy')
-param frontDoorName string = '${baseName}-afd}'
+@allowed(['FrontDoorStandard'
+'FrontDoorPremium'
+'TrafficManager'])
+param loadBalancerOption string
 
-@description('Set to true to deploy the Azure Front Door resource, otherwise false to not deploy AFD')
-param deployFrontDoor bool = false
-
+@description('The build ID that deploys this template')
 param buildId string
 
 @description('The location of the storage account that will be used to store the URL data.')
@@ -24,9 +24,12 @@ var UrlsStorageAccountName = '${baseName}urlstorage'
 var functionAcount = length(regions)
 var appInsightsDeploymentName = '${baseName}-${sharedResourceRegion}-ai-${buildId}'
 var functionAppNames = [for location in regions: '${baseName}-${location}']
+var trafficManagerProfileName = '${baseName}-atm'
+var frontDoorName = '${baseName}-afd'
 var frontDoorDeploymentName= '${baseName}-${frontDoorName}-fd-${buildId}'
 var cosmosAccountName = '${baseName}-cdb'
 var cosmosDeploymentName = '${cosmosAccountName}-${buildId}'
+var trafficManagerProfileDeploymentName = '${trafficManagerProfileName}-${buildId}'
 
 resource UrlsStorageAccount 'Microsoft.Storage/storageAccounts@2019-06-01' = {
   name: UrlsStorageAccountName
@@ -60,11 +63,23 @@ module functionApps './modules/functionApp.bicep' = [for (location, i) in region
   }
 }]
 
-module frontDoor './modules/frontDoor.bicep' = if (deployFrontDoor) {
+module frontDoor './modules/frontDoor.bicep' = if (loadBalancerOption == 'FrontDoorStandard' || loadBalancerOption == 'FrontDoorPremium') {
   name: frontDoorDeploymentName
   params: {
     frontDoorName: frontDoorName
     functionAppHostNames: functionAppNames
+  }
+  dependsOn: [
+    functionApps
+  ]
+}
+
+module trafficManager './modules/trafficManager.bicep' = if(loadBalancerOption == 'TrafficManager') {
+  name: trafficManagerProfileDeploymentName
+  params: {
+    trafficManagerProfileName: trafficManagerProfileName
+    functionAppNames: functionAppNames
+    functionRegions: regions
   }
   dependsOn: [
     functionApps
