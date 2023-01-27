@@ -9,8 +9,8 @@ param regions array = [
   'eastus'
 ]
 
-@allowed(['FrontDoorStandard'
-'FrontDoorPremium'
+@allowed(['Premium_AzureFrontDoor'
+'Standard_AzureFrontDoor'
 'TrafficManager'])
 param loadBalancerOption string
 
@@ -68,6 +68,7 @@ module frontDoor './modules/frontDoor.bicep' = if (loadBalancerOption == 'FrontD
   params: {
     frontDoorName: frontDoorName
     functionAppHostNames: functionAppNames
+    frontDoorSku: loadBalancerOption
   }
   dependsOn: [
     functionApps

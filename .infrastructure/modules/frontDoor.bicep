@@ -1,4 +1,5 @@
 param frontDoorName string
+param frontDoorSku string
 param functionAppHostNames array
 
 var profileName = '${frontDoorName}-profile'
@@ -11,7 +12,7 @@ resource frontDoorProfile 'Microsoft.Cdn/profiles@2022-11-01-preview' = {
   name: profileName
   location: 'global'
   sku: {
-    name: 'Premium_AzureFrontDoor'
+    name: frontDoorSku
   }
 }
 
