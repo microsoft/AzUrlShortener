@@ -8,7 +8,7 @@ var endpoints = [for (name, i) in functionAppNames: {
   name: name
   type: 'Microsoft.Network/trafficManagerProfiles/azureEndpoints'
   properties: {
-    targetResourceId: '/subscriptions/${subscription().subscriptionId}/resourceGroups/${resourceGroup().name}/providers/Microsoft.Web/sites/${name}'
+    targetResourceId: '/subscriptions/${subscription().subscriptionId}/resourceGroups/${resourceGroup().name}/providers/Microsoft.Web/sites/${name}-fa'
     endpointStatus: 'Enabled'
     priority: i+1
     endpointLocation: functionRegions[i]
