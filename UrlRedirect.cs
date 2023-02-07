@@ -22,7 +22,7 @@ namespace Cloud5mins.Function
 
         [Function("UrlRedirect")]
         public async Task<HttpResponseData> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "urlredirect/{shortUrl}")]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{shortUrl}")]
             HttpRequestData req,
             string shortUrl,
             ExecutionContext context)
@@ -32,7 +32,7 @@ namespace Cloud5mins.Function
 
             if (!String.IsNullOrWhiteSpace(shortUrl))
             {
-                redirectUrl = _shortenerSettings.defaultRedirectUrl;
+                redirectUrl = _shortenerSettings.defaultRedirectUrl ?? redirectUrl;
 
                 StorageTableHelper stgHelper = new StorageTableHelper(_shortenerSettings.UlsDataStorage);
 
