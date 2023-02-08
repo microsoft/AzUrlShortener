@@ -1,18 +1,16 @@
-using System.Threading.Tasks;
+using Cloud5mins.ShortenerTools.Domain;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Azure.Functions.Worker.Configuration;
-using Cloud5mins.domain;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-namespace Cloud5mins.AdminApi
+namespace Cloud5mins.ShortenerTools
 {
     public class Program
     {
         public static void Main()
         {
             ShortenerSettings shortenerSettings = null;
-            
+
             var host = new HostBuilder()
                 .ConfigureFunctionsWorkerDefaults()
                 .ConfigureServices((context, services) =>
@@ -25,7 +23,7 @@ namespace Cloud5mins.AdminApi
                         configuration.Bind(shortenerSettings);
                         return configuration;
                     });
-            
+
                     // Add our configuration class
                     services.AddSingleton(options => { return shortenerSettings; });
                 })

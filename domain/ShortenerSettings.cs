@@ -1,9 +1,9 @@
-namespace Cloud5mins.domain
+namespace Cloud5mins.ShortenerTools.Domain
 {
     public class ShortenerSettings
     {
-        public string defaultRedirectUrl { get; set; }
-        public string customDomain { get; set; }
-        public string UlsDataStorage { get; set; }
+        public string DefaultRedirectUrl { get; set; }
+        public string CustomDomain { get; set; }
+        public string UrlDataStorage { get; set; }
     }
 }

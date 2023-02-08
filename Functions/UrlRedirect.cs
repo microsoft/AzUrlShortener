@@ -1,13 +1,12 @@
-using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Cloud5mins.domain;
+using Cloud5mins.ShortenerTools.Domain;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Cloud5mins.Function
+namespace Cloud5mins.ShortenerTools.Functions
 {
     public class UrlRedirect
     {
@@ -30,11 +29,11 @@ namespace Cloud5mins.Function
             string redirectUrl = "https://azure.com";
 
 
-            if (!String.IsNullOrWhiteSpace(shortUrl))
+            if (!string.IsNullOrWhiteSpace(shortUrl))
             {
-                redirectUrl = _shortenerSettings.defaultRedirectUrl ?? redirectUrl;
+                redirectUrl = _shortenerSettings.DefaultRedirectUrl ?? redirectUrl;
 
-                StorageTableHelper stgHelper = new StorageTableHelper(_shortenerSettings.UlsDataStorage);
+                StorageTableHelper stgHelper = new StorageTableHelper(_shortenerSettings.UrlDataStorage);
 
                 var tempUrl = new ShortUrlEntity(string.Empty, shortUrl);
                 var newUrl = await stgHelper.GetShortUrlEntity(tempUrl);

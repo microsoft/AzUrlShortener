@@ -1,17 +1,27 @@
-using System;
 using Cronos;
+using System;
 
-namespace Cloud5mins.domain
+namespace Cloud5mins.ShortenerTools.Domain
 {
     public class Schedule
     {
-        public DateTime Start { get; set; } = DateTime.MinValue;
-        public DateTime End { get; set; } = DateTime.MaxValue;
+        public DateTime Start { get; set; } = DateTime.Now.AddMonths(-6);
+        public DateTime End { get; set; } = DateTime.Now.AddMonths(6);
 
         public string AlternativeUrl { get; set; } = "";
-        public string Cron { get; set; } = "0 0 0 0 0";
+        public string Cron { get; set; } = "* * * * *";
 
         public int DurationMinutes { get; set; } = 0;
+
+        public string GetDisplayableUrl(int max)
+        {
+            var length = AlternativeUrl.ToString().Length;
+            if (length >= max)
+            {
+                return string.Concat(AlternativeUrl.Substring(0, max-1), "...");
+            }
+            return AlternativeUrl;
+        }
 
         public bool IsActive(DateTime pointInTime)
         {
