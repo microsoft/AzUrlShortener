@@ -1,0 +1,29 @@
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="error-template">
+                    <h1>Oops!</h1>
+                    <h2>401 Unauthorized</h2>
+                    <AuthorizeView>
+                      <Authorized>
+                        <div class="error-details">
+                                Sorry, you are not authorized to access this resource.
+                        </div>
+                      </Authorized>  
+                      <NotAuthorized>
+                            <div class="error-details">
+                                Sorry, please get authenticated.
+                            </div>
+                      </NotAuthorized>  
+                    </AuthorizeView>
+                    <a class="btn btn-link" href="/">Return Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</section>

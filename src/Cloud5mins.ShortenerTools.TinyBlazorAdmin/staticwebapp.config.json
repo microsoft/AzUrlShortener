@@ -1,0 +1,50 @@
+{
+    "navigationFallback": {
+        "rewrite": "/index.html"
+    },
+    "routes": [
+        {
+          "route": "/urlmanager*",
+          "allowedRoles": ["admin"]
+        },
+        {
+          "route": "/statistics*",
+          "allowedRoles": ["admin"]
+        },
+        {
+          "route": "/api/*",
+          "methods": ["GET", "POST"],
+          "allowedRoles": ["admin"]
+        },
+        {
+          "route": "/login",
+          "rewrite": "/.auth/login/aad"
+        },
+        {
+          "route": "/.auth/login/twitter",
+          "statusCode": 404
+        },
+        {
+          "route": "/logout*",
+          "redirect": "/.auth/logout"
+        }
+        ,
+        {
+          "route": "/unauthorized*",
+          "redirect": "/unauthorized"
+        }
+      ],
+      "responseOverrides": {
+        "401": {
+          "redirect": "/.auth/login/aad?post_login_redirect_uri=.referrer",
+          "statusCode": 302
+        },
+        "403": {
+          "rewrite": "/unauthorized"
+        },
+        "404": {
+          "rewrite": "/404"
+        }
+      }
+      
+}
