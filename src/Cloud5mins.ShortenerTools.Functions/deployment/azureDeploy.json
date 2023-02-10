@@ -48,11 +48,10 @@
     "variables":{
         "suffix": "[substring(toLower(uniqueString(resourceGroup().id, resourceGroup().location)),0,5)]",
         "funcAppName": "[toLower(concat(parameters('baseName'), variables('suffix')))]",
-        "funcStorageAccountName": "[tolower(concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),16)), variables('suffix'), 'stg'))]",
+        "storageAccountName": "[tolower(concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),16)), variables('suffix'), 'stg'))]",
         "funcHhostingPlanName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), 'plan')]",
         "insightsAppName":"[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), '-meta')]",
         "functionProjectFolder": "src",
-        "UrlsStorageAccountName": "[concat('urldata', variables('suffix'), 'stg')]"
     },
     "resources": [
         {
@@ -68,8 +67,7 @@
             "dependsOn": [
                 "[concat('microsoft.insights/components/', variables('insightsAppName'))]",
                 "[concat('Microsoft.Web/serverfarms/', variables('funcHhostingPlanName'))]",
-                "[concat('Microsoft.Storage/storageAccounts/',variables('funcStorageAccountName'))]",
-                "[concat('Microsoft.Storage/storageAccounts/',variables('UrlsStorageAccountName'))]"
+                "[concat('Microsoft.Storage/storageAccounts/',variables('storageAccountName'))]"
             ],
             "properties": {
                 "name": "[variables('funcAppName')]",
@@ -93,19 +91,19 @@
                         },
                         {
                             "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('funcStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('funcStorageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
                         },
                         {
                             "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('funcStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('funcStorageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
                         },
                         {
                             "name": "WEBSITE_CONTENTSHARE",
                             "value": "[concat(variables('funcAppName'), 'ba91')]"
                         },
                         {
-                            "name": "UlsDataStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('UrlsStorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('UrlsStorageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                            "name": "DataStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
                         },
                         {
                             "name": "defaultRedirectUrl",
@@ -172,29 +170,19 @@
         {
             "apiVersion": "2019-06-01",
             "type": "Microsoft.Storage/storageAccounts",
-            "name": "[variables('funcStorageAccountName')]",
+            "name": "[variables('storageAccountName')]",
             "location": "[resourceGroup().location]",
             "sku": {
                 "name": "Standard_LRS",
                 "tier": "Standard"
             },
-            "properties": {
-                "supportsHttpsTrafficOnly": true
-            }
-        },
-        {
-            "name": "[variables('UrlsStorageAccountName')]",
-            "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2019-06-01",
-            "location": "[resourceGroup().location]",
             "tags": {
-                "displayName": "[variables('UrlsStorageAccountName')]",
+                "displayName": "[variables('storageAccountName')]",
                 "Owner": "[parameters('OwnerName')]",
                 "ExpireOn": "[parameters('ExpireOn')]"
             },
-            "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
+            "properties": {
+                "supportsHttpsTrafficOnly": true
             }
         }
     ],
