@@ -30,27 +30,35 @@
                 "description": "Name of the branch to use when deploying (Default = main)."
             }
         },
-        "ExpireOn":{
-            "type":"string",
-            "defaultValue":"[utcNow('yyyy-MM-dd')]",
+        "DeployTinyBlazorAdmin": {
+            "defaultValue": "true",
+            "type": "string",
+            "metadata": {
+                "description": "'true' if the TinyBlazorAdmin UI should be deployed, otherwise false"
+            }
+        },
+        "ExpireOn": {
+            "type": "string",
+            "defaultValue": "[utcNow('yyyy-MM-dd')]",
             "metadata": {
                 "description": "Just a text value (format: yyyy-MM-dd) that express when it is safe to delete these resources"
             }
         },
-        "OwnerName":{
-            "type":"string",
+        "OwnerName": {
+            "type": "string",
             "defaultValue": "",
             "metadata": {
                 "description": "Owner of this deployment, person to contact for question."
             }
         }
     },
-    "variables":{
+    "variables": {
         "suffix": "[substring(toLower(uniqueString(resourceGroup().id, resourceGroup().location)),0,5)]",
-        "funcAppName": "[toLower(concat(parameters('baseName'), variables('suffix')))]",
-        "storageAccountName": "[tolower(concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),16)), variables('suffix'), 'stg'))]",
-        "funcHhostingPlanName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), 'plan')]",
-        "insightsAppName":"[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), '-meta')]",
+        "funcAppName": "[toLower(concat(parameters('baseName'), variables('suffix'), '-fa'))]",
+        "swaName": "[toLower(concat(parameters('baseName'), variables('suffix'), '-swa'))]",
+        "storageAccountName": "[tolower(concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),16)), variables('suffix'), 'sa'))]",
+        "funcHhostingPlanName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), '-asp')]",
+        "insightsAppName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), '-ai')]",
         "functionProjectFolder": "src"
     },
     "resources": [
@@ -111,7 +119,7 @@
                         }
                     ]
                 },
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('funcHhostingPlanName'))]",                
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('funcHhostingPlanName'))]",
                 "use32BitWorkerProcess": true,
                 "netFrameworkVersion": "v6.0",
                 "clientAffinityEnabled": true
@@ -119,10 +127,10 @@
             "resources": [
                 {
                     "apiVersion": "2022-03-01",
-                    "type":"sourcecontrols",
+                    "type": "sourcecontrols",
                     "name": "web",
                     "dependsOn": [
-                      "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
+                        "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
                     ],
                     "properties": {
                         "repoUrl": "[parameters('GitHubURL')]",
@@ -168,10 +176,10 @@
             }
         },
         {
-            "apiVersion": "2019-06-01",
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[variables('storageAccountName')]",
             "location": "[resourceGroup().location]",
+            "apiVersion": "2019-06-01",
             "sku": {
                 "name": "Standard_LRS",
                 "tier": "Standard"
@@ -184,7 +192,73 @@
             "properties": {
                 "supportsHttpsTrafficOnly": true
             }
+        },
+        {
+            "condition": "[equals(toLower(parameters('DeployTinyBlazorAdmin')), 'true')]",
+            "type": "Microsoft.Web/staticSites",
+            "name": "[parameters('swaName')]",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2022-03-01",
+            "sku": {
+                "name": "Free",
+                "tier": "Free"
+            },
+            "properties": {
+                "repositoryUrl": "[parameters('GitHubURL')]",
+                "branch": "[parameters('GitHubBranch')]",
+                "stagingEnvironmentPolicy": "Enabled",
+                "allowConfigFileUpdates": true,
+                "provider": "GitHub",
+                "enterpriseGradeCdnStatus": "Disabled",
+                "buildProperties": {
+                    "appLocation": "/",
+                    "apiLocation": "[parameters('apiLocation')]",
+                    "appArtifactLocation": "[parameters('appArtifactLocation')]"
+                },
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').ConnectionString]"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "condition": "[equals(toLower(parameters('DeployTinyBlazorAdmin')), 'true')]",
+            "type": "Microsoft.Web/staticSites/linkedBackends",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('swaName'), '/backend1')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/staticSites', parameters('swaName'))]",
+                "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
+            ],
+            "properties": {
+                "backendResourceId": "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]",
+                "region": "[resourceGroup().location]"
+            }
+        },
+        {
+            "condition": "[equals(toLower(parameters('DeployTinyBlazorAdmin')), 'true')]",
+            "type": "Microsoft.Web/staticSites/userProvidedFunctionApps",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('swaName'), '/backend1')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/staticSites', parameters('swaName'))]",
+                "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
+            ],
+            "properties": {
+                "functionAppResourceId": "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]",
+                "functionAppRegion": "[resourceGroup().location]"
+            }
         }
     ],
-    "outputs":{}
+    "outputs": {}
 }
