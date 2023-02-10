@@ -53,12 +53,6 @@ namespace Cloud5mins.ShortenerTools.Functions
 
             try
             {
-                var invalidCode = Utility.CatchUnauthorize(req, _logger);
-                if (invalidCode != HttpStatusCode.Continue)
-                {
-                    return req.CreateResponse(invalidCode);
-                }
-
                 result.UrlList = await stgHelper.GetAllShortUrlEntities();
                 result.UrlList = result.UrlList.Where(p => !(p.IsArchived ?? false)).ToList();
                 var host = string.IsNullOrEmpty(_settings.CustomDomain) ? req.Url.Host : _settings.CustomDomain;

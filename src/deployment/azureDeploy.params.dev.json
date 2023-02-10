@@ -3,16 +3,16 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "baseName": {
-            "value": "franktestv3"
+            "value": "UrlShortenerConsolidated"
         },
         "OwnerName": {
-            "value": "Frank"
+            "value": "Me"
         },
         "GitHubBranch": {
-            "value": "vnext-v3"
+            "value": "UpdateDeployment"
         },
         "defaultRedirectUrl": {
-            "value": "https://frankysnotes.com"
+            "value": "https://azure.com"
         }
     }
 }

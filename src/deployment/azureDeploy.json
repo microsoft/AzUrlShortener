@@ -18,7 +18,7 @@
         },
         "GitHubURL": {
             "type": "string",
-            "defaultValue": "https://github.com/fboucher/AzUrlShortener.git",
+            "defaultValue": "https://github.com/microsoft/AzUrlShortener.git",
             "metadata": {
                 "description": "The URL of GitHub (ending by .git)"
             }
@@ -51,7 +51,7 @@
         "storageAccountName": "[tolower(concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),16)), variables('suffix'), 'stg'))]",
         "funcHhostingPlanName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), 'plan')]",
         "insightsAppName":"[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), '-meta')]",
-        "functionProjectFolder": "src",
+        "functionProjectFolder": "src"
     },
     "resources": [
         {

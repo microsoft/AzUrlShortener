@@ -67,44 +67,5 @@ namespace Cloud5mins.ShortenerTools
                 return uniqueId + reversedToken;
             }
         }
-
-        public static HttpStatusCode CatchUnauthorize(HttpRequestData req, ILogger log)
-        {
-            // TODO: Handle authorization
-            return HttpStatusCode.Continue;
-            
-            //try
-            //{
-
-            //    ClaimsPrincipal principal = StaticWebAppsAuth.GetClaimsPrincipal(req, log);
-
-            //    if (principal == null)
-            //    {
-            //        log.LogTrace("No principal.");
-            //        return HttpStatusCode.Unauthorized;
-            //    }
-
-            //    if (!principal.IsInRole("admin"))
-            //    {
-            //        log.LogInformation("Not IsInRole admin");
-            //        var claims = new List<Claim>(principal.FindAll(ClaimTypes.Role));
-            //        foreach (var c in claims)
-            //        {
-            //            if (c.Value == "admin")
-            //                return HttpStatusCode.Continue;
-            //        }
-            //        log.LogInformation("No claim with value admin");
-            //        return HttpStatusCode.Unauthorized;
-            //    }
-
-            //    return HttpStatusCode.Continue;
-            //}
-            //catch (Exception ex)
-            //{
-            //    log.LogError(ex, "An unexpected error was encountered.");
-            //    return HttpStatusCode.BadRequest;
-            //}
-        }
-
     }
 }

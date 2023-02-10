@@ -59,12 +59,6 @@ namespace Cloud5mins.ShortenerTools.Functions
 
             try
             {
-                var invalidCode = Utility.CatchUnauthorize(req, _logger);
-                if (invalidCode != HttpStatusCode.Continue)
-                {
-                    return req.CreateResponse(invalidCode);
-                }
-
                 // Validation of the inputs
                 if (req == null)
                 {
