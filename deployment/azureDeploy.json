@@ -18,7 +18,7 @@
         },
         "GitHubURL": {
             "type": "string",
-            "defaultValue": "https://github.com/fboucher/AzUrlShortener.git",
+            "defaultValue": "https://github.com/microsoft/AzUrlShortener.git",
             "metadata": {
                 "description": "The URL of GitHub (ending by .git)"
             }

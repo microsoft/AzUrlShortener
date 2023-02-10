@@ -24,15 +24,15 @@ Features:
 
 One click deployment - In progress
 
-👉 **[Step by Step Deployment](https://github.com/FBoucher/AzUrlShortener/wiki/How-to-deploy-your-AzUrlShortener)** (wiki pages) 👈 documentation is available here. If you would like to used the TinyBlazorAdmin as frontend (suggested) here the the [steps to follow for TinyBlazorAdmin](https://github.com/FBoucher/TinyBlazorAdmin/wiki/Deployment).
+👉 **[Step by Step Deployment](https://github.com/microsoft/AzUrlShortener/wiki/How-to-deploy-your-AzUrlShortener)** (wiki pages) 👈 documentation is available here. If you would like to used the TinyBlazorAdmin as frontend (suggested) here the the [steps to follow for TinyBlazorAdmin](https://github.com/microsoft/TinyBlazorAdmin/wiki/Deployment).
 
-If you want to **Update** or **Upgrade**, please refer to [this page](https://github.com/FBoucher/AzUrlShortener/wiki/How-to-Update---Upgrade) (wiki pages). 
+If you want to **Update** or **Upgrade**, please refer to [this page](https://github.com/microsoft/AzUrlShortener/wiki/How-to-Update---Upgrade) (wiki pages). 
 
 ## How To Use It
 
 AzUrlShortener is an API that doesn't have any admin UI by default. There are many different ways to manage your Short Urls, from a direct HTTP call to a fancy website. 
 
-We suggest [Tiny Blazor Admin](https://github.com/FBoucher/TinyBlazorAdmin); it's a static website. 
+We suggest [Tiny Blazor Admin](https://github.com/microsoft/TinyBlazorAdmin); it's a static website. 
 
 ![Tiny Blazor Admin looks](/medias/TinyBlazorAdmin.gif)
 
@@ -42,7 +42,7 @@ By default, without any specific Admin tool, we recommend using [Azure Storage E
 
 ## How It Works
 
-If you are interested to learn more about what's under the hood, and get more details on each Azure Function, read the [How it works](https://github.com/FBoucher/AzUrlShortener/wiki/how-it-works) page.
+If you are interested to learn more about what's under the hood, and get more details on each Azure Function, read the [How it works](https://github.com/microsoft/AzUrlShortener/wiki/how-it-works) page.
 
 There is also a videos that explains a bit how things works and does a quick tour of the project.
 
@@ -56,9 +56,9 @@ There is also a videos that explains a bit how things works and does a quick tou
 
 ## What's Next?
 
-We are always trying to make it better. See the [AzUrlShortener project](https://github.com/users/FBoucher/projects/6/views/4) page and [issues](https://github.com/FBoucher/AzUrlShortener/issues) to see the current progress. 
+We are always trying to make it better. See the [AzUrlShortener project](https://github.com/users/FBoucher/projects/6/views/4) page and [issues](https://github.com/microsoft/AzUrlShortener/issues) to see the current progress. 
 
-You are invited to go into the [Discussion](https://github.com/FBoucher/AzUrlShortener/discussions) tab to share your feedback, ask question, and suggest new feature!
+You are invited to go into the [Discussion](https://github.com/microsoft/AzUrlShortener/discussions) tab to share your feedback, ask question, and suggest new feature!
 
 Current Backlog contains:
 - More Statistics
@@ -87,26 +87,26 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tbody>
     <tr>
       <td align="center"><a href="https://github.com/surlydev"><img src="https://avatars1.githubusercontent.com/u/880671?v=4?s=100" width="100px;" alt="SurlyDev"/><br /><sub><b>SurlyDev</b></sub></a><br /><a href="#ideas-surlydev" title="Ideas, Planning, & Feedback">🤔</a></td>
-      <td align="center"><a href="http://cloud5mins.com"><img src="https://avatars3.githubusercontent.com/u/2404846?v=4?s=100" width="100px;" alt="Frank Boucher"/><br /><sub><b>Frank Boucher</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/commits?author=FBoucher" title="Code">💻</a> <a href="#video-FBoucher" title="Videos">📹</a> <a href="https://github.com/FBoucher/AzUrlShortener/issues?q=author%3AFBoucher" title="Bug reports">🐛</a></td>
+      <td align="center"><a href="http://cloud5mins.com"><img src="https://avatars3.githubusercontent.com/u/2404846?v=4?s=100" width="100px;" alt="Frank Boucher"/><br /><sub><b>Frank Boucher</b></sub></a><br /><a href="https://github.com/microsoft/AzUrlShortener/commits?author=FBoucher" title="Code">💻</a> <a href="#video-FBoucher" title="Videos">📹</a> <a href="https://github.com/microsoft/AzUrlShortener/issues?q=author%3AFBoucher" title="Bug reports">🐛</a></td>
       <td align="center"><a href="https://github.com/AK0785"><img src="https://avatars1.githubusercontent.com/u/40241010?v=4?s=100" width="100px;" alt="AKER"/><br /><sub><b>AKER</b></sub></a><br /><a href="#ideas-AK0785" title="Ideas, Planning, & Feedback">🤔</a></td>
-      <td align="center"><a href="http://baaijte.net"><img src="https://avatars3.githubusercontent.com/u/1761079?v=4?s=100" width="100px;" alt="Vincent Baaij"/><br /><sub><b>Vincent Baaij</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/commits?author=vnbaaij" title="Code">💻</a></td>
-      <td align="center"><a href="https://github.com/kmm7"><img src="https://avatars3.githubusercontent.com/u/13196402?v=4?s=100" width="100px;" alt="kmm7"/><br /><sub><b>kmm7</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/commits?author=kmm7" title="Code">💻</a> <a href="#ideas-kmm7" title="Ideas, Planning, & Feedback">🤔</a></td>
-      <td align="center"><a href="https://github.com/fs366e2spm"><img src="https://avatars2.githubusercontent.com/u/52791126?v=4?s=100" width="100px;" alt="fs366e2spm"/><br /><sub><b>fs366e2spm</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/issues?q=author%3Afs366e2spm" title="Bug reports">🐛</a> <a href="#ideas-fs366e2spm" title="Ideas, Planning, & Feedback">🤔</a></td>
-      <td align="center"><a href="https://github.com/Hedlund01"><img src="https://avatars1.githubusercontent.com/u/48281171?v=4?s=100" width="100px;" alt="Hugo Hedlund"/><br /><sub><b>Hugo Hedlund</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/commits?author=Hedlund01" title="Code">💻</a></td>
+      <td align="center"><a href="http://baaijte.net"><img src="https://avatars3.githubusercontent.com/u/1761079?v=4?s=100" width="100px;" alt="Vincent Baaij"/><br /><sub><b>Vincent Baaij</b></sub></a><br /><a href="https://github.com/microsoft/AzUrlShortener/commits?author=vnbaaij" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/kmm7"><img src="https://avatars3.githubusercontent.com/u/13196402?v=4?s=100" width="100px;" alt="kmm7"/><br /><sub><b>kmm7</b></sub></a><br /><a href="https://github.com/microsoft/AzUrlShortener/commits?author=kmm7" title="Code">💻</a> <a href="#ideas-kmm7" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center"><a href="https://github.com/fs366e2spm"><img src="https://avatars2.githubusercontent.com/u/52791126?v=4?s=100" width="100px;" alt="fs366e2spm"/><br /><sub><b>fs366e2spm</b></sub></a><br /><a href="https://github.com/microsoft/AzUrlShortener/issues?q=author%3Afs366e2spm" title="Bug reports">🐛</a> <a href="#ideas-fs366e2spm" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center"><a href="https://github.com/Hedlund01"><img src="https://avatars1.githubusercontent.com/u/48281171?v=4?s=100" width="100px;" alt="Hugo Hedlund"/><br /><sub><b>Hugo Hedlund</b></sub></a><br /><a href="https://github.com/microsoft/AzUrlShortener/commits?author=Hedlund01" title="Code">💻</a></td>
     </tr>
     <tr>
-      <td align="center"><a href="https://github.com/thefisk"><img src="https://avatars2.githubusercontent.com/u/39799908?v=4?s=100" width="100px;" alt="Nathan Fisk"/><br /><sub><b>Nathan Fisk</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/commits?author=thefisk" title="Documentation">📖</a></td>
-      <td align="center"><a href="http://www.lexplore.com"><img src="https://avatars0.githubusercontent.com/u/3719489?v=4?s=100" width="100px;" alt="Erik Alsmyr"/><br /><sub><b>Erik Alsmyr</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/issues?q=author%3Aalsmyr" title="Bug reports">🐛</a> <a href="https://github.com/FBoucher/AzUrlShortener/commits?author=alsmyr" title="Documentation">📖</a></td>
-      <td align="center"><a href="https://jawn.net"><img src="https://avatars3.githubusercontent.com/u/1705112?v=4?s=100" width="100px;" alt="Bernard Vander Beken"/><br /><sub><b>Bernard Vander Beken</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/commits?author=jawn" title="Documentation">📖</a></td>
-      <td align="center"><a href="https://github.com/IronManion"><img src="https://avatars0.githubusercontent.com/u/36028632?v=4?s=100" width="100px;" alt="IronManion"/><br /><sub><b>IronManion</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/commits?author=IronManion" title="Documentation">📖</a></td>
-      <td align="center"><a href="http://www.jasonhand.com"><img src="https://avatars0.githubusercontent.com/u/1173344?v=4?s=100" width="100px;" alt="Jason Hand"/><br /><sub><b>Jason Hand</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/commits?author=jasonhand" title="Documentation">📖</a> <a href="#infra-jasonhand" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
-      <td align="center"><a href="https://Microsoft.com"><img src="https://avatars.githubusercontent.com/u/617586?v=4?s=100" width="100px;" alt="Scott Cate"/><br /><sub><b>Scott Cate</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/commits?author=scottcate" title="Code">💻</a></td>
-      <td align="center"><a href="https://github.com/arglgruml"><img src="https://avatars.githubusercontent.com/u/3940298?v=4?s=100" width="100px;" alt="arglgruml"/><br /><sub><b>arglgruml</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/issues?q=author%3Aarglgruml" title="Bug reports">🐛</a></td>
+      <td align="center"><a href="https://github.com/thefisk"><img src="https://avatars2.githubusercontent.com/u/39799908?v=4?s=100" width="100px;" alt="Nathan Fisk"/><br /><sub><b>Nathan Fisk</b></sub></a><br /><a href="https://github.com/microsoft/AzUrlShortener/commits?author=thefisk" title="Documentation">📖</a></td>
+      <td align="center"><a href="http://www.lexplore.com"><img src="https://avatars0.githubusercontent.com/u/3719489?v=4?s=100" width="100px;" alt="Erik Alsmyr"/><br /><sub><b>Erik Alsmyr</b></sub></a><br /><a href="https://github.com/microsoft/AzUrlShortener/issues?q=author%3Aalsmyr" title="Bug reports">🐛</a> <a href="https://github.com/microsoft/AzUrlShortener/commits?author=alsmyr" title="Documentation">📖</a></td>
+      <td align="center"><a href="https://jawn.net"><img src="https://avatars3.githubusercontent.com/u/1705112?v=4?s=100" width="100px;" alt="Bernard Vander Beken"/><br /><sub><b>Bernard Vander Beken</b></sub></a><br /><a href="https://github.com/microsoft/AzUrlShortener/commits?author=jawn" title="Documentation">📖</a></td>
+      <td align="center"><a href="https://github.com/IronManion"><img src="https://avatars0.githubusercontent.com/u/36028632?v=4?s=100" width="100px;" alt="IronManion"/><br /><sub><b>IronManion</b></sub></a><br /><a href="https://github.com/microsoft/AzUrlShortener/commits?author=IronManion" title="Documentation">📖</a></td>
+      <td align="center"><a href="http://www.jasonhand.com"><img src="https://avatars0.githubusercontent.com/u/1173344?v=4?s=100" width="100px;" alt="Jason Hand"/><br /><sub><b>Jason Hand</b></sub></a><br /><a href="https://github.com/microsoft/AzUrlShortener/commits?author=jasonhand" title="Documentation">📖</a> <a href="#infra-jasonhand" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+      <td align="center"><a href="https://Microsoft.com"><img src="https://avatars.githubusercontent.com/u/617586?v=4?s=100" width="100px;" alt="Scott Cate"/><br /><sub><b>Scott Cate</b></sub></a><br /><a href="https://github.com/microsoft/AzUrlShortener/commits?author=scottcate" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/arglgruml"><img src="https://avatars.githubusercontent.com/u/3940298?v=4?s=100" width="100px;" alt="arglgruml"/><br /><sub><b>arglgruml</b></sub></a><br /><a href="https://github.com/microsoft/AzUrlShortener/issues?q=author%3Aarglgruml" title="Bug reports">🐛</a></td>
     </tr>
     <tr>
-      <td align="center"><a href="https://github.com/DavidTCarpenters"><img src="https://avatars.githubusercontent.com/u/50587918?v=4?s=100" width="100px;" alt="DavidTCarpenters"/><br /><sub><b>DavidTCarpenters</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/commits?author=DavidTCarpenters" title="Code">💻</a></td>
-      <td align="center"><a href="https://github.com/solvaholic"><img src="https://avatars.githubusercontent.com/u/14636658?v=4?s=100" width="100px;" alt="Roger D. Winans"/><br /><sub><b>Roger D. Winans</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/commits?author=solvaholic" title="Documentation">📖</a></td>
-      <td align="center"><a href="https://github.com/fatpacket"><img src="https://avatars.githubusercontent.com/u/5621063?v=4?s=100" width="100px;" alt="fatpacket"/><br /><sub><b>fatpacket</b></sub></a><br /><a href="https://github.com/FBoucher/AzUrlShortener/commits?author=fatpacket" title="Documentation">📖</a></td>
+      <td align="center"><a href="https://github.com/DavidTCarpenters"><img src="https://avatars.githubusercontent.com/u/50587918?v=4?s=100" width="100px;" alt="DavidTCarpenters"/><br /><sub><b>DavidTCarpenters</b></sub></a><br /><a href="https://github.com/microsoft/AzUrlShortener/commits?author=DavidTCarpenters" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/solvaholic"><img src="https://avatars.githubusercontent.com/u/14636658?v=4?s=100" width="100px;" alt="Roger D. Winans"/><br /><sub><b>Roger D. Winans</b></sub></a><br /><a href="https://github.com/microsoft/AzUrlShortener/commits?author=solvaholic" title="Documentation">📖</a></td>
+      <td align="center"><a href="https://github.com/fatpacket"><img src="https://avatars.githubusercontent.com/u/5621063?v=4?s=100" width="100px;" alt="fatpacket"/><br /><sub><b>fatpacket</b></sub></a><br /><a href="https://github.com/microsoft/AzUrlShortener/commits?author=fatpacket" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
@@ -123,9 +123,9 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 > This project was inspire by a project created by [Jeremy Likness](https://github.com/JeremyLikness) that you can find here [jlik.me](https://github.com/JeremyLikness/jlik.me).
 
 
-[UrlShortener]: https://github.com/FBoucher/AzUrlShortener/raw/main/medias/UrlShortener_600.png
-[ThumbnailYTAzUrlShortener_EN]: https://github.com/FBoucher/AzUrlShortener/raw/main/medias/ThumbnailYTAzUrlShortener_EN.png
-[glo]: https://github.com/FBoucher/AzUrlShortener/raw/main/medias/glo-board_screenshot.png
-[AzFunctionGitSync]: https://github.com/FBoucher/AzUrlShortener/raw/main/medias/AzFunctionGitSync.png
+[UrlShortener]: https://github.com/microsoft/AzUrlShortener/raw/main/medias/UrlShortener_600.png
+[ThumbnailYTAzUrlShortener_EN]: https://github.com/microsoft/AzUrlShortener/raw/main/medias/ThumbnailYTAzUrlShortener_EN.png
+[glo]: https://github.com/microsoft/AzUrlShortener/raw/main/medias/glo-board_screenshot.png
+[AzFunctionGitSync]: https://github.com/microsoft/AzUrlShortener/raw/main/medias/AzFunctionGitSync.png
 
 
