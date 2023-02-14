@@ -18,13 +18,12 @@ Features:
 - Redirect different destination base on schedules.
 - Keep Statistics of your clicks.
 - Budget-friendly and 100% open-source.
+- Extensible for more enterprise-friendly configurations
 - Simple step by step deployment. 
 
 ## How To Deploy
 
-One click deployment - In progress
-
-👉 **[Step by Step Deployment](https://github.com/microsoft/AzUrlShortener/wiki/How-to-deploy-your-AzUrlShortener)** (wiki pages) 👈 documentation is available here. If you would like to used the TinyBlazorAdmin as frontend (suggested) here the the [steps to follow for TinyBlazorAdmin](https://github.com/microsoft/TinyBlazorAdmin/wiki/Deployment).
+👉 **[Step by Step Deployment](https://github.com/microsoft/AzUrlShortener/wiki/How-to-deploy-your-AzUrlShortener)** (wiki pages) 👈 documentation is available here. If you would like to used the TinyBlazorAdmin as frontend (suggested) **you must first** follow the [steps to follow for TinyBlazorAdmin](https://github.com/microsoft/AzUrlShortener/wiki/TinyBlazorAdmin-Deployment).
 
 If you want to **Update** or **Upgrade**, please refer to [this page](https://github.com/microsoft/AzUrlShortener/wiki/How-to-Update---Upgrade) (wiki pages). 
 
@@ -32,12 +31,13 @@ If you want to **Update** or **Upgrade**, please refer to [this page](https://gi
 
 AzUrlShortener is an API that doesn't have any admin UI by default. There are many different ways to manage your Short Urls, from a direct HTTP call to a fancy website. 
 
-We suggest [Tiny Blazor Admin](https://github.com/microsoft/TinyBlazorAdmin); it's a static website. 
+We suggest [Tiny Blazor Admin](./src/Cloud5mins.ShortenerTools.TinyBlazorAdmin/README.md); it's a static website. 
 
 ![Tiny Blazor Admin looks](/Media/TinyBlazorAdmin.gif)
 
-By default, without any specific Admin tool, we recommend using [Azure Storage Explorer](/doc/howto-use-azure-storage-explorer.md).
+By default, without any specific Admin tool, you can use an API client like [Postman](https://www.postman.com/) or a plugin to VSCode like [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client). We've included simple API calls via a postman collection and environment [here](./src/tools).
 
+You can also directly update the tables in storage using [Azure Storage Explorer](/doc/howto-use-azure-storage-explorer.md). 
 ---
 
 ## How It Works
@@ -61,6 +61,7 @@ We are always trying to make it better. See the [AzUrlShortener project](https:/
 You are invited to go into the [Discussion](https://github.com/microsoft/AzUrlShortener/discussions) tab to share your feedback, ask question, and suggest new feature!
 
 Current Backlog contains:
+- A deployment option with everything combined into TinyBlazorAdmin
 - More Statistics
 - QR Code
 - More tracking information (like Country)
@@ -120,7 +121,7 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 
 
-> This project was inspire by a project created by [Jeremy Likness](https://github.com/JeremyLikness) that you can find here [jlik.me](https://github.com/JeremyLikness/jlik.me).
+> This project was inspired by a project created by [Jeremy Likness](https://github.com/JeremyLikness) that you can find here [jlik.me](https://github.com/JeremyLikness/jlik.me).
 
 
 [UrlShortener]: https://github.com/microsoft/AzUrlShortener/raw/main/Media/UrlShortener_600.png
