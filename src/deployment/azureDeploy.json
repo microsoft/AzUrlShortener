@@ -56,7 +56,7 @@
         "suffix": "[substring(toLower(uniqueString(resourceGroup().id, resourceGroup().location)),0,5)]",
         "funcAppName": "[toLower(concat(parameters('baseName'), '-', variables('suffix'), '-fa'))]",
         "swaName": "[parameters('existingSWAName')]",
-        "DeployTinyBlazorAdmin": "[if(equals(parameters('existingSWAName'), 'SKIP-THIS-RESOURCE'), 'false', 'true')]",
+        "deployTinyBlazorAdmin": "[if(equals(parameters('existingSWAName'), 'SKIP-THIS-RESOURCE'), 'false', 'true')]",
         "storageAccountName": "[tolower(concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),16)), variables('suffix'), 'sa'))]",
         "funcHhostingPlanName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),13)), '-', variables('suffix'), '-asp')]",
         "insightsAppName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),13)), '-', variables('suffix'), '-ai')]",
@@ -211,7 +211,7 @@
             }
         },
         {
-            "condition": "[equals(toLower(variables('DeployTinyBlazorAdmin')), 'true')]",
+            "condition": "[equals(toLower(variables('deployTinyBlazorAdmin')), 'true')]",
             "type": "Microsoft.Web/staticSites",
             "name": "[variables('swaName')]",
             "location": "[resourceGroup().location]",
@@ -263,7 +263,7 @@
             ]
         },
         {
-            "condition": "[equals(toLower(variables('DeployTinyBlazorAdmin')), 'true')]",
+            "condition": "[equals(toLower(variables('deployTinyBlazorAdmin')), 'true')]",
             "type": "Microsoft.Web/staticSites/config",
             "apiVersion": "2022-03-01",
             "name": "[format('{0}/{1}', variables('swaName'), 'appsettings')]",
