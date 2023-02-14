@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Tiny Blazor Admin</title>
+    <base href="/" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="Cloud5mins.ShortenerTools.TinyBlazorAdmin.styles.css?version=0.1" rel="stylesheet" />
+    <link href="https://cdn.syncfusion.com/blazor/20.1.51/styles/bootstrap5.css" rel="stylesheet"/>
+    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <script src="https://cdn.syncfusion.com/blazor/20.1.51/syncfusion-blazor.min.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div id="app">Loading...</div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_content/Microsoft.Authentication.WebAssembly.Msal/AuthenticationService.js"></script>
+    <script src="_framework/blazor.webassembly.js"></script>
+
+<script>
+        window.clipboardCopy = {
+            copyText: function(text) {
+                navigator.clipboard.writeText(text)
+                .catch(function (error) {
+                    alert(error);
+                });
+            }
+        };
+    </script>
+</body>
+
+</html>

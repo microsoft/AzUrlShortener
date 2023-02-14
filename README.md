@@ -34,7 +34,7 @@ AzUrlShortener is an API that doesn't have any admin UI by default. There are ma
 
 We suggest [Tiny Blazor Admin](https://github.com/microsoft/TinyBlazorAdmin); it's a static website. 
 
-![Tiny Blazor Admin looks](/medias/TinyBlazorAdmin.gif)
+![Tiny Blazor Admin looks](/Media/TinyBlazorAdmin.gif)
 
 By default, without any specific Admin tool, we recommend using [Azure Storage Explorer](/doc/howto-use-azure-storage-explorer.md).
 
@@ -48,7 +48,7 @@ There is also a videos that explains a bit how things works and does a quick tou
 
 | Cloud 5 Mins | Azure Friday |
 | ---          | --- |
-| [![Tiny Blazor Admin looks](/medias/AzUrlShortener_preview.gif)](https://youtu.be/fzXy2D77WMM) | [![Azure Friday](/medias/AzureFriday_preview.gif)](https://learn.microsoft.com/en-us/shows/azure-friday/azurlshortener-an-open-source-budget-friendly-url-shortener)  |
+| [![Tiny Blazor Admin looks](/Media/AzUrlShortener_preview.gif)](https://youtu.be/fzXy2D77WMM) | [![Azure Friday](/Media/AzureFriday_preview.gif)](https://learn.microsoft.com/en-us/shows/azure-friday/azurlshortener-an-open-source-budget-friendly-url-shortener)  |
 
 
 ---
@@ -123,9 +123,9 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 > This project was inspire by a project created by [Jeremy Likness](https://github.com/JeremyLikness) that you can find here [jlik.me](https://github.com/JeremyLikness/jlik.me).
 
 
-[UrlShortener]: https://github.com/microsoft/AzUrlShortener/raw/main/medias/UrlShortener_600.png
-[ThumbnailYTAzUrlShortener_EN]: https://github.com/microsoft/AzUrlShortener/raw/main/medias/ThumbnailYTAzUrlShortener_EN.png
-[glo]: https://github.com/microsoft/AzUrlShortener/raw/main/medias/glo-board_screenshot.png
-[AzFunctionGitSync]: https://github.com/microsoft/AzUrlShortener/raw/main/medias/AzFunctionGitSync.png
+[UrlShortener]: https://github.com/microsoft/AzUrlShortener/raw/main/Media/UrlShortener_600.png
+[ThumbnailYTAzUrlShortener_EN]: https://github.com/microsoft/AzUrlShortener/raw/main/Media/ThumbnailYTAzUrlShortener_EN.png
+[glo]: https://github.com/microsoft/AzUrlShortener/raw/main/Media/glo-board_screenshot.png
+[AzFunctionGitSync]: https://github.com/microsoft/AzUrlShortener/raw/main/Media/AzFunctionGitSync.png
 
 

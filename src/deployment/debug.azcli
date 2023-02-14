@@ -1,0 +1,19 @@
+
+
+az group create -n crv-urlshortener-rg2 -l eastus
+
+## validate with Parameter file
+az deployment group validate -g crv-urlshortener-rg2  --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.dev.json"  --verbose 
+
+## deploy it with parameter file
+# az deployment group create  -g crv-urlshortener-rg2 -n urlshortenerv1 --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.dev.json"  --verbose
+
+## what-if
+az deployment group create  -g crv-urlshortener-rg2  -n urlshortenerv1 --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.dev.json"  --verbose --what-what-if-result-format
+
+## deploy it
+az deployment group create  -g crv-urlshortener-rg2  -n urlshortenerv1 --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.dev.json"  --verbose 
+
+
+## update setting
+az functionapp config appsettings set --name c5murltest --resource-group crv-urlshortener-rg2 --settings "FUNCTIONS_WORKER_RUNTIME=dotnet-isolated"
