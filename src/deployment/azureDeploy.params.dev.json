@@ -3,13 +3,19 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "baseName": {
-            "value": "UrlShortenerConsolidated"
+            "value": "shortenertool"
         },
-        "OwnerName": {
-            "value": "Me"
+        "existingSWAName": {
+            "value": "shortenertool-swa"
+        },
+        "GitHubURL": {
+            "value": "https://github.com/ch-rob/AzUrlShortener"
         },
         "GitHubBranch": {
-            "value": "UpdateDeployment"
+            "value": "UpdateDeployment2"
+        },
+        "OwnerName": {
+            "value": "Chad V"
         },
         "defaultRedirectUrl": {
             "value": "https://azure.com"

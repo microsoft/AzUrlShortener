@@ -3,10 +3,17 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "baseName": {
-            "defaultValue": "ShortenerTools",
+            "defaultValue": "shortenertool",
             "type": "string",
             "metadata": {
                 "description": "Name used as base-template to name the resources to be deployed in Azure."
+            }
+        },
+        "existingSWAName": {
+            "type": "string",
+            "defaultValue": "SKIP-THIS-RESOURCE",
+            "metadata": {
+                "description": "Optional (SKIP-THIS-RESOURCE): If provided, this is name of the the already created Static Web App in this resource group. If not provided: API will be standalone"
             }
         },
         "defaultRedirectUrl": {
@@ -18,7 +25,7 @@
         },
         "GitHubURL": {
             "type": "string",
-            "defaultValue": "https://github.com/microsoft/AzUrlShortener.git",
+            "defaultValue": "https://github.com/MUST-BE-A-REPO-YOU-CONTROL/AzUrlShortener.git",
             "metadata": {
                 "description": "The URL of GitHub (ending by .git)"
             }
@@ -28,13 +35,6 @@
             "defaultValue": "main",
             "metadata": {
                 "description": "Name of the branch to use when deploying (Default = main)."
-            }
-        },
-        "DeployTinyBlazorAdmin": {
-            "defaultValue": "true",
-            "type": "string",
-            "metadata": {
-                "description": "'true' if the TinyBlazorAdmin UI should be deployed, otherwise false"
             }
         },
         "ExpireOn": {
@@ -54,11 +54,12 @@
     },
     "variables": {
         "suffix": "[substring(toLower(uniqueString(resourceGroup().id, resourceGroup().location)),0,5)]",
-        "funcAppName": "[toLower(concat(parameters('baseName'), variables('suffix'), '-fa'))]",
-        "swaName": "[toLower(concat(parameters('baseName'), variables('suffix'), '-swa'))]",
+        "funcAppName": "[toLower(concat(parameters('baseName'), '-', variables('suffix'), '-fa'))]",
+        "swaName": "[parameters('existingSWAName')]",
+        "DeployTinyBlazorAdmin": "[if(equals(parameters('existingSWAName'), 'SKIP-THIS-RESOURCE'), 'false', 'true')]",
         "storageAccountName": "[tolower(concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),16)), variables('suffix'), 'sa'))]",
-        "funcHhostingPlanName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), '-asp')]",
-        "insightsAppName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), variables('suffix'), '-ai')]",
+        "funcHhostingPlanName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),13)), '-', variables('suffix'), '-asp')]",
+        "insightsAppName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),13)), '-', variables('suffix'), '-ai')]",
         "functionProjectFolder": "src"
     },
     "resources": [
@@ -141,6 +142,22 @@
             ]
         },
         {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2022-03-01",
+            "name": "[format('{0}/{1}', variables('funcAppName'), 'authsettingsV2')]",
+            "properties": {
+                "globalValidation": {
+                    "unauthenticatedClientAction": "AllowAnonymous" 
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]",
+                "[resourceId('Microsoft.Web/staticSites', variables('swaName'))]",
+                "[format('{0}/resourceGroups/{1}/providers/Microsoft.Web/staticSites/{2}/userProvidedFunctionApps/backend1', subscription().id, resourceGroup().name, variables('swaName'))]",
+                "[format('{0}/resourceGroups/{1}/providers/Microsoft.Web/staticSites/{2}/linkedBackends/backend1', subscription().id, resourceGroup().name, variables('swaName'))]"
+            ]
+        },
+        {
             "apiVersion": "2021-03-01",
             "name": "[variables('funcHhostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
@@ -162,7 +179,7 @@
         {
             "apiVersion": "2015-05-01",
             "name": "[variables('insightsAppName')]",
-            "type": "microsoft.insights/components",
+            "type": "Microsoft.Insights/components",
             "location": "[resourceGroup().location]",
             "tags": {
                 "Owner": "[parameters('OwnerName')]",
@@ -194,70 +211,69 @@
             }
         },
         {
-            "condition": "[equals(toLower(parameters('DeployTinyBlazorAdmin')), 'true')]",
+            "condition": "[equals(toLower(variables('DeployTinyBlazorAdmin')), 'true')]",
             "type": "Microsoft.Web/staticSites",
-            "name": "[parameters('swaName')]",
+            "name": "[variables('swaName')]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2022-03-01",
             "sku": {
-                "name": "Free",
-                "tier": "Free"
+                "name": "Standard",
+                "tier": "Standard"
             },
             "properties": {
                 "repositoryUrl": "[parameters('GitHubURL')]",
                 "branch": "[parameters('GitHubBranch')]",
+                "buildProperties": {
+                    "appLocation": "./src/Cloud5mins.ShortenerTools.TinyBlazorAdmin",
+                    "outputLocation": "wwwroot"
+                },
                 "stagingEnvironmentPolicy": "Enabled",
                 "allowConfigFileUpdates": true,
                 "provider": "GitHub",
-                "enterpriseGradeCdnStatus": "Disabled",
-                "buildProperties": {
-                    "appLocation": "/",
-                    "apiLocation": "[parameters('apiLocation')]",
-                    "appArtifactLocation": "[parameters('appArtifactLocation')]"
+                "enterpriseGradeCdnStatus": "Disabled"
+            },
+            "resources":
+            [
+                {
+                    "type": "linkedBackends",
+                    "apiVersion": "2022-03-01",
+                    "name": "backend1",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/staticSites', variables('swaName'))]",
+                        "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
+                    ],
+                    "properties": {
+                        "backendResourceId": "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]",
+                        "region": "[resourceGroup().location]"
+                    }
                 },
-                "siteConfig": {
-                    "appSettings": [
-                        {
-                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                            "value": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').InstrumentationKey]"
-                        },
-                        {
-                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            "value": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').ConnectionString]"
-                        }
-                    ]
+                {
+                    "type": "userProvidedFunctionApps",
+                    "apiVersion": "2022-03-01",
+                    "name": "backend1",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/staticSites', variables('swaName'))]",
+                        "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
+                    ],
+                    "properties": {
+                        "functionAppResourceId": "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]",
+                        "functionAppRegion": "[resourceGroup().location]"
+                    }
                 }
-            }
+            ]
         },
         {
-            "condition": "[equals(toLower(parameters('DeployTinyBlazorAdmin')), 'true')]",
-            "type": "Microsoft.Web/staticSites/linkedBackends",
+            "condition": "[equals(toLower(variables('DeployTinyBlazorAdmin')), 'true')]",
+            "type": "Microsoft.Web/staticSites/config",
             "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('swaName'), '/backend1')]",
-            "location": "Central US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/staticSites', parameters('swaName'))]",
-                "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
-            ],
+            "name": "[format('{0}/{1}', variables('swaName'), 'appsettings')]",
             "properties": {
-                "backendResourceId": "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]",
-                "region": "[resourceGroup().location]"
-            }
-        },
-        {
-            "condition": "[equals(toLower(parameters('DeployTinyBlazorAdmin')), 'true')]",
-            "type": "Microsoft.Web/staticSites/userProvidedFunctionApps",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('swaName'), '/backend1')]",
-            "location": "Central US",
+              "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').InstrumentationKey]",
+              "APPLICATIONINSIGHTS_CONNECTION_STRING": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').InstrumentationKey]"
+            },
             "dependsOn": [
-                "[resourceId('Microsoft.Web/staticSites', parameters('swaName'))]",
-                "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
-            ],
-            "properties": {
-                "functionAppResourceId": "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]",
-                "functionAppRegion": "[resourceGroup().location]"
-            }
+                "[resourceId('Microsoft.Web/staticSites', variables('swaName'))]"
+            ]
         }
     ],
     "outputs": {}
