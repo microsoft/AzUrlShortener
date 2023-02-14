@@ -235,7 +235,7 @@ else
 
         try
         {
-            await Http.PostAsJsonAsync<ShortUrlRequest>("/api/UrlShortener", shortUrlRequest);
+            await Http.PostAsJsonAsync<ShortUrlRequest>("/api/UrlCreate", shortUrlRequest);
             await UpdateUIList();
             @* await grdUrls.ClearFilteringAsync();
                 await grdUrls.FilterByColumnAsync("RowKey", "equal", shortUrlRequest.Vanity); *@
