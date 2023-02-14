@@ -23,7 +23,7 @@ Fork, then clone the repo:
 
     git clone git@github.com:your-username/AzUrlShortener.git
 
-Push to your fork and [submit a pull request](https://github.com/fboucher/AzUrlShortener/compare/) against the `vnext` branch.
+Push to your fork and [submit a pull request](https://github.com/microsoft/AzUrlShortener/compare/) against the `vnext` branch.
 
 At this point you're waiting on us. We like to at least comment on pull requests within three days (and, typically, one day). We may suggest some changes or improvements or alternatives.
 
