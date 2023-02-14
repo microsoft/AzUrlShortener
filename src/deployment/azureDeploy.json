@@ -235,6 +235,7 @@
             "resources":
             [
                 {
+                    "condition": "[equals(toLower(variables('deployTinyBlazorAdmin')), 'true')]",
                     "type": "linkedBackends",
                     "apiVersion": "2022-03-01",
                     "name": "backend1",
@@ -248,6 +249,7 @@
                     }
                 },
                 {
+                    "condition": "[equals(toLower(variables('deployTinyBlazorAdmin')), 'true')]",
                     "type": "userProvidedFunctionApps",
                     "apiVersion": "2022-03-01",
                     "name": "backend1",
