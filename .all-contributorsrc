@@ -6,7 +6,7 @@
   "contributorsPerLine": 7,
   "skipCi": true,
   "projectName": "AzUrlShortener",
-  "projectOwner": "FBoucher",
+  "projectOwner": "microsoft",
   "repoType": "github",
   "repoHost": "https://github.com",
   "contributors": [
@@ -167,6 +167,15 @@
       "profile": "https://github.com/fatpacket",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "ch-rob",
+      "name": "Chad Voelker",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14352153?v=4",
+      "profile": "https://github.com/ch-rob",
+      "contributions": [
+        "code"
       ]
     }
   ],
