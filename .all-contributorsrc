@@ -170,6 +170,7 @@
       ]
     },
     {
+
       "login": "ch-rob",
       "name": "Chad Voelker",
       "avatar_url": "https://avatars.githubusercontent.com/u/14352153?v=4",
@@ -177,6 +178,14 @@
       "contributions": [
         "code",
         "doc"
+    },
+    {
+      "login": "davidmginn",
+      "name": "David Ginn",
+      "avatar_url": "https://avatars.githubusercontent.com/u/831166?v=4",
+      "profile": "https://github.com/davidmginn",
+      "contributions": [
+        "code"
       ]
     }
   ],
