@@ -76,7 +76,7 @@ namespace Cloud5mins.ShortenerTools.Functions
 
                 using (var reader = new StreamReader(req.Body))
                 {
-                    var strBody = reader.ReadToEnd();
+                    var strBody = await reader.ReadToEndAsync();
                     input = JsonSerializer.Deserialize<ShortUrlEntity>(strBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                     if (input == null)
                     {
