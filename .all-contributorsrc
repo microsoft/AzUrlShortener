@@ -170,7 +170,6 @@
       ]
     },
     {
-
       "login": "ch-rob",
       "name": "Chad Voelker",
       "avatar_url": "https://avatars.githubusercontent.com/u/14352153?v=4",
@@ -185,6 +184,15 @@
       "name": "David Ginn",
       "avatar_url": "https://avatars.githubusercontent.com/u/831166?v=4",
       "profile": "https://github.com/davidmginn",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "catcherwong",
+      "name": "Catcher Wong",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8394988?v=4",
+      "profile": "http://www.c-sharpcorner.com/members/catcher-wong",
       "contributions": [
         "code"
       ]
