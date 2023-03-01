@@ -55,7 +55,7 @@ namespace Cloud5mins.ShortenerTools
         //(not entirely secure but not sequential so generally not guessable)
         public static string GenerateUniqueRandomToken(int uniqueId)
         {
-            using (var generator = new RNGCryptoServiceProvider())
+            using (var generator = RandomNumberGenerator.Create())
             {
                 //minimum size I would suggest is 5, longer the better but we want short URLs!
                 var bytes = new byte[MinVanityCodeLength];
