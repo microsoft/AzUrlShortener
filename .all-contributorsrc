@@ -196,6 +196,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "stulzq",
+      "name": "Zhiqiang Li",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13200155?v=4",
+      "profile": "https://github.com/stulzq",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "commitConvention": "angular"
