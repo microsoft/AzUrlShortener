@@ -26,11 +26,9 @@ If you find a bug or would like to add a feature, check out those resources:
 
 To see the current work in progress on the [kanban board](https://github.com/users/FBoucher/projects/7) 
 
-
-[TinyBlazorAdmin]: /Medias/TinyBlazorAdmin.png
-[tinyBA_home]: /Medias/tinyBA_home.png
-[tinyBA_stats]: /Medias/inyBA_stats.png
-[tinyBA_urls]: /Medias/inyBA_urls.png
+[tinyBA_home]: /Media/tinyBA_home.png
+[tinyBA_stats]: /Media/tinyBA_stats.png
+[tinyBA_urls]: /Media/tinyBA_urls.png
 
 ## Contributors ✨
 
