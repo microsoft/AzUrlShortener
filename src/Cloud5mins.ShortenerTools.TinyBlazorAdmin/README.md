@@ -11,9 +11,9 @@ The project is now at version 3 and ready to be used! It is using Azure Static W
 
 Once authenticated you can manage your URLs and see some statistics. Thanks to [Syncfusion](https://www.syncfusion.com/blazor-components) for the community licences. Everyone can use Tiny Blazor Admin with that great look!
 
-![Tiny Blazor Admin URLs manager page][inyBA_urls]
+![Tiny Blazor Admin URLs manager page][tinyBA_urls]
 
-![Tiny Blazor Admin Statistics page][inyBA_stats]
+![Tiny Blazor Admin Statistics page][tinyBA_stats]
 
 
 # Deployment
@@ -27,10 +27,10 @@ If you find a bug or would like to add a feature, check out those resources:
 To see the current work in progress on the [kanban board](https://github.com/users/FBoucher/projects/7) 
 
 
-[TinyBlazorAdmin]: medias/TinyBlazorAdmin.png
-[tinyBA_home]: medias/tinyBA_home.png
-[inyBA_stats]: medias/inyBA_stats.png
-[inyBA_urls]: medias/inyBA_urls.png
+[TinyBlazorAdmin]: /Medias/TinyBlazorAdmin.png
+[tinyBA_home]: /Medias/tinyBA_home.png
+[tinyBA_stats]: /Medias/inyBA_stats.png
+[tinyBA_urls]: /Medias/inyBA_urls.png
 
 ## Contributors ✨
 
