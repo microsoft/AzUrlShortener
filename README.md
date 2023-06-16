@@ -23,7 +23,7 @@ Features:
 
 ## How To Deploy
 
-👉 **[Step by Step Deployment](https://github.com/microsoft/AzUrlShortener/wiki/How-to-deploy-your-AzUrlShortener)** (wiki pages) 👈 documentation is available here. If you would like to used the TinyBlazorAdmin as frontend (suggested) **you must first** follow the [steps to follow for TinyBlazorAdmin](https://github.com/microsoft/AzUrlShortener/wiki/TinyBlazorAdmin-Deployment).
+👉 **[Step by Step Deployment](https://github.com/microsoft/AzUrlShortener/wiki/How-to-deploy-your-AzUrlShortener)** (wiki pages) 👈 documentation is available here. If you would like to used the TinyBlazorAdmin as frontend (suggested) **you must first** follow the [steps to follow for TinyBlazorAdmin](https://github.com/microsoft/AzUrlShortener/wiki/How-to-deploy-TinyBlazorAdmin).
 
 If you want to **Update** or **Upgrade**, please refer to [this page](https://github.com/microsoft/AzUrlShortener/wiki/How-to-Update---Upgrade) (wiki pages). 
 
