@@ -3,7 +3,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
- Admin tools for [Azure Url Shortener](https://github.com/FBoucher/AzUrlShortener) using [Blazor Single Page Application (webassembly)](https://azure.microsoft.com/services/app-service/static/?WT.mc_id=dotnet-0000-frbouche).
+ Admin tools for [Azure Url Shortener](https://github.com/microsoft/AzUrlShortener) using [Blazor Single Page Application (webassembly)](https://azure.microsoft.com/services/app-service/static/?WT.mc_id=dotnet-0000-frbouche).
 
 The project is now at version 3 and ready to be used! It is using Azure Static Web App native security and the API is an Azure Function.
 
@@ -18,13 +18,11 @@ Once authenticated you can manage your URLs and see some statistics. Thanks to [
 
 # Deployment
 
-Until an automatic deployment is created, you will need to deploy some part manually. [All the steps to deploy the TinyBlazorAdmin app into Azure are listed here](https://github.com/FBoucher/TinyBlazorAdmin/wiki/Deployment). You can also run it somewhere else if you prefer, even locally.
+Until an automatic deployment is created, you will need to deploy some part manually. [All the steps to deploy the TinyBlazorAdmin app into Azure are listed here](https://github.com/microsoft/AzUrlShortener/wiki/How-to-deploy-TinyBlazorAdmin). You can also run it somewhere else if you prefer, even locally.
 
 # Contributing
 
 If you find a bug or would like to add a feature, check out those resources:
-
-To see the current work in progress on the [kanban board](https://github.com/users/FBoucher/projects/7) 
 
 [tinyBA_home]: /Media/tinyBA_home.png
 [tinyBA_stats]: /Media/tinyBA_stats.png
