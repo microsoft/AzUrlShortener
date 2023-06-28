@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageReference Include="cronos" Version="0.7.1" />
     <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
   </ItemGroup>
 
 </Project>

@@ -26,31 +26,9 @@ namespace Cloud5mins.ShortenerTools.Functions
             string shortUrl,
             ExecutionContext context)
         {
-            string redirectUrl = "https://azure.com";
-
-
-            if (!string.IsNullOrWhiteSpace(shortUrl))
-            {
-                redirectUrl = _settings.DefaultRedirectUrl ?? redirectUrl;
-
-                StorageTableHelper stgHelper = new StorageTableHelper(_settings.DataStorage);
-
-                var tempUrl = new ShortUrlEntity(string.Empty, shortUrl);
-                var newUrl = await stgHelper.GetShortUrlEntity(tempUrl);
-
-                if (newUrl != null)
-                {
-                    _logger.LogInformation($"Found it: {newUrl.Url}");
-                    newUrl.Clicks++;
-                    await stgHelper.SaveClickStatsEntity(new ClickStatsEntity(newUrl.RowKey));
-                    await stgHelper.SaveShortUrlEntity(newUrl);
-                    redirectUrl = WebUtility.UrlDecode(newUrl.ActiveUrl);
-                }
-            }
-            else
-            {
-                _logger.LogInformation("Bad Link, resorting to fallback.");
-            }
+            
+            UrlActions UrlActions = new UrlActions();
+            string redirectUrl = await UrlActions.Redirect(shortUrl, _settings, _logger);
 
             var res = req.CreateResponse(HttpStatusCode.Redirect);
             res.Headers.Add("Location", redirectUrl);
