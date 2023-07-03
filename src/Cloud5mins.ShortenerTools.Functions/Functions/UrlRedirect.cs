@@ -27,8 +27,8 @@ namespace Cloud5mins.ShortenerTools.Functions
             ExecutionContext context)
         {
             
-            UrlActions UrlActions = new UrlActions();
-            string redirectUrl = await UrlActions.Redirect(shortUrl, _settings, _logger);
+            UrlServices urlServices = new UrlServices(_settings, _logger);
+            string redirectUrl = await urlServices.Redirect(shortUrl);
 
             var res = req.CreateResponse(HttpStatusCode.Redirect);
             res.Headers.Add("Location", redirectUrl);
