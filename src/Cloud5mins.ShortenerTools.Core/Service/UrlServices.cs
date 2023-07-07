@@ -4,6 +4,8 @@ using Cloud5mins.ShortenerTools.Core.Messages;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
+namespace Cloud5mins.ShortenerTools.Core.Services;
+
 public class UrlServices
 {
 	private readonly ShortenerSettings _settings;

@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Hosting;
 using Cloud5mins.ShortenerTools.Core.Domain;
-
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 
 ShortenerSettings shortenerSettings = null;
 

@@ -1,3 +1,4 @@
+using Cloud5mins.ShortenerTools.Core.Services;
 using Cloud5mins.ShortenerTools.Core.Domain;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -27,8 +28,8 @@ namespace Cloud5mins.ShortenerTools.Functions
             ExecutionContext context)
         {
             
-            UrlActions UrlActions = new UrlActions();
-            string redirectUrl = await UrlActions.Redirect(shortUrl, _settings, _logger);
+            UrlServices UrlServices = new UrlServices(_settings, _logger);
+            string redirectUrl = await UrlServices.Redirect(shortUrl);
 
             var res = req.CreateResponse(HttpStatusCode.Redirect);
             res.Headers.Add("Location", redirectUrl);

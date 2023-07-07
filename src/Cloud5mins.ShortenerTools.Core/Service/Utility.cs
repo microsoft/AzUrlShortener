@@ -1,5 +1,4 @@
 using Cloud5mins.ShortenerTools.Core.Domain;
-using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System;
