@@ -8,4 +8,9 @@ public class ShortenerToolException: Exception
 	public ShortenerToolException(string message) : base(message)
 	{
 	}
+
+	public ShortenerToolException(HttpStatusCode statusCode, string message) : base(message)
+	{
+		StatusCode = statusCode;
+	}
 }
