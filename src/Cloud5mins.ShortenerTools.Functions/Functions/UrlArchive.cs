@@ -28,6 +28,7 @@ Output:
 using Cloud5mins.ShortenerTools.Core.Domain;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
@@ -51,6 +52,11 @@ namespace Cloud5mins.ShortenerTools.Functions
         }
 
         [Function("UrlArchive")]
+        [OpenApiOperation(operationId: "UrlArchive", tags: new[] { "Url" }, Summary = "Archive a short url")]
+        [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(ShortUrlEntity), Description = "Short url that needs to be archived.")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ShortUrlEntity), Description = "The OK response")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Unexpected error")]
+        [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Invalid inputs")]
         public async Task<HttpResponseData> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "api/UrlArchive")] HttpRequestData req,
         ExecutionContext context)

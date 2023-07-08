@@ -27,6 +27,7 @@ using Cloud5mins.ShortenerTools.Core.Messages;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
@@ -50,6 +51,11 @@ namespace Cloud5mins.ShortenerTools.Functions
         }
 
         [Function("UrlClickStatsByDay")]
+        [OpenApiOperation(operationId: "UrlClickStatsByDay", tags: new[] { "Url" }, Summary = "Get url click stats by day")]
+        [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(UrlClickStatsRequest), Description = "The stats request")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ClickDateList), Description = "The OK response")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string), Description = "Unexpected error")]
+        [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Invalid inputs")]
         public async Task<HttpResponseData> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "api/UrlClickStatsByDay")] HttpRequestData req,
         ExecutionContext context)

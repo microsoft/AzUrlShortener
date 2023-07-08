@@ -33,6 +33,7 @@ using Cloud5mins.ShortenerTools.Core.Domain;
 // using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
@@ -55,6 +56,11 @@ namespace Cloud5mins.ShortenerTools.Functions
         }
 
         [Function("UrlUpdate")]
+        [OpenApiOperation(operationId: "UrlUpdate", tags: new[] { "Url" }, Summary = "Update an existing short url")]
+        [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(ShortUrlEntity), Description = "JSON request body")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ShortUrlEntity), Description = "The OK response")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string))]
+        [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Invalid inputs")]
         public async Task<HttpResponseData> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "api/UrlUpdate")] HttpRequestData req,
                                     ExecutionContext context
