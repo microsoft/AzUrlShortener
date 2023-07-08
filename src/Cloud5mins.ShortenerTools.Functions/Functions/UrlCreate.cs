@@ -24,6 +24,7 @@ using Cloud5mins.ShortenerTools.Core.Domain;
 using Cloud5mins.ShortenerTools.Core.Messages;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
@@ -47,8 +48,14 @@ namespace Cloud5mins.ShortenerTools.Functions
         }
 
         [Function("UrlCreate")]
+        [OpenApiOperation(operationId: "UrlCreate", tags: new[] { "Url" }, Summary = "Create a new short url")]
+        [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(ShortRequest), Description = "Short url that needs to be added.")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ShortResponse), Description = "The OK response")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(string))]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.Conflict, contentType: "application/json", bodyType: typeof(string), Description = "Short uRL already exist")]
+        [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Invalid inputs")]
         public async Task<HttpResponseData> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "api/UrlCreate")] HttpRequestData req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "api/UrlCreate")] HttpRequestData req,
             ExecutionContext context
         )
         {
