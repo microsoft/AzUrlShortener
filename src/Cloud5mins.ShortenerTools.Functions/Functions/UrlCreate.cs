@@ -79,7 +79,7 @@ namespace Cloud5mins.ShortenerTools.Functions
                 if (string.IsNullOrWhiteSpace(input.Url))
                 {
                     var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                    await badResponse.WriteAsJsonAsync(new { Message = "The url parameter can not be empty." });
+                    await badResponse.WriteAsJsonAsync(new { Message = "The url parameter can not be empty." }, badResponse.StatusCode);
                     return badResponse;
                 }
 
@@ -87,7 +87,7 @@ namespace Cloud5mins.ShortenerTools.Functions
                 if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
                 {
                     var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                    await badResponse.WriteAsJsonAsync(new { Message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'." });
+                    await badResponse.WriteAsJsonAsync(new { Message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'." }, badResponse.StatusCode);
                     return badResponse;
                 }
 
@@ -106,7 +106,7 @@ namespace Cloud5mins.ShortenerTools.Functions
                     if (await stgHelper.IfShortUrlEntityExist(newRow))
                     {
                         var badResponse = req.CreateResponse(HttpStatusCode.Conflict);
-                        await badResponse.WriteAsJsonAsync(new { Message = "This Short URL already exist." });
+                        await badResponse.WriteAsJsonAsync(new { Message = "This Short URL already exist." }, badResponse.StatusCode);
                         return badResponse;
                     }
                 }
@@ -127,7 +127,7 @@ namespace Cloud5mins.ShortenerTools.Functions
                 _logger.LogError(ex, "An unexpected error was encountered.");
 
                 var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badResponse.WriteAsJsonAsync(new { ex.Message });
+                await badResponse.WriteAsJsonAsync(new { ex.Message }, badResponse.StatusCode);
                 return badResponse;
             }
 
