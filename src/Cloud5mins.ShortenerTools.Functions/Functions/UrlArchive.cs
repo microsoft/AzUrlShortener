@@ -26,6 +26,7 @@ Output:
 */
 
 using Cloud5mins.ShortenerTools.Core.Domain;
+using Cloud5mins.ShortenerTools.Core.Services;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
@@ -57,7 +58,6 @@ namespace Cloud5mins.ShortenerTools.Functions
         {
             _logger.LogInformation($"HTTP trigger - UrlArchive");
 
-            string userId = string.Empty;
             ShortUrlEntity input;
             ShortUrlEntity result;
             try
@@ -78,9 +78,8 @@ namespace Cloud5mins.ShortenerTools.Functions
                     }
                 }
 
-                StorageTableHelper stgHelper = new StorageTableHelper(_settings.DataStorage);
-
-                result = await stgHelper.ArchiveShortUrlEntity(input);
+                var urlServices = new UrlServices(_settings, _logger);
+                result = await urlServices.Archive(input);
             }
             catch (Exception ex)
             {

@@ -20,6 +20,11 @@ public class UrlServices
 
 	private StorageTableHelper StgHelper => _stgHelper ?? new StorageTableHelper(_settings.DataStorage);
 
+	public  async Task<ShortUrlEntity> Archive(ShortUrlEntity input)
+	{
+		ShortUrlEntity result = await _stgHelper.ArchiveShortUrlEntity(input);
+		return result;
+	}
 	public async Task<string> Redirect(string shortUrl)
 	{
 		string redirectUrl = "https://azure.com";
@@ -47,7 +52,6 @@ public class UrlServices
 
 		return redirectUrl;
 	}
-
 
 	public async Task<ListResponse> List(string host)
 	{
