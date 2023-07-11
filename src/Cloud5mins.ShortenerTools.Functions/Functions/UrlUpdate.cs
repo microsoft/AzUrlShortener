@@ -29,6 +29,7 @@ Output:
 */
 
 using Cloud5mins.ShortenerTools.Core.Domain;
+using Cloud5mins.ShortenerTools.Core.Services;
 // using Microsoft.Azure.WebJobs;
 // using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.Functions.Worker;
@@ -62,7 +63,6 @@ namespace Cloud5mins.ShortenerTools.Functions
         {
             _logger.LogInformation($"HTTP trigger - UrlUpdate");
 
-            string userId = string.Empty;
             ShortUrlEntity input;
             ShortUrlEntity result;
 
@@ -84,28 +84,15 @@ namespace Cloud5mins.ShortenerTools.Functions
                     }
                 }
 
-                // If the Url parameter only contains whitespaces or is empty return with BadRequest.
-                if (string.IsNullOrWhiteSpace(input.Url))
-                {
-                    var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
-                    await badRequest.WriteAsJsonAsync(new { Message = "The url parameter can not be empty." });
-                    return badRequest;
-                }
-
-                // Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
-                if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
-                {
-                    var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
-                    await badRequest.WriteAsJsonAsync(new { Message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'." });
-                    return badRequest;
-                }
-
-                StorageTableHelper stgHelper = new StorageTableHelper(_settings.DataStorage);
-
-                result = await stgHelper.UpdateShortUrlEntity(input);
                 var host = string.IsNullOrEmpty(_settings.CustomDomain) ? req.Url.Host : _settings.CustomDomain.ToString();
-                result.ShortUrl = Utility.GetShortUrl(host, result.RowKey);
-
+                var urlServices = new UrlServices(_settings, _logger);
+                result = await urlServices.Update(input, host);
+            }
+            catch (ShortenerToolException shortEx)
+            {
+                var badResponse = req.CreateResponse(shortEx.StatusCode);
+                await badResponse.WriteAsJsonAsync(new { shortEx.Message });
+                return badResponse;
             }
             catch (Exception ex)
             {
