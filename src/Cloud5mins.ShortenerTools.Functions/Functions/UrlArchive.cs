@@ -58,24 +58,14 @@ namespace Cloud5mins.ShortenerTools.Functions
         {
             _logger.LogInformation($"HTTP trigger - UrlArchive");
 
-            ShortUrlEntity input;
             ShortUrlEntity result;
             try
             {
                 // Validation of the inputs
-                if (req == null)
+                ShortUrlEntity input = await InputValidator.ValidateShortUrlEntity(req);
+                if(input == null)
                 {
                     return req.CreateResponse(HttpStatusCode.NotFound);
-                }
-
-                using (var reader = new StreamReader(req.Body))
-                {
-                    var body = await reader.ReadToEndAsync();
-                    input = JsonSerializer.Deserialize<ShortUrlEntity>(body, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    if (input == null)
-                    {
-                        return req.CreateResponse(HttpStatusCode.NotFound);
-                    }
                 }
 
                 var urlServices = new UrlServices(_settings, _logger);

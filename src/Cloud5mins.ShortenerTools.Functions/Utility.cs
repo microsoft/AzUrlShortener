@@ -11,61 +11,72 @@ using System.Threading.Tasks;
 
 
 
+using Microsoft.Azure.Functions.Worker.Http;
+using Cloud5mins.ShortenerTools.Core.Messages;
+using System.IO;
+using System.Text.Json;
+
 namespace Cloud5mins.ShortenerTools
 {
-    public static class Utility
+    public static class InputValidator
     {
-        //reshuffled for randomisation, same unique characters just jumbled up, you can replace with your own version
-        private const string ConversionCode = "FjTG0s5dgWkbLf_8etOZqMzNhmp7u6lUJoXIDiQB9-wRxCKyrPcv4En3Y21aASHV";
-        private static readonly int Base = ConversionCode.Length;
-        //sets the length of the unique code to add to vanity
-        private const int MinVanityCodeLength = 5;
 
-        public static async Task<string> GetValidEndUrl(string vanity, StorageTableHelper stgHelper)
+        public static async Task<ShortRequest> ValidateShortRequest(HttpRequestData req)
         {
-            if (string.IsNullOrEmpty(vanity))
+            ShortRequest input;
+            if (req == null)
             {
-                var newKey = await stgHelper.GetNextTableId();
-                string getCode() => Encode(newKey);
-                if (await stgHelper.IfShortUrlEntityExistByVanity(getCode()))
-                    return await GetValidEndUrl(vanity, stgHelper);
-
-                return string.Join(string.Empty, getCode());
+                return null;
             }
-            else
+
+            using var reader = new StreamReader(req.Body);
+            var strBody = await reader.ReadToEndAsync();
+            input = JsonSerializer.Deserialize<ShortRequest>(strBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            if (input == null)
             {
-                return string.Join(string.Empty, vanity);
+                return null;
             }
+            return input;
         }
 
-        public static string Encode(int i)
-        {
-            if (i == 0)
-                return ConversionCode[0].ToString();
 
-            return GenerateUniqueRandomToken(i);
-        }
-
-        public static string GetShortUrl(string host, string vanity)
+        public static async Task<ShortUrlEntity> ValidateShortUrlEntity(HttpRequestData req)
         {
-            return host + "/" + vanity;
-        }
-
-        // generates a unique, random, and alphanumeric token for the use as a url 
-        //(not entirely secure but not sequential so generally not guessable)
-        public static string GenerateUniqueRandomToken(int uniqueId)
-        {
-            using (var generator = RandomNumberGenerator.Create())
+            ShortUrlEntity input;
+            if (req == null)
             {
-                //minimum size I would suggest is 5, longer the better but we want short URLs!
-                var bytes = new byte[MinVanityCodeLength];
-                generator.GetBytes(bytes);
-                var chars = bytes
-                    .Select(b => ConversionCode[b % ConversionCode.Length]);
-                var token = new string(chars.ToArray());
-                var reversedToken = string.Join(string.Empty, token.Reverse());
-                return uniqueId + reversedToken;
+                return null;
             }
+
+            using var reader = new StreamReader(req.Body);
+            var strBody = await reader.ReadToEndAsync();
+            input = JsonSerializer.Deserialize<ShortUrlEntity>(strBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            if (input == null)
+            {
+                return null;
+            }
+            return input;
         }
+
+        public static async Task<UrlClickStatsRequest> ValidateUrlClickStatsRequest(HttpRequestData req)
+        {
+            UrlClickStatsRequest input;
+            if (req == null)
+            {
+                return null;
+            }
+
+            using var reader = new StreamReader(req.Body);
+            var strBody = await reader.ReadToEndAsync();
+            input = JsonSerializer.Deserialize<UrlClickStatsRequest>(strBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            if (input == null)
+            {
+                return null;
+            }
+            return input;
+        }
+
+
+
     }
 }

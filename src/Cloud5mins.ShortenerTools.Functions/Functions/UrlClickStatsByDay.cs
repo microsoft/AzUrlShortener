@@ -57,27 +57,16 @@ namespace Cloud5mins.ShortenerTools.Functions
         {
             _logger.LogInformation($"HTTP trigger: UrlClickStatsByDay");
 
-            UrlClickStatsRequest input;
             var result = new ClickDateList();
 
-            // Validation of the inputs
-            if (req == null)
+            UrlClickStatsRequest input = await InputValidator.ValidateUrlClickStatsRequest(req);
+            if(input == null)
             {
                 return req.CreateResponse(HttpStatusCode.NotFound);
             }
-
+            
             try
             {
-                using (var reader = new StreamReader(req.Body))
-                {
-                    var strBody = await reader.ReadToEndAsync();
-                    input = JsonSerializer.Deserialize<UrlClickStatsRequest>(strBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    if (input == null)
-                    {
-                        return req.CreateResponse(HttpStatusCode.NotFound);
-                    }
-                }
-
                 var host = string.IsNullOrEmpty(_settings.CustomDomain) ? req.Url.Host : _settings.CustomDomain.ToString();
                 var urlServices = new UrlServices(_settings, _logger);
                 result = await urlServices.ClickStatsByDay(input, host);

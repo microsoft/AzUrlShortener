@@ -54,24 +54,14 @@ namespace Cloud5mins.ShortenerTools.Functions
         )
         {
             _logger.LogInformation($"__trace creating shortURL: {req}");
-            ShortRequest input;
             ShortResponse result;
             try
             {
                 // Validation of the inputs
-                if (req == null)
+                ShortRequest input = await InputValidator.ValidateShortRequest(req);
+                if(input == null)
                 {
                     return req.CreateResponse(HttpStatusCode.NotFound);
-                }
-
-                using (var reader = new StreamReader(req.Body))
-                {
-                    var strBody = await reader.ReadToEndAsync();
-                    input = JsonSerializer.Deserialize<ShortRequest>(strBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    if (input == null)
-                    {
-                        return req.CreateResponse(HttpStatusCode.NotFound);
-                    }
                 }
 
                 var host = string.IsNullOrEmpty(_settings.CustomDomain) ? req.Url.Host : _settings.CustomDomain;
