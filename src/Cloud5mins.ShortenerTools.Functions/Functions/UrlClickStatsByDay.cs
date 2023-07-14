@@ -24,6 +24,7 @@ Output:
 
 using Cloud5mins.ShortenerTools.Core.Domain;
 using Cloud5mins.ShortenerTools.Core.Messages;
+using Cloud5mins.ShortenerTools.Core.Services;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -56,7 +57,6 @@ namespace Cloud5mins.ShortenerTools.Functions
         {
             _logger.LogInformation($"HTTP trigger: UrlClickStatsByDay");
 
-            string userId = string.Empty;
             UrlClickStatsRequest input;
             var result = new ClickDateList();
 
@@ -78,19 +78,9 @@ namespace Cloud5mins.ShortenerTools.Functions
                     }
                 }
 
-                StorageTableHelper stgHelper = new StorageTableHelper(_settings.DataStorage);
-
-                var rawStats = await stgHelper.GetAllStatsByVanity(input.Vanity);
-
-                result.Items = rawStats.GroupBy(s => DateTime.Parse(s.Datetime).Date)
-                                            .Select(stat => new ClickDate
-                                            {
-                                                DateClicked = stat.Key.ToString("yyyy-MM-dd"),
-                                                Count = stat.Count()
-                                            }).OrderBy(s => DateTime.Parse(s.DateClicked).Date).ToList<ClickDate>();
-
                 var host = string.IsNullOrEmpty(_settings.CustomDomain) ? req.Url.Host : _settings.CustomDomain.ToString();
-                result.Url = Utility.GetShortUrl(host, input.Vanity);
+                var urlServices = new UrlServices(_settings, _logger);
+                result = await urlServices.ClickStatsByDay(input, host);
             }
             catch (Exception ex)
             {

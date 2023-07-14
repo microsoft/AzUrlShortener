@@ -163,5 +163,29 @@ public class UrlServices
 			return result;
 		}
 
+
+		public async Task<ClickDateList> ClickStatsByDay(UrlClickStatsRequest input, string host)
+		{
+            var result = new ClickDateList();
+			try
+            {
+                var rawStats = await StgHelper.GetAllStatsByVanity(input.Vanity);
+
+                result.Items = rawStats.GroupBy(s => DateTime.Parse(s.Datetime).Date)
+                                            .Select(stat => new ClickDate
+                                            {
+                                                DateClicked = stat.Key.ToString("yyyy-MM-dd"),
+                                                Count = stat.Count()
+                                            }).OrderBy(s => DateTime.Parse(s.DateClicked).Date).ToList<ClickDate>();
+
+                result.Url = Utility.GetShortUrl(host, input.Vanity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error was encountered.");
+                throw;
+            }
+			return result;
+		}
 }
 
