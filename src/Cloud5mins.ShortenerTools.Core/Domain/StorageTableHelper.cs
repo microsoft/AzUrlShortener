@@ -74,6 +74,7 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
         /// <returns>ShortUrlEntity</returns>
         public async Task<ShortUrlEntity> GetShortUrlEntityByVanity(string vanity)
         {
+            vanity = vanity.ToLower();
             var tblUrls = GetUrlsTable();
             TableContinuationToken token = null;
             ShortUrlEntity shortUrlEntity = null;
@@ -169,7 +170,7 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
                 }
                 else{
                     rangeQuery = new TableQuery<ClickStatsEntity>().Where(
-                    filter: TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, vanity));
+                    filter: TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, vanity.ToLower()));
                 }
 
                 var queryResult = await tblUrls.ExecuteQuerySegmentedAsync(rangeQuery, token);

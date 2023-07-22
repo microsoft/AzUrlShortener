@@ -95,6 +95,7 @@ namespace Cloud5mins.ShortenerTools.Functions
 
                 string longUrl = input.Url.Trim();
                 string vanity = string.IsNullOrWhiteSpace(input.Vanity) ? "" : input.Vanity.Trim();
+                vanity = vanity.ToLower();
                 string title = string.IsNullOrWhiteSpace(input.Title) ? "" : input.Title.Trim();
 
 
