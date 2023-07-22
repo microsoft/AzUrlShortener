@@ -30,11 +30,11 @@ namespace Cloud5mins.ShortenerTools
                 if (await stgHelper.IfShortUrlEntityExistByVanity(getCode()))
                     return await GetValidEndUrl(vanity, stgHelper);
 
-                return string.Join(string.Empty, getCode());
+                return string.Join(string.Empty, getCode()).ToLower();
             }
             else
             {
-                return string.Join(string.Empty, vanity);
+                return string.Join(string.Empty, vanity).ToLower();
             }
         }
 
@@ -48,7 +48,7 @@ namespace Cloud5mins.ShortenerTools
 
         public static string GetShortUrl(string host, string vanity)
         {
-            return host + "/" + vanity;
+            return host + "/" + vanity.ToLower();
         }
 
         // generates a unique, random, and alphanumeric token for the use as a url 

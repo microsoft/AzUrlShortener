@@ -12,7 +12,7 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
 
         public ClickStatsEntity(string vanity)
         {
-            PartitionKey = vanity;
+            PartitionKey = vanity.ToLower();;
             RowKey = Guid.NewGuid().ToString();
             Datetime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
         }
