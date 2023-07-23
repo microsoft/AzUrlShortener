@@ -23,6 +23,13 @@
                 "description": "Default URL used when key passed by the user is not found."
             }
         },
+        "rootRedirectUrl": {
+            "defaultValue": "https://azure.com",
+            "type": "string",
+            "metadata": {
+                "description": "URL used someone access the root (/)."
+            }
+        },
         "GitHubURL": {
             "type": "string",
             "defaultValue": "https://github.com/microsoft/AzUrlShortener.git",
@@ -117,6 +124,14 @@
                         {
                             "name": "defaultRedirectUrl",
                             "value": "[parameters('defaultRedirectUrl')]"
+                        },
+                        {
+                            "name": "rootRedirectUrl",
+                            "value": "[parameters('rootRedirectUrl')]"
+                        },
+                        {
+                            "name": "AzureWebJobsDisableHomepage",
+                            "value": "true"
                         }
                     ]
                 },
