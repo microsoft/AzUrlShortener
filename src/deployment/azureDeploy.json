@@ -9,6 +9,14 @@
                 "description": "Name used as base-template to name the resources to be deployed in Azure."
             }
         },
+        "deployingWhat":{
+            "type": "array",
+            "allowedValues": ["Full UrlShortener", "Light UrlShortener"],
+            "defaultValue": "Light UrlShortener",
+            "metadata": {
+                "description" : "Full UrlShortener deploys the complete but unsecure Azure function. Light UrlShortener deploys only the redirect Azure function and required the an admin tool (ex: TinyBlazorAdmin)"
+            }
+        },
         "existingSWAName": {
             "type": "string",
             "defaultValue": "SKIP-THIS-RESOURCE",
@@ -60,7 +68,7 @@
         "storageAccountName": "[tolower(concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),16)), variables('suffix'), 'sa'))]",
         "funcHhostingPlanName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),13)), '-', variables('suffix'), '-asp')]",
         "insightsAppName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),13)), '-', variables('suffix'), '-ai')]",
-        "functionProjectFolder": "src"
+        "functionProjectFolder": "[if(equals(parameters('deployingWhat'), 'Light UrlShortener'), 'src\\Cloud5mins.ShortenerTools.FunctionsLight', 'src\\Cloud5mins.ShortenerTools.Functions')]"
     },
     "resources": [
         {
@@ -117,6 +125,10 @@
                         {
                             "name": "defaultRedirectUrl",
                             "value": "[parameters('defaultRedirectUrl')]"
+                        },
+                        {
+                            "name": "PROJECT",
+                            "value": "[variables('functionProjectFolder')]"
                         }
                     ]
                 },
