@@ -10,7 +10,7 @@
             }
         },
         "deployingWhat":{
-            "type": "array",
+            "type": "string",
             "allowedValues": ["Full UrlShortener", "Light UrlShortener"],
             "defaultValue": "Light UrlShortener",
             "metadata": {
