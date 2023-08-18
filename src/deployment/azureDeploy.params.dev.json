@@ -3,19 +3,22 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "baseName": {
-            "value": "shortenertool"
+            "value": "url2del"
+        },
+        "deployingWhat":{
+            "value": "Light UrlShortener"
         },
         "existingSWAName": {
-            "value": "shortenertool-swa"
+            "value": "admin2del"
         },
         "GitHubURL": {
-            "value": "https://github.com/ch-rob/AzUrlShortener"
+            "value": "https://github.com/fboucheros/AzUrlShortener"
         },
         "GitHubBranch": {
-            "value": "UpdateDeployment2"
+            "value": "core-extra"
         },
         "OwnerName": {
-            "value": "Chad V"
+            "value": "frank"
         },
         "defaultRedirectUrl": {
             "value": "https://azure.com"

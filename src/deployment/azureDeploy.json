@@ -164,7 +164,7 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]",
-                "[resourceId('Microsoft.Web/staticSites', variables('swaName'))]",
+                "[resourceId('Microsoft.Web/staticSites', variables('swaName'))]"
             ]
         },
         {
@@ -225,7 +225,8 @@
             "type": "Microsoft.Web/staticSites",
             "name": "[variables('swaName')]",
             "location": "[resourceGroup().location]",
-            "apiVersion": "2022-03-01"
+            "apiVersion": "2022-03-01",
+            "properties": {}
         },
         {
             "condition": "[equals(toLower(variables('deployTinyBlazorAdmin')), 'true')]",
@@ -235,10 +236,8 @@
             "properties": {
               "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').InstrumentationKey]",
               "APPLICATIONINSIGHTS_CONNECTION_STRING": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').InstrumentationKey]",
-              "DataStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/staticSites', variables('swaName'))]"
-            ]
+              "DataStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"            
+            }
         }
     ],
     "outputs": {}

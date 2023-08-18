@@ -3,7 +3,7 @@
 az group create -n crv-urlshortener-rg2 -l eastus
 
 ## validate with Parameter file
-az deployment group validate -g crv-urlshortener-rg2  --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.dev.json"  --verbose 
+az deployment group validate -g todelete  --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.dev.json"  --verbose 
 
 ## deploy it with parameter file
 # az deployment group create  -g crv-urlshortener-rg2 -n urlshortenerv1 --template-file "deployment/azureDeploy.json" --parameters "deployment/azureDeploy.params.dev.json"  --verbose
