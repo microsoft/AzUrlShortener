@@ -224,6 +224,13 @@
         },
         {
             "condition": "[equals(toLower(variables('deployTinyBlazorAdmin')), 'true')]",
+            "type": "Microsoft.Web/staticSites",
+            "name": "[variables('swaName')]",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2022-03-01"
+        },
+        {
+            "condition": "[equals(toLower(variables('deployTinyBlazorAdmin')), 'true')]",
             "type": "Microsoft.Web/staticSites/config",
             "apiVersion": "2022-03-01",
             "name": "[format('{0}/{1}', variables('swaName'), 'appsettings')]",
