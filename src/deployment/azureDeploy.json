@@ -165,8 +165,6 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]",
                 "[resourceId('Microsoft.Web/staticSites', variables('swaName'))]",
-                "[format('{0}/resourceGroups/{1}/providers/Microsoft.Web/staticSites/{2}/userProvidedFunctionApps/backend1', subscription().id, resourceGroup().name, variables('swaName'))]",
-                "[format('{0}/resourceGroups/{1}/providers/Microsoft.Web/staticSites/{2}/linkedBackends/backend1', subscription().id, resourceGroup().name, variables('swaName'))]"
             ]
         },
         {
