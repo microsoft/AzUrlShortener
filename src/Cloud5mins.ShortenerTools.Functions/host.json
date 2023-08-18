@@ -7,10 +7,5 @@
         "excludedTypes": "Request"
       }
     }
-  },
-  "extensions": {
-    "http": {
-      "routePrefix": "api"
-    }
   }
 }
