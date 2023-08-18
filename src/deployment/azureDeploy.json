@@ -129,6 +129,10 @@
                         {
                             "name": "PROJECT",
                             "value": "[variables('functionProjectFolder')]"
+                        },
+                        {
+                            "name": "AzureFunctionsJobHost__extensions__http__routePrefix",
+                            "value": ""
                         }
                     ]
                 },
