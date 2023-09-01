@@ -87,6 +87,28 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
 
             return shortUrlEntity;
         }
+
+        /// <summary>
+        /// Returns the ShortUrlEntity of the <paramref name="url"/>
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns>ShortUrlEntity</returns>
+        public async Task<ShortUrlEntity> GetShortUrlEntityByUrl(string url)
+        {
+            var tblUrls = GetUrlsTable();
+            TableContinuationToken token = null;
+            ShortUrlEntity shortUrlEntity = null;
+            do
+            {
+                TableQuery<ShortUrlEntity> query = new TableQuery<ShortUrlEntity>().Where(
+                    filter: TableQuery.GenerateFilterCondition("Url", QueryComparisons.Equal, url));
+                var queryResult = await tblUrls.ExecuteQuerySegmentedAsync(query, token);
+                shortUrlEntity = queryResult.Results.FirstOrDefault();
+            } while (token != null);
+
+            return shortUrlEntity;
+        }
+
         public async Task SaveClickStatsEntity(ClickStatsEntity newStats)
         {
             TableOperation insOperation = TableOperation.InsertOrMerge(newStats);
