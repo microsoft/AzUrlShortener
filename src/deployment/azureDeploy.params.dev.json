@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "baseName": {
+            "value": "shortenertool"
+        },
+        "existingSWAName": {
+            "value": "shortenertool-swa"
+        },
+        "GitHubURL": {
+            "value": "https://github.com/ch-rob/AzUrlShortener"
+        },
+        "GitHubBranch": {
+            "value": "UpdateDeployment2"
+        },
+        "OwnerName": {
+            "value": "Chad V"
+        },
+        "defaultRedirectUrl": {
+            "value": "https://azure.com"
+        }
+    }
+}

@@ -1,0 +1,26 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <AuthorizeView>
+                <Authorized >
+                        Hello, @context.User.Identity?.Name! 
+                        <a class="nav-link btn btn-link" href="/logout?post_logout_redirect_uri=/">Log out</a>
+                </Authorized>
+                <NotAuthorized>
+                    <a href="/login">Log in</a>
+                </NotAuthorized>
+            </AuthorizeView>
+            <a href="https://github.com/FBoucher/AzUrlShortener" target="_blank">About</a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
