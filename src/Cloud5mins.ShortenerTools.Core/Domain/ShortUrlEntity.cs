@@ -1,7 +1,4 @@
 using Microsoft.Azure.Cosmos.Table;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 
 namespace Cloud5mins.ShortenerTools.Core.Domain
@@ -46,7 +43,7 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
                     }
                     else
                     {
-                        _schedules = JsonSerializer.Deserialize<Schedule[]>(SchedulesPropertyRaw).ToList<Schedule>();
+                        _schedules = JsonSerializer.Deserialize<Schedule[]>(SchedulesPropertyRaw)?.ToList<Schedule>() ?? new List<Schedule>();
                     }
                 }
                 return _schedules;
@@ -83,7 +80,7 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
             Clicks = 0;
             IsArchived = false;
 
-            if(schedules?.Length>0)
+            if (schedules?.Length > 0)
             {
                 Schedules = schedules.ToList<Schedule>();
                 SchedulesPropertyRaw = JsonSerializer.Serialize<List<Schedule>>(Schedules);
