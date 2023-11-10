@@ -16,10 +16,8 @@ namespace Cloud5mins.ShortenerTools.Functions
 
         public UrlRedirect(ILoggerFactory loggerFactory, ShortenerSettings settings)
         {
-            console.log("UrlRedirect constructor");
             _logger = loggerFactory.CreateLogger<UrlRedirect>();
             _logger.LogInformation("UrlRedirect in constructor");
-            _logger.LogInformation("DataStorage: " + settings.DataStorage.ToString());
             _settings = settings;
         }
 
@@ -30,15 +28,14 @@ namespace Cloud5mins.ShortenerTools.Functions
             string shortUrl,
             ExecutionContext context)
         {
-            console.log("UrlRedirect starting");
             UrlServices UrlServices = new UrlServices(_settings, _logger);
-            console.log("Services created");
+            _logger.LogInformation("Services created");
             _logger.LogInformation($"Redirecting {shortUrl}");
             string redirectUrl = await UrlServices.Redirect(shortUrl);
-            console.log("got the redirect url");
+            _logger.LogInformation("got the redirect url");
             var res = req.CreateResponse(HttpStatusCode.Redirect);
             res.Headers.Add("Location", redirectUrl);
-            console.log("response created");
+            _logger.LogInformation("response created");
             return res;
 
         }
