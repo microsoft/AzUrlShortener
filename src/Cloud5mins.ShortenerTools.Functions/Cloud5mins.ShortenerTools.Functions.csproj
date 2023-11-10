@@ -5,6 +5,12 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Functions\UrlRedirect.cs.bak" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Functions\UrlRedirect.cs.bak" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="cronos" Version="0.7.1" />
     <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.8" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.0.12" />
