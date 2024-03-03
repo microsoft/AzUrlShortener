@@ -285,7 +285,7 @@ else
 
     public async Task ArchiveShortUrl(ShortUrlEntity urlEntity)
     {
-        await Http.PostAsJsonAsync<ShortUrlEntity>("/api/api/UrlList", urlEntity);
+        await Http.PostAsJsonAsync<ShortUrlEntity>("/api/UrlList", urlEntity);
         await UpdateUIList();
     }
 

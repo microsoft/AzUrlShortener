@@ -28,6 +28,7 @@ namespace Cloud5mins.ShortenerTools.Functions
             string shortUrl,
             ExecutionContext context)
         {
+            _logger.LogInformation("Function reached");
             UrlServices UrlServices = new UrlServices(_settings, _logger);
             _logger.LogInformation("Services created");
             _logger.LogInformation($"Redirecting {shortUrl}");
