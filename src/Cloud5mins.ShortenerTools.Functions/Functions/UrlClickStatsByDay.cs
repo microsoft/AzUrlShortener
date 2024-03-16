@@ -52,7 +52,7 @@ namespace Cloud5mins.ShortenerTools.Functions
 
         [Function("UrlClickStatsByDay")]
         public async Task<HttpResponseData> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "api/UrlClickStatsByDay")] HttpRequestData req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "UrlClickStatsByDay")] HttpRequestData req,
         ExecutionContext context)
         {
             _logger.LogInformation($"HTTP trigger: UrlClickStatsByDay");

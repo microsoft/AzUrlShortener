@@ -57,7 +57,7 @@ namespace Cloud5mins.ShortenerTools.Functions
 
         [Function("UrlUpdate")]
         public async Task<HttpResponseData> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "api/UrlUpdate")] HttpRequestData req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "UrlUpdate")] HttpRequestData req,
                                     ExecutionContext context
                                 )
         {

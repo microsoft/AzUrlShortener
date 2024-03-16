@@ -51,8 +51,9 @@ public class UrlServices
 				_logger.LogInformation("Bad Link, resorting to fallback.");
 			}
 		}
-		catch(Exception exp){
-			_logger.LogInformation($"Problem getting to storage: {exp.Message}");
+		catch (Exception ex)
+		{
+			_logger.LogInformation($"Problem accessing storage: {ex.Message}");
 		}
 			return redirectUrl;
 		}
@@ -86,110 +87,117 @@ public class UrlServices
 		{
 			ShortResponse result;
 
-			try
-			{
-
-				// If the Url parameter only contains whitespaces or is empty return with BadRequest.
-				if (string.IsNullOrWhiteSpace(input.Url))
-				{
-					throw new ShortenerToolException(HttpStatusCode.BadRequest, "The url parameter can not be empty.");
-				}
-
-				// Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
-				if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
-				{
-					throw new ShortenerToolException(HttpStatusCode.BadRequest, $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
-				}
-
-				string longUrl = input.Url.Trim();
-				string vanity = string.IsNullOrWhiteSpace(input.Vanity) ? "" : input.Vanity.Trim();
-				string title = string.IsNullOrWhiteSpace(input.Title) ? "" : input.Title.Trim();
-
-				ShortUrlEntity newRow;
-
-				if (!string.IsNullOrEmpty(vanity))
-				{
-					newRow = new ShortUrlEntity(longUrl, vanity, title, input.Schedules);
-
-					if (await StgHelper.IfShortUrlEntityExist(newRow))
-					{
-						throw new ShortenerToolException(HttpStatusCode.Conflict, "This Short URL already exist.");
-					}
-				}
-				else
-				{
-					newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, StgHelper), title, input.Schedules);
-				}
-
-				await StgHelper.SaveShortUrlEntity(newRow);
-
-				result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
-
-				_logger.LogInformation("Short Url created.");
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, "An unexpected error was encountered.");
-				throw;
-			}
-
-			return result;
-		}
-
-		public async Task<ShortUrlEntity> Update(ShortUrlEntity input, string host)
-		{
-			ShortUrlEntity result;
-
-			try
-			{
-				// If the Url parameter only contains whitespaces or is empty return with BadRequest.
-				if (string.IsNullOrWhiteSpace(input.Url))
-				{
-					throw new ShortenerToolException(HttpStatusCode.BadRequest, "The url parameter can not be empty.");
-				}
-
-				// Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
-				if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
-				{
-					throw new ShortenerToolException(HttpStatusCode.BadRequest, $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
-				}
-
-				result = await StgHelper.UpdateShortUrlEntity(input);
-				result.ShortUrl = Utility.GetShortUrl(host, result.RowKey);
-
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, "An unexpected error was encountered.");
-				throw;
-			}
-
-			return result;
-		}
-
-
-		public async Task<ClickDateList> ClickStatsByDay(UrlClickStatsRequest input, string host)
-		{
-			var result = new ClickDateList();
-			try
-			{
-				var rawStats = await StgHelper.GetAllStatsByVanity(input.Vanity);
-
-				result.Items = rawStats.GroupBy(s => DateTime.Parse(s.Datetime).Date)
-											.Select(stat => new ClickDate
-											{
-												DateClicked = stat.Key.ToString("yyyy-MM-dd"),
-												Count = stat.Count()
-											}).OrderBy(s => DateTime.Parse(s.DateClicked).Date).ToList<ClickDate>();
-
-				result.Url = Utility.GetShortUrl(host, input.Vanity);
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, "An unexpected error was encountered.");
-				throw;
-			}
-			return result;
-		}
+		return result;
 	}
+
+	public async Task<ShortResponse> Create(ShortRequest input, string host)
+	{
+		ShortResponse result;
+
+		try
+		{
+
+			// If the Url parameter only contains whitespaces or is empty return with BadRequest.
+			if (string.IsNullOrWhiteSpace(input.Url))
+			{
+				throw new ShortenerToolException(HttpStatusCode.BadRequest, "The url parameter can not be empty.");
+			}
+
+			// Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
+			if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
+			{
+				throw new ShortenerToolException(HttpStatusCode.BadRequest, $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
+			}
+
+			string longUrl = input.Url.Trim();
+			string vanity = string.IsNullOrWhiteSpace(input.Vanity) ? "" : input.Vanity.Trim();
+			string title = string.IsNullOrWhiteSpace(input.Title) ? "" : input.Title.Trim();
+
+			ShortUrlEntity newRow;
+
+			if (!string.IsNullOrEmpty(vanity))
+			{
+				newRow = new ShortUrlEntity(longUrl, vanity, title, input.Schedules);
+
+				if (await StgHelper.IfShortUrlEntityExist(newRow))
+				{
+					throw new ShortenerToolException(HttpStatusCode.Conflict, "This Short URL already exist.");
+				}
+			}
+			else
+			{
+				newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, StgHelper), title, input.Schedules);
+			}
+
+			await StgHelper.SaveShortUrlEntity(newRow);
+
+			result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
+
+			_logger.LogInformation("Short Url created.");
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "An unexpected error was encountered.");
+			throw;
+		}
+
+		return result;
+	}
+
+	public async Task<ShortUrlEntity> Update(ShortUrlEntity input, string host)
+	{
+		ShortUrlEntity result;
+
+		try
+		{
+			// If the Url parameter only contains whitespaces or is empty return with BadRequest.
+			if (string.IsNullOrWhiteSpace(input.Url))
+			{
+				throw new ShortenerToolException(HttpStatusCode.BadRequest, "The url parameter can not be empty.");
+			}
+
+			// Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
+			if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
+			{
+				throw new ShortenerToolException(HttpStatusCode.BadRequest, $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
+			}
+
+			result = await StgHelper.UpdateShortUrlEntity(input);
+			result.ShortUrl = Utility.GetShortUrl(host, result.RowKey);
+
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "An unexpected error was encountered.");
+			throw;
+		}
+
+		return result;
+	}
+
+
+	public async Task<ClickDateList> ClickStatsByDay(UrlClickStatsRequest input, string host)
+	{
+		var result = new ClickDateList();
+		try
+		{
+			var rawStats = await StgHelper.GetAllStatsByVanity(input.Vanity);
+
+			result.Items = rawStats.GroupBy(s => DateTime.Parse(s.Datetime).Date)
+										.Select(stat => new ClickDate
+										{
+											DateClicked = stat.Key.ToString("yyyy-MM-dd"),
+											Count = stat.Count()
+										}).OrderBy(s => DateTime.Parse(s.DateClicked).Date).ToList<ClickDate>();
+
+			result.Url = Utility.GetShortUrl(host, input.Vanity);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "An unexpected error was encountered.");
+			throw;
+		}
+		return result;
+	}
+}
 
