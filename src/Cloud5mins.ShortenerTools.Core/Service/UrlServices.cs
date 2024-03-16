@@ -55,37 +55,30 @@ public class UrlServices
 		{
 			_logger.LogInformation($"Problem accessing storage: {ex.Message}");
 		}
-			return redirectUrl;
-		}
+		return redirectUrl;
+	}
 
 	public async Task<ListResponse> List(string host)
+	{
+		_logger.LogInformation($"Starting UrlList...");
+
+		var result = new ListResponse();
+		string userId = string.Empty;
+
+		try
 		{
-			_logger.LogInformation($"Starting UrlList...");
-
-			var result = new ListResponse();
-			string userId = string.Empty;
-
-			try
+			result.UrlList = await StgHelper.GetAllShortUrlEntities();
+			result.UrlList = result.UrlList.Where(p => !(p.IsArchived ?? false)).ToList();
+			foreach (ShortUrlEntity url in result.UrlList)
 			{
-				result.UrlList = await StgHelper.GetAllShortUrlEntities();
-				result.UrlList = result.UrlList.Where(p => !(p.IsArchived ?? false)).ToList();
-				foreach (ShortUrlEntity url in result.UrlList)
-				{
-					url.ShortUrl = Utility.GetShortUrl(host, url.RowKey);
-				}
+				url.ShortUrl = Utility.GetShortUrl(host, url.RowKey);
 			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, "An unexpected error was encountered.");
-				throw;
-			}
-
-			return result;
 		}
-
-		public async Task<ShortResponse> Create(ShortRequest input, string host)
+		catch (Exception ex)
 		{
-			ShortResponse result;
+			_logger.LogError(ex, "An unexpected error was encountered.");
+			throw;
+		}
 
 		return result;
 	}
