@@ -75,7 +75,7 @@
             "apiVersion": "2022-03-01",
             "name": "[variables('funcAppName')]",
             "type": "Microsoft.Web/sites",
-            "kind": "functionapp",
+            "kind": "functionapp,linux",
             "location": "[resourceGroup().location]",
             "tags": {
                 "Owner": "[parameters('OwnerName')]",
@@ -137,8 +137,8 @@
                     ]
                 },
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('funcHhostingPlanName'))]",
-                "use32BitWorkerProcess": true,
-                "netFrameworkVersion": "v6.0",
+                "linuxFxVersion": "DOTNET-ISOLATED|8.0",
+                "netFrameworkVersion": "v8.0",
                 "clientAffinityEnabled": true
             },
             "resources": [
