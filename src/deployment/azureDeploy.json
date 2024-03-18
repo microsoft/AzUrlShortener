@@ -45,6 +45,12 @@
                 "description": "Name of the branch to use when deploying (Default = main)."
             }
         },
+        "repositoryToken": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Allows the ARM deployment process to interact with the GitHub repo holding the static site source code."
+            }
+        },
         "ExpireOn": {
             "type": "string",
             "defaultValue": "[utcNow('yyyy-MM-dd')]",
@@ -230,7 +236,16 @@
             "name": "[variables('swaName')]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2022-03-01",
-            "properties": {}
+            "properties": {
+                "repositoryUrl": "[parameters('GitHubURL')]",
+                    "branch": "[parameters('GitHubBranch')]",
+                    "repositoryToken": "[parameters('repositoryToken')]",
+                    "buildProperties": {
+                        "appLocation": "./src/Cloud5mins.ShortenerTools.TinyBlazorAdmin/",
+                        "apiLocation": "./src/Cloud5mins.ShortenerTools.Functions/",
+                        "appArtifactLocation": "wwwroot"
+                    }
+            }
         },
         {
             "condition": "[equals(toLower(variables('deployTinyBlazorAdmin')), 'true')]",
