@@ -236,6 +236,10 @@
             "name": "[variables('swaName')]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2022-03-01",
+            "sku": {
+                "Tier": "Free",
+                "Name": "Free"
+            },
             "properties": {
                 "repositoryUrl": "[parameters('GitHubURL')]",
                     "branch": "[parameters('GitHubBranch')]",
@@ -256,7 +260,11 @@
               "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').InstrumentationKey]",
               "APPLICATIONINSIGHTS_CONNECTION_STRING": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').InstrumentationKey]",
               "DataStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"            
-            }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/staticSites/', variables('swaName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/',variables('storageAccountName'))]"
+            ]
         }
     ],
     "outputs": {}
