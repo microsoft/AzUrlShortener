@@ -74,7 +74,7 @@
         "storageAccountName": "[tolower(concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),16)), variables('suffix'), 'sa'))]",
         "funcHhostingPlanName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),13)), '-', variables('suffix'), '-asp')]",
         "insightsAppName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),13)), '-', variables('suffix'), '-ai')]",
-        "functionProjectFolder": "[if(equals(parameters('deployingWhat'), 'Light UrlShortener'), 'src\\Cloud5mins.ShortenerTools.FunctionsLight', 'src\\Cloud5mins.ShortenerTools.Functions')]"
+        "functionProjectFolder": "[if(equals(parameters('deployingWhat'), 'Light UrlShortener'), 'src/Cloud5mins.ShortenerTools.FunctionsLight', 'src/Cloud5mins.ShortenerTools.Functions')]"
     },
     "resources": [
         {
@@ -94,6 +94,7 @@
             ],
             "properties": {
                 "name": "[variables('funcAppName')]",
+                "reserved": true,
                 "siteConfig": {
                     "appSettings": [
                         {
@@ -178,7 +179,7 @@
             ]
         },
         {
-            "apiVersion": "2021-03-01",
+            "apiVersion": "2022-03-01",
             "name": "[variables('funcHhostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
             "location": "[resourceGroup().location]",
@@ -216,10 +217,10 @@
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[variables('storageAccountName')]",
             "location": "[resourceGroup().location]",
-            "apiVersion": "2019-06-01",
+            "apiVersion": "2022-05-01",
+            "kind": "StorageV2",
             "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
+                "name": "Standard_LRS"
             },
             "tags": {
                 "displayName": "[variables('storageAccountName')]",
@@ -227,7 +228,8 @@
                 "ExpireOn": "[parameters('ExpireOn')]"
             },
             "properties": {
-                "supportsHttpsTrafficOnly": true
+                "supportsHttpsTrafficOnly": true,
+                "defaultToOAuthAuthentication": true
             }
         },
         {
@@ -254,7 +256,7 @@
         {
             "condition": "[equals(toLower(variables('deployTinyBlazorAdmin')), 'true')]",
             "type": "Microsoft.Web/staticSites/config",
-            "apiVersion": "2022-03-01",
+            "apiVersion": "2021-01-15",
             "name": "[format('{0}/{1}', variables('swaName'), 'appsettings')]",
             "properties": {
               "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').InstrumentationKey]",
