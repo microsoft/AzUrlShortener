@@ -17,13 +17,6 @@
                 "description" : "Full UrlShortener deploys the complete but unsecure Azure function. Light UrlShortener deploys only the redirect Azure function and required the an admin tool (ex: TinyBlazorAdmin)"
             }
         },
-        "existingSWAName": {
-            "type": "string",
-            "defaultValue": "SKIP-THIS-RESOURCE",
-            "metadata": {
-                "description": "Optional (SKIP-THIS-RESOURCE): If provided, this is name of the the already created Static Web App in this resource group. If not provided: API will be standalone"
-            }
-        },
         "defaultRedirectUrl": {
             "defaultValue": "https://azure.com",
             "type": "string",
@@ -63,8 +56,6 @@
     "variables": {
         "suffix": "[substring(toLower(uniqueString(resourceGroup().id, resourceGroup().location)),0,5)]",
         "funcAppName": "[toLower(concat(parameters('baseName'), '-', variables('suffix'), '-fa'))]",
-        "swaName": "[parameters('existingSWAName')]",
-        "deployTinyBlazorAdmin": "[if(equals(parameters('existingSWAName'), 'SKIP-THIS-RESOURCE'), 'false', 'true')]",
         "storageAccountName": "[tolower(concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),16)), variables('suffix'), 'sa'))]",
         "funcHhostingPlanName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),13)), '-', variables('suffix'), '-asp')]",
         "insightsAppName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),13)), '-', variables('suffix'), '-ai')]",
@@ -167,8 +158,7 @@
                 }
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]",
-                "[resourceId('Microsoft.Web/staticSites', variables('swaName'))]"
+                "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
             ]
         },
         {
