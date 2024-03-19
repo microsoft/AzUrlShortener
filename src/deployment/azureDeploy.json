@@ -45,12 +45,6 @@
                 "description": "Name of the branch to use when deploying (Default = main)."
             }
         },
-        "repositoryToken": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Allows the ARM deployment process to interact with the GitHub repo holding the static site source code."
-            }
-        },
         "ExpireOn": {
             "type": "string",
             "defaultValue": "[utcNow('yyyy-MM-dd')]",
@@ -74,14 +68,14 @@
         "storageAccountName": "[tolower(concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),16)), variables('suffix'), 'sa'))]",
         "funcHhostingPlanName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),13)), '-', variables('suffix'), '-asp')]",
         "insightsAppName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),13)), '-', variables('suffix'), '-ai')]",
-        "functionProjectFolder": "[if(equals(parameters('deployingWhat'), 'Light UrlShortener'), 'src/Cloud5mins.ShortenerTools.FunctionsLight', 'src/Cloud5mins.ShortenerTools.Functions')]"
+        "functionProjectFolder": "[if(equals(parameters('deployingWhat'), 'Light UrlShortener'), 'src\\Cloud5mins.ShortenerTools.FunctionsLight', 'src\\Cloud5mins.ShortenerTools.Functions')]"
     },
     "resources": [
         {
             "apiVersion": "2022-03-01",
             "name": "[variables('funcAppName')]",
             "type": "Microsoft.Web/sites",
-            "kind": "functionapp,linux",
+            "kind": "functionapp",
             "location": "[resourceGroup().location]",
             "tags": {
                 "Owner": "[parameters('OwnerName')]",
@@ -94,7 +88,6 @@
             ],
             "properties": {
                 "name": "[variables('funcAppName')]",
-                "reserved": true,
                 "siteConfig": {
                     "appSettings": [
                         {
@@ -144,7 +137,7 @@
                     ]
                 },
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('funcHhostingPlanName'))]",
-                "linuxFxVersion": "DOTNET-ISOLATED|8.0",
+                "use32BitWorkerProcess": true,
                 "netFrameworkVersion": "v8.0",
                 "clientAffinityEnabled": true
             },
@@ -179,7 +172,7 @@
             ]
         },
         {
-            "apiVersion": "2022-03-01",
+            "apiVersion": "2021-03-01",
             "name": "[variables('funcHhostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
             "location": "[resourceGroup().location]",
@@ -217,10 +210,10 @@
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[variables('storageAccountName')]",
             "location": "[resourceGroup().location]",
-            "apiVersion": "2022-05-01",
-            "kind": "StorageV2",
+            "apiVersion": "2019-06-01",
             "sku": {
-                "name": "Standard_LRS"
+                "name": "Standard_LRS",
+                "tier": "Standard"
             },
             "tags": {
                 "displayName": "[variables('storageAccountName')]",
@@ -228,45 +221,8 @@
                 "ExpireOn": "[parameters('ExpireOn')]"
             },
             "properties": {
-                "supportsHttpsTrafficOnly": true,
-                "defaultToOAuthAuthentication": true
+                "supportsHttpsTrafficOnly": true
             }
-        },
-        {
-            "condition": "[equals(toLower(variables('deployTinyBlazorAdmin')), 'true')]",
-            "type": "Microsoft.Web/staticSites",
-            "name": "[variables('swaName')]",
-            "location": "[resourceGroup().location]",
-            "apiVersion": "2022-03-01",
-            "sku": {
-                "Tier": "Free",
-                "Name": "Free"
-            },
-            "properties": {
-                "repositoryUrl": "[parameters('GitHubURL')]",
-                    "branch": "[parameters('GitHubBranch')]",
-                    "repositoryToken": "[parameters('repositoryToken')]",
-                    "buildProperties": {
-                        "appLocation": "./src/Cloud5mins.ShortenerTools.TinyBlazorAdmin/",
-                        "apiLocation": "./src/Cloud5mins.ShortenerTools.Functions/",
-                        "appArtifactLocation": "wwwroot"
-                    }
-            }
-        },
-        {
-            "condition": "[equals(toLower(variables('deployTinyBlazorAdmin')), 'true')]",
-            "type": "Microsoft.Web/staticSites/config",
-            "apiVersion": "2021-01-15",
-            "name": "[format('{0}/{1}', variables('swaName'), 'appsettings')]",
-            "properties": {
-              "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').InstrumentationKey]",
-              "APPLICATIONINSIGHTS_CONNECTION_STRING": "[reference(concat('microsoft.insights/components/', variables('insightsAppName')), '2015-05-01').InstrumentationKey]",
-              "DataStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"            
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/staticSites/', variables('swaName'))]",
-                "[concat('Microsoft.Storage/storageAccounts/',variables('storageAccountName'))]"
-            ]
         }
     ],
     "outputs": {}
