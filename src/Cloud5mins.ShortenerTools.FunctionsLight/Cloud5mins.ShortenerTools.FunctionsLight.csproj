@@ -3,19 +3,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <AzureFunctionsVersion>v4</AzureFunctionsVersion>
     <OutputType>Exe</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Functions\UrlRedirect.cs.bak" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Functions\UrlRedirect.cs.bak" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="cronos" Version="0.7.1" />
-    <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.8" />
-    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.17.2"/>
     <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.21.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.17.2"/>
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cloud5mins.ShortenerTools.Core\Cloud5mins.ShortenerTools.Core.csproj" />
@@ -28,5 +22,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext"/>
   </ItemGroup>
 </Project>
