@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: './src/Cloud5mins.ShortenerTools.FunctionsLight' # set this to the path to your web app project, defaults to the repository root
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'src/Cloud5mins.ShortenerTools.FunctionsLight' # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '8.0.x' # set this to the dotnet version to use
 
 jobs:
