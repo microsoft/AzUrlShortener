@@ -215,7 +215,17 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "davidop",
+      "name": "David Oliva Paredes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7433346?v=4",
+      "profile": "https://davidop.code.blog/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
-  "commitConvention": "angular"
+  "commitConvention": "angular",
+  "commitType": "docs"
 }
