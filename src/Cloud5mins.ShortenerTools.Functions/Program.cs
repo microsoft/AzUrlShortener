@@ -12,7 +12,7 @@ namespace Cloud5mins.ShortenerTools
             ShortenerSettings shortenerSettings = null;
 
             var host = new HostBuilder()
-                .ConfigureFunctionsWorkerDefaults()
+                .ConfigureFunctionsWebApplication()
                 .ConfigureServices((context, services) =>
                 {
                     // Add our global configuration instance
