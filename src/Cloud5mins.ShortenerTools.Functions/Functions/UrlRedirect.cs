@@ -27,6 +27,7 @@ namespace Cloud5mins.ShortenerTools.Functions
             ExecutionContext context)
         {
             string redirectUrl = "https://azure.com";
+            shortUrl = shortUrl.ToLower();
 
 
             if (!string.IsNullOrWhiteSpace(shortUrl))
