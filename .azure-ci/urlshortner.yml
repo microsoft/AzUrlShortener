@@ -1,0 +1,25 @@
+trigger:
+- main
+
+pr:
+    branches:
+        include:
+            - main
+    paths:
+        exclude:
+            - .azure-ci/*
+            - .devcontainer/*
+            - .github/*
+            - README.md
+
+resources:
+    repositories:
+        - repository: templates
+          type: github
+          name: RollKall/cops-build-templates
+          # ref: refs/tags/v1.0
+          ref: refs/heads/COPS-549-create-url-shortner
+          endpoint: "RollKall"
+
+extends:
+    template: src/services/tiny-url/latest.yml@templates # Template reference
