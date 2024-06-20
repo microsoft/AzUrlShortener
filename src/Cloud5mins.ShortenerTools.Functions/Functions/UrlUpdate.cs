@@ -88,7 +88,7 @@ namespace Cloud5mins.ShortenerTools.Functions
                 if (string.IsNullOrWhiteSpace(input.Url))
                 {
                     var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
-                    await badRequest.WriteAsJsonAsync(new { Message = "The url parameter can not be empty." });
+                    await badRequest.WriteAsJsonAsync(new { Message = "The url parameter can not be empty." }, badRequest.StatusCode);
                     return badRequest;
                 }
 
@@ -96,7 +96,7 @@ namespace Cloud5mins.ShortenerTools.Functions
                 if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
                 {
                     var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
-                    await badRequest.WriteAsJsonAsync(new { Message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'." });
+                    await badRequest.WriteAsJsonAsync(new { Message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'." }, badRequest.StatusCode);
                     return badRequest;
                 }
 
@@ -112,7 +112,7 @@ namespace Cloud5mins.ShortenerTools.Functions
                 _logger.LogError(ex, "An unexpected error was encountered.");
 
                 var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequest.WriteAsJsonAsync(new { ex.Message });
+                await badRequest.WriteAsJsonAsync(new { ex.Message }, badRequest.StatusCode);
                 return badRequest;
             }
 

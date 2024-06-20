@@ -65,7 +65,7 @@ namespace Cloud5mins.ShortenerTools.Functions
             {
                 _logger.LogError(ex, "An unexpected error was encountered.");
                 var badres = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badres.WriteAsJsonAsync(new { ex.Message });
+                await badres.WriteAsJsonAsync(new { ex.Message }, badres.StatusCode);
                 return badres;
             }
 
