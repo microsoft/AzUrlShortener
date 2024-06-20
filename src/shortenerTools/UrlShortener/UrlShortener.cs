@@ -47,7 +47,7 @@ namespace Cloud5mins.Function
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ShortResponse))]
         [FunctionName("UrlShortener")]
         public static async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequestMessage req,
+        [HttpTrigger(AuthorizationLevel.Function, "post", "get", Route = null)] HttpRequestMessage req,
         ILogger log)
         {
             log.LogInformation($"C# HTTP trigger function processed this request: {req}");
