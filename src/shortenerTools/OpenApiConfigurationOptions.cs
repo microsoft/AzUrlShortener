@@ -20,7 +20,7 @@ An API key is required to use this API. Enter your API key in authorize/api key 
 
 ### URL Redirect
 
-A short url is provided as part of the response to the /UrlShortener endpoint. To manually reconstruct a short url, append the vanity to the domain name: `https://tows.at/{vanity}`. [Example short url](https://beac.co/da)
+A short url is provided as part of the response to the /UrlShortener endpoint. To manually reconstruct a short url, append the vanity to the domain name: `https://tows.at/{vanity}`. [Example short url](https://tows.at/TRAXERO)
 
 Custom domains names can be configured upon request."
         };
