@@ -25,10 +25,15 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using System.Net;
 using System.Net.Http;
 using Cloud5mins.domain;
-using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.OpenApi.Models;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
+using System.Net;
 
 namespace Cloud5mins.Function
 {
@@ -36,47 +41,45 @@ namespace Cloud5mins.Function
     public static class UrlShortener
     {
 
+        [OpenApiOperation(operationId: "UrlShortener", tags: new[] { "Urls" }, Summary = "Shorten a URL", Description = "Creates the short version of a URL and returns the result. If no vanity is specified one will be automatically generated for you.", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(ShortRequest), Required = true)]
+        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ShortResponse))]
         [FunctionName("UrlShortener")]
-        public static async Task<HttpResponseMessage> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequestMessage req, 
-        ILogger log, 
-        ExecutionContext context)
+        public static async Task<IActionResult> Run(
+        [HttpTrigger(AuthorizationLevel.Function, "post", "get", Route = null)] HttpRequestMessage req,
+        ILogger log)
         {
             log.LogInformation($"C# HTTP trigger function processed this request: {req}");
-
+            var x = req.RequestUri.GetLeftPart(UriPartial.Authority);
             // Validation of the inputs
             if (req == null)
             {
-                return req.CreateResponse(HttpStatusCode.NotFound);
+                return new NotFoundResult();
             }
 
             ShortRequest input = await req.Content.ReadAsAsync<ShortRequest>();
             if (input == null)
             {
-                return req.CreateResponse(HttpStatusCode.NotFound);
+                return new NotFoundResult();
             }
 
 
             // If the Url parameter only contains whitespaces or is empty return with BadRequest.
             if (string.IsNullOrWhiteSpace(input.Url))
             {
-                return req.CreateErrorResponse(HttpStatusCode.BadRequest, "The url parameter can not be empty.");
+                return new BadRequestObjectResult("The url parameter can not be empty.");
             }
 
             // Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
             if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
             {
-                return req.CreateErrorResponse(HttpStatusCode.BadRequest, $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
+                return new BadRequestObjectResult($"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
             }
-            
-            var result = new ShortResponse();
-            var config = new ConfigurationBuilder()
-                .SetBasePath(context.FunctionAppDirectory)
-                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
 
-            StorageTableHelper stgHelper = new StorageTableHelper(config["UlsDataStorage"]); 
+            var result = new ShortResponse();
+
+            StorageTableHelper stgHelper = new StorageTableHelper(Environment.GetEnvironmentVariable("UlsDataStorage"));
 
             try
             {
@@ -86,12 +89,12 @@ namespace Cloud5mins.Function
 
                 ShortUrlEntity newRow;
 
-                if(!string.IsNullOrEmpty(vanity))
+                if (!string.IsNullOrEmpty(vanity))
                 {
                     newRow = new ShortUrlEntity(longUrl, vanity, title);
-                    if(await stgHelper.IfShortUrlEntityExist(newRow))
+                    if (await stgHelper.IfShortUrlEntityExist(newRow))
                     {
-                        return req.CreateResponse(HttpStatusCode.Conflict, "This Short URL already exist.");
+                        return new ConflictObjectResult("This Short URL already exist.");
                     }
                 }
                 else
@@ -101,19 +104,25 @@ namespace Cloud5mins.Function
 
                 await stgHelper.SaveShortUrlEntity(newRow);
 
-                var host = req.RequestUri.GetLeftPart(UriPartial.Authority);
-                log.LogInformation($"-> host = {host}");
+                string host = null;
+                if (req.Headers.TryGetValues("X-Forwarded-Host", out IEnumerable<string> hosts))
+                {
+                    var builder = new UriBuilder(req.RequestUri);
+                    builder.Host = hosts.ToArray().First();
+                    host = builder.Uri.GetLeftPart(UriPartial.Authority);
+                }
+                if (string.IsNullOrEmpty(host)) { host = req.RequestUri.GetLeftPart(UriPartial.Authority); }
                 result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
 
                 log.LogInformation("Short Url created.");
-             }
+            }
             catch (Exception ex)
             {
                 log.LogError(ex, "An unexpected error was encountered.");
-                return req.CreateResponse(HttpStatusCode.BadRequest, ex);
+                return new BadRequestObjectResult(ex);
             }
 
-            return req.CreateResponse(HttpStatusCode.OK, result);
+            return new OkObjectResult(result);
         }
     }
 }

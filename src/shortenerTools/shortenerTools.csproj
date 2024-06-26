@@ -6,6 +6,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.7" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.0.2" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.OpenApi" Version="0.8.1-preview" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.7" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.5" />
   </ItemGroup>
@@ -16,9 +17,9 @@
     <None Update="proxies.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None  Update="local.settings.json">
+    <None Update="local.settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-    </None >
+    </None>
   </ItemGroup>
 </Project>

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos.Table;
 
@@ -34,7 +35,7 @@ namespace Cloud5mins.domain
             CloudStorageAccount storageAccount = this.CreateStorageAccountFromConnectionString();
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient(new TableClientConfiguration());
             CloudTable table = tableClient.GetTableReference(tableName);
-            table.CreateIfNotExists();
+            //table.CreateIfNotExists(); Removed to cut response time in half
 
             return table;
         }
@@ -85,6 +86,22 @@ namespace Cloud5mins.domain
             return lstShortUrl;
         }
 
+        /// <summary>
+        /// Returns the ShortUrlEntity of the <paramref name="vanity"/>
+        /// </summary>
+        /// <param name="vanity"></param>
+        /// <returns>ShortUrlEntity</returns>
+        public async Task<ShortUrlEntity> GetShortUrlEntityByVanity(string vanity)
+        {
+            var tempUrl = new ShortUrlEntity(string.Empty, vanity);
+            return await GetShortUrlEntity(tempUrl);
+        }
+
+        public async Task<bool> IfShortUrlEntityExistByVanity(string vanity)
+        {
+            ShortUrlEntity shortUrlEntity = await GetShortUrlEntityByVanity(vanity);
+            return (shortUrlEntity != null);
+        }
 
         public async Task<bool> IfShortUrlEntityExist(ShortUrlEntity row)
         {
