@@ -35,7 +35,7 @@ namespace Cloud5mins.domain
             CloudStorageAccount storageAccount = this.CreateStorageAccountFromConnectionString();
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient(new TableClientConfiguration());
             CloudTable table = tableClient.GetTableReference(tableName);
-            table.CreateIfNotExists();
+            //table.CreateIfNotExists(); Removed to cut response time in half
 
             return table;
         }
