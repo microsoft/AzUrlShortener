@@ -93,18 +93,8 @@ namespace Cloud5mins.domain
         /// <returns>ShortUrlEntity</returns>
         public async Task<ShortUrlEntity> GetShortUrlEntityByVanity(string vanity)
         {
-            var tblUrls = GetUrlsTable();
-            TableContinuationToken token = null;
-            ShortUrlEntity shortUrlEntity = null;
-            do
-            {
-                TableQuery<ShortUrlEntity> query = new TableQuery<ShortUrlEntity>().Where(
-                    filter: TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, vanity));
-                var queryResult = await tblUrls.ExecuteQuerySegmentedAsync(query, token);
-                shortUrlEntity = queryResult.Results.FirstOrDefault();
-            } while (token != null);
-
-            return shortUrlEntity;
+            var tempUrl = new ShortUrlEntity(string.Empty, vanity);
+            return await GetShortUrlEntity(tempUrl);
         }
 
         public async Task<bool> IfShortUrlEntityExistByVanity(string vanity)
