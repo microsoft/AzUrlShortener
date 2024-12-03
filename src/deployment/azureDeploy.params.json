@@ -6,13 +6,16 @@
             "value": "AzUrlShortTools"
         },
         "OwnerName": {
-            "value": "Me"
+            "value": "Harry"
         },
         "GitHubBranch": {
             "value": "main"
         },
         "defaultRedirectUrl": {
-            "value": "https://azure.com"
+            "value": "https://kimpel.com"
+        },
+        "existingSWAName": {
+            "value": "url-shortener-swa"
         }
     }
 }
