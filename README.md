@@ -6,7 +6,6 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-23-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-
 ![UrlShortener][UrlShortener]
 
 A simple and easy to use and to deploy budget-friendly Url Shortener for everyone. It runs in your Azure (Microsoft cloud) subscription.  
@@ -19,25 +18,27 @@ Features:
 - Keep Statistics of your clicks.
 - Budget-friendly and 100% open-source.
 - Extensible for more enterprise-friendly configurations
-- Simple step by step deployment. 
+- Simple step by step deployment.
 
 ## How To Deploy
 
+[Deploy to Azure](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgithub.com%2Fharrykimpel%2FMicrosoft-AzUrlShortener%2Fblob%2Fmain%2Fsrc%2Fdeployment%2FazureDeploy.json)
+
 👉 **[Step by Step Deployment](https://github.com/microsoft/AzUrlShortener/wiki/How-to-deploy-your-AzUrlShortener)** (wiki pages) 👈 documentation is available here. If you would like to used the TinyBlazorAdmin as frontend (suggested) **you must first** follow the [steps to follow for TinyBlazorAdmin](https://github.com/microsoft/AzUrlShortener/wiki/How-to-deploy-TinyBlazorAdmin).
 
-If you want to **Update** or **Upgrade**, please refer to [this page](https://github.com/microsoft/AzUrlShortener/wiki/How-to-Update---Upgrade) (wiki pages). 
+If you want to **Update** or **Upgrade**, please refer to [this page](https://github.com/microsoft/AzUrlShortener/wiki/How-to-Update---Upgrade) (wiki pages).
 
 ## How To Use It
 
-AzUrlShortener is an API that doesn't have any admin UI by default. There are many different ways to manage your Short Urls, from a direct HTTP call to a fancy website. 
+AzUrlShortener is an API that doesn't have any admin UI by default. There are many different ways to manage your Short Urls, from a direct HTTP call to a fancy website.
 
-We suggest [Tiny Blazor Admin](./src/Cloud5mins.ShortenerTools.TinyBlazorAdmin/README.md); it's a static website. 
+We suggest [Tiny Blazor Admin](./src/Cloud5mins.ShortenerTools.TinyBlazorAdmin/README.md); it's a static website.
 
 ![Tiny Blazor Admin looks](/Media/TinyBlazorAdmin.gif)
 
 By default, without any specific Admin tool, you can use an API client like [Postman](https://www.postman.com/) or a plugin to VSCode like [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client). We've included simple API calls via a postman collection and environment [here](./src/tools).
 
-You can also directly update the tables in storage using [Azure Storage Explorer](https://github.com/microsoft/AzUrlShortener/wiki/How-to-Use-Azure-Storage-Explorer-as-Admin-Tools-for-AzUrlShortener). 
+You can also directly update the tables in storage using [Azure Storage Explorer](https://github.com/microsoft/AzUrlShortener/wiki/How-to-Use-Azure-Storage-Explorer-as-Admin-Tools-for-AzUrlShortener).
 
 ---
 
@@ -51,26 +52,23 @@ There is also a videos that explains a bit how things works and does a quick tou
 | ---          | --- |
 | [![Tiny Blazor Admin looks](/Media/AzUrlShortener_preview.gif)](https://youtu.be/fzXy2D77WMM) | [![Azure Friday](/Media/AzureFriday_preview.gif)](https://learn.microsoft.com/en-us/shows/azure-friday/azurlshortener-an-open-source-budget-friendly-url-shortener)  |
 
-
 ---
-
 
 ## What's Next?
 
-We are always trying to make it better. See the [AzUrlShortener project](https://github.com/users/FBoucher/projects/6/views/4) page and [issues](https://github.com/microsoft/AzUrlShortener/issues) to see the current progress. 
+We are always trying to make it better. See the [AzUrlShortener project](https://github.com/users/FBoucher/projects/6/views/4) page and [issues](https://github.com/microsoft/AzUrlShortener/issues) to see the current progress.
 
 You are invited to go into the [Discussion](https://github.com/microsoft/AzUrlShortener/discussions) tab to share your feedback, ask question, and suggest new feature!
 
 Current Backlog contains:
+
 - A deployment option with everything combined into TinyBlazorAdmin
 - More Statistics
 - QR Code
 - More tracking information (like Country)
 - etc.
 
-
 ---
-
 
 ## Contributing
 
@@ -128,14 +126,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
-
-
 > This project was inspired by a project created by [Jeremy Likness](https://github.com/JeremyLikness) that you can find here [jlik.me](https://github.com/JeremyLikness/jlik.me).
 
-
 [UrlShortener]: https://github.com/microsoft/AzUrlShortener/raw/main/Media/UrlShortener_600.png
-[ThumbnailYTAzUrlShortener_EN]: https://github.com/microsoft/AzUrlShortener/raw/main/Media/ThumbnailYTAzUrlShortener_EN.png
-[glo]: https://github.com/microsoft/AzUrlShortener/raw/main/Media/glo-board_screenshot.png
-[AzFunctionGitSync]: https://github.com/microsoft/AzUrlShortener/raw/main/Media/AzFunctionGitSync.png
-
-
