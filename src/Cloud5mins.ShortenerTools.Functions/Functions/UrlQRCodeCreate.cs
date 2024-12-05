@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Cloud5mins.ShortenerTools.Core.Domain;
+using Cloud5mins.ShortenerTools.Core.Messages;
 
 namespace Cloud5mins.Function
 {
