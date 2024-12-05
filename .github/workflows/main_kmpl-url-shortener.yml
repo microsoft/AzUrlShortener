@@ -32,7 +32,7 @@ jobs:
         shell: pwsh
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-          dotnet build --configuration Release --output ./output
+          dotnet build -r win-x64 --configuration Release --output ./output
           popd
       
       - name: Login to Azure
