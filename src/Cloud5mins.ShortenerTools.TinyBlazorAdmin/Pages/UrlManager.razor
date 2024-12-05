@@ -61,6 +61,14 @@ else
         </GridColumn>
         <GridColumn Field=@nameof(ShortUrlEntity.Title) HeaderText="Title"></GridColumn>
         <GridColumn Field=@nameof(ShortUrlEntity.Url) HeaderText="Url"></GridColumn>
+        <GridColumn Field=@nameof(ShortUrlEntity.Url) HeaderText="QR Code">
+            <Template>
+                @{
+                    var url = (context as ShortUrlEntity);
+                    <a @href="@(() => GetQRCodeShortUrl(url))">QR Code<a/>
+                }
+            </Template>
+        </GridColumn>
         <GridColumn Width="100" TextAlign="TextAlign.Right" Field=@nameof(ShortUrlEntity.Clicks) HeaderText="Clicks">
             <Template>
                 @{
@@ -206,14 +214,14 @@ else
         {
             using var response = await Http.GetAsync("/api/UrlList");
             if(response.IsSuccessStatusCode){
-                urls = await response.Content.ReadFromJsonAsync<ListResponse>();    
+                urls = await response.Content.ReadFromJsonAsync<ListResponse>();
             }
             else{
                 switch (response.StatusCode)
                 {
-                    case HttpStatusCode.Unauthorized: NavigationManager.NavigateTo("/unauthorized"); 
+                    case HttpStatusCode.Unauthorized: NavigationManager.NavigateTo("/unauthorized");
                         break;
-                    default: NavigationManager.NavigateTo("/404"); 
+                    default: NavigationManager.NavigateTo("/404");
                         break;
                 }
             }
@@ -289,4 +297,9 @@ else
         await UpdateUIList();
     }
 
+    public async Task GetQRCodeShortUrl(ShortUrlEntity urlEntity)
+    {
+        var res = await Http.GetAsync<ShortUrlEntity>("/api/UrlQRCodeCreate", urlEntity);
+        return res;
+    }
 }
