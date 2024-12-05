@@ -17,7 +17,7 @@ namespace Cloud5mins.Function
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "UrlQRCodeCreate/{shortUrl}")] 
             HttpRequestData req,
             string shortUrl, 
-            ExecutionContext context //,
+            ExecutionContext context) //,
             //ILogger log)
         {
 
