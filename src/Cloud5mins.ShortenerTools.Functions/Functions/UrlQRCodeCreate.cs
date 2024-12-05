@@ -6,7 +6,6 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Http;
-using Cloud5mins.domain;
 using Microsoft.Extensions.Configuration;
 
 namespace Cloud5mins.Function
