@@ -51,6 +51,6 @@ jobs:
         id: fa
         with:
           app-name: 'shortenertool-oa3jr-fa'
-          slot-name: 'Production'
+          # slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
           
