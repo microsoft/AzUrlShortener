@@ -10,8 +10,17 @@ using Microsoft.Extensions.Configuration;
 
 namespace Cloud5mins.Function
 {
-    public static class UrlQRCodeCreate
+    public class UrlQRCodeCreate
     {
+        private readonly ILogger _logger;
+        private readonly ShortenerSettings _settings;
+
+        public UrlQRCodeCreate(ILoggerFactory loggerFactory, ShortenerSettings settings)
+        {
+            _logger = loggerFactory.CreateLogger<UrlQRCodeCreate>();
+            _settings = settings;
+        }
+
         [Function("UrlQRCodeCreate")]
         public async Task<HttpResponseData> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "UrlQRCodeCreate/{shortUrl}")] 
