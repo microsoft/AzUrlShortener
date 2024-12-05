@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
+using Cloud5mins.ShortenerTools.Core.Domain;
 
 namespace Cloud5mins.Function
 {
