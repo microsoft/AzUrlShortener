@@ -12,7 +12,7 @@ namespace Cloud5mins.Function
 {
     public static class UrlQRCodeCreate
     {
-        [FunctionName("UrlQRCodeCreate")]
+        [Function("UrlQRCodeCreate")]
         public static HttpResponseMessage Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "UrlQRCodeCreate/{shortUrl}")] HttpRequestMessage req,
             string shortUrl, 
