@@ -53,4 +53,5 @@ jobs:
           app-name: 'shortenertool-oa3jr-fa'
           # slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISH_PROFILE }}
           
