@@ -31,9 +31,9 @@ else
             <GridColumn Width="70" AllowFiltering="false" >
                 <Template>
                     @{
-                    var url = (context as ShortUrlEntity);
-                    <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => CopyToClipboardAsync(url.ShortUrl))">Copy</button>
-                }
+                        var url = (context as ShortUrlEntity);
+                        <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => CopyToClipboardAsync(url.ShortUrl))">Copy</button>
+                    }
             </Template>
         </GridColumn>
         <GridColumn  Width="105" HeaderText="Schedule(s)">
@@ -65,7 +65,7 @@ else
             <Template>
                 @{
                     var url = (context as ShortUrlEntity);
-                    <a @href="@(() => GetQRCodeShortUrl(url))">QR Code<a/>
+                    <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => GetQRCodeShortUrl(url))">QR Code</button>
                 }
             </Template>
         </GridColumn>
@@ -87,7 +87,7 @@ else
             <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => ArchiveShortUrl(url))">Archive</button>
             }
             </Template>
-            </GridColumn>
+        </GridColumn>
     </GridColumns>
 </SfGrid>
 }
