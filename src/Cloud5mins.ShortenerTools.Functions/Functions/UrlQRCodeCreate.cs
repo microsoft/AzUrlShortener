@@ -54,6 +54,7 @@ namespace Cloud5mins.Function
 
            var res = req.CreateResponse(HttpStatusCode.Redirect);
            res.Headers.Add("Location", redirectUrl);
+           res.Headers.Add("Access-Control-Allow-Origin", "https://kmpl.fun");
            return res;
         }
     }
