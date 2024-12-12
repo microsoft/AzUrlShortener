@@ -50,7 +50,7 @@ namespace Cloud5mins.Function
                 }
             }
 
-           var redirectUrl = "http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data="+WebUtility.UrlEncode(input.Url)+"&qzone=0&margin=0&size=250x250&ecc=L";
+           var redirectUrl = "https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data="+WebUtility.UrlEncode(input.Url)+"&qzone=0&margin=0&size=250x250&ecc=L";
 
            var res = req.CreateResponse(HttpStatusCode.Redirect);
            res.Headers.Add("Location", redirectUrl);
