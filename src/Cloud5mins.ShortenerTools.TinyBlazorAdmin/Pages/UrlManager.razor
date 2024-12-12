@@ -31,9 +31,9 @@ else
             <GridColumn Width="70" AllowFiltering="false" >
                 <Template>
                     @{
-                        var url = (context as ShortUrlEntity);
-                        <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => CopyToClipboardAsync(url.ShortUrl))">Copy</button>
-                    }
+                    var url = (context as ShortUrlEntity);
+                    <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => CopyToClipboardAsync(url.ShortUrl))">Copy</button>
+                }
             </Template>
         </GridColumn>
         <GridColumn  Width="105" HeaderText="Schedule(s)">
@@ -88,7 +88,7 @@ else
             <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => ArchiveShortUrl(url))">Archive</button>
             }
             </Template>
-        </GridColumn>
+            </GridColumn>
     </GridColumns>
 </SfGrid>
 }
@@ -203,7 +203,6 @@ else
     SfGrid<ShortUrlEntity> grdUrls;
     public List<ShortUrlEntity> gridData { get; set; }
 
-
     protected override async Task OnInitializedAsync()
     {
         await RefreshGrid();
@@ -215,14 +214,14 @@ else
         {
             using var response = await Http.GetAsync("/api/UrlList");
             if(response.IsSuccessStatusCode){
-                urls = await response.Content.ReadFromJsonAsync<ListResponse>();
+                urls = await response.Content.ReadFromJsonAsync<ListResponse>();    
             }
             else{
                 switch (response.StatusCode)
                 {
-                    case HttpStatusCode.Unauthorized: NavigationManager.NavigateTo("/unauthorized");
+                    case HttpStatusCode.Unauthorized: NavigationManager.NavigateTo("/unauthorized"); 
                         break;
-                    default: NavigationManager.NavigateTo("/404");
+                    default: NavigationManager.NavigateTo("/404"); 
                         break;
                 }
             }
