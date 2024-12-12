@@ -65,6 +65,8 @@ else
             <Template>
                 @{
                     var url = (context as ShortUrlEntity);
+                    var imgSrc = GetQRCodeShortUrl(url);
+                    <img src="@imgSrc" alt="QR Code" />
                 }
             </Template>
         </GridColumn>
