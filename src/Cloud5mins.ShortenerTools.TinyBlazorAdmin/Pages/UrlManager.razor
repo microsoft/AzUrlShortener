@@ -299,7 +299,10 @@ else
 
     public async Task GetQRCodeShortUrl(ShortUrlEntity urlEntity)
     {
-        var res = await Http.GetAsync<ShortUrlEntity>("/api/UrlQRCodeCreate", urlEntity);
-        return res;
+        var res = await Http.GetAsync("/api/UrlQRCodeCreate", urlEntity);
+        response.EnsureSuccessStatusCode();
+
+        var responseContent = await response.Content.ReadAsStreamAsync();
+        return responseContent;
     }
 }
