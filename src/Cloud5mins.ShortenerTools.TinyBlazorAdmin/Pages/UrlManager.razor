@@ -300,6 +300,6 @@ else
     public async Task GetQRCodeShortUrl(ShortUrlEntity urlEntity)
     {
         var res = await Http.PostAsJsonAsync<ShortUrlEntity>("/api/UrlQRCodeCreate", urlEntity);
-        return responseContent;
+        return res;
     }
 }
