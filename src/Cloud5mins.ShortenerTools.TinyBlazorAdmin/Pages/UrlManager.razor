@@ -65,7 +65,8 @@ else
             <Template>
                 @{
                     var url = (context as ShortUrlEntity);
-                    <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => GetQRCodeShortUrl(url))">QR Code</button>
+                    var imgSrc = GetQRCodeShortUrl(url));
+                    <img src="@imgSrc" alt="QR Code" />
                 }
             </Template>
         </GridColumn>
@@ -300,6 +301,6 @@ else
     public async Task GetQRCodeShortUrl(ShortUrlEntity urlEntity)
     {
         var res = await Http.PostAsJsonAsync<ShortUrlEntity>("/api/UrlQRCodeCreate", urlEntity);
-        return res;
+        await UpdateUIList();
     }
 }
