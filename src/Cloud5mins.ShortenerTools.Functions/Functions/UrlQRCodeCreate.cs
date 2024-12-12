@@ -26,7 +26,6 @@ namespace Cloud5mins.Function
         }
 
         [Function("UrlQRCodeCreate")]
-        [Cors ]
         public async Task<HttpResponseData> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "api/UrlQRCodeCreate")] HttpRequestData req,
             ExecutionContext context)
@@ -53,7 +52,8 @@ namespace Cloud5mins.Function
 
            var redirectUrl = "https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data="+WebUtility.UrlEncode(input.Url)+"&qzone=0&margin=0&size=250x250&ecc=L";
 
-context.Response.Headers.Add("Access-Control-Allow-Origin", "https://kmpl.fun");
+            req.FunctionContext.GetHttpResponseData()?.Headers.Add("Access-Control-Allow-Origin", "https://kmpl.fun");
+      
             req.Headers.Add("Access-Control-Allow-Origin", "https://kmpl.fun");
            var res = req.CreateResponse(HttpStatusCode.Redirect);
            res.Headers.Add("Location", redirectUrl);
