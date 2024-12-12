@@ -27,11 +27,8 @@ namespace Cloud5mins.Function
 
         [Function("UrlQRCodeCreate")]
         public async Task<HttpResponseData> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "api/UrlQRCodeCreate/{shortUrl}")] 
-            HttpRequestData req,
-            string shortUrl, 
-            ExecutionContext context) //,
-            //ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "api/UrlQRCodeCreate")] HttpRequestData req,
+            ExecutionContext context
         {
            //log.LogInformation($"C# HTTP trigger function processed for Url: {shortUrl}");
 
