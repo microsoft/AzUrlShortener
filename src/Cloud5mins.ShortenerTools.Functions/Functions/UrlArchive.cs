@@ -26,6 +26,7 @@ Output:
 */
 
 using Cloud5mins.ShortenerTools.Core.Domain;
+using Cloud5mins.ShortenerTools.Core.Services;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
@@ -52,35 +53,23 @@ namespace Cloud5mins.ShortenerTools.Functions
 
         [Function("UrlArchive")]
         public async Task<HttpResponseData> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "api/UrlArchive")] HttpRequestData req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "UrlArchive")] HttpRequestData req,
         ExecutionContext context)
         {
             _logger.LogInformation($"HTTP trigger - UrlArchive");
 
-            string userId = string.Empty;
-            ShortUrlEntity input;
             ShortUrlEntity result;
             try
             {
                 // Validation of the inputs
-                if (req == null)
+                ShortUrlEntity input = await InputValidator.ValidateShortUrlEntity(req);
+                if(input == null)
                 {
                     return req.CreateResponse(HttpStatusCode.NotFound);
                 }
 
-                using (var reader = new StreamReader(req.Body))
-                {
-                    var body = await reader.ReadToEndAsync();
-                    input = JsonSerializer.Deserialize<ShortUrlEntity>(body, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    if (input == null)
-                    {
-                        return req.CreateResponse(HttpStatusCode.NotFound);
-                    }
-                }
-
-                StorageTableHelper stgHelper = new StorageTableHelper(_settings.DataStorage);
-
-                result = await stgHelper.ArchiveShortUrlEntity(input);
+                var urlServices = new UrlServices(_settings, _logger);
+                result = await urlServices.Archive(input);
             }
             catch (Exception ex)
             {

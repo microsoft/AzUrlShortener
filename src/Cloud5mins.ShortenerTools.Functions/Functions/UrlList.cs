@@ -16,6 +16,7 @@ Output:
 */
 
 using Cloud5mins.ShortenerTools.Core.Domain;
+using Cloud5mins.ShortenerTools.Core.Services;
 using Cloud5mins.ShortenerTools.Core.Messages;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -42,24 +43,14 @@ namespace Cloud5mins.ShortenerTools.Functions
 
         [Function("UrlList")]
         public async Task<HttpResponseData> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "api/UrlList")] HttpRequestData req, ExecutionContext context)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "UrlList")] HttpRequestData req, ExecutionContext context)
         {
-            _logger.LogInformation($"Starting UrlList...");
-
             var result = new ListResponse();
-            string userId = string.Empty;
-
-            StorageTableHelper stgHelper = new StorageTableHelper(_settings.DataStorage);
-
             try
             {
-                result.UrlList = await stgHelper.GetAllShortUrlEntities();
-                result.UrlList = result.UrlList.Where(p => !(p.IsArchived ?? false)).ToList();
                 var host = string.IsNullOrEmpty(_settings.CustomDomain) ? req.Url.Host : _settings.CustomDomain;
-                foreach (ShortUrlEntity url in result.UrlList)
-                {
-                    url.ShortUrl = Utility.GetShortUrl(host, url.RowKey);
-                }
+                var urlServices = new UrlServices(_settings, _logger);
+                result = await urlServices.List(host);
             }
             catch (Exception ex)
             {

@@ -29,6 +29,7 @@ Output:
 */
 
 using Cloud5mins.ShortenerTools.Core.Domain;
+using Cloud5mins.ShortenerTools.Core.Services;
 // using Microsoft.Azure.WebJobs;
 // using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.Functions.Worker;
@@ -56,56 +57,31 @@ namespace Cloud5mins.ShortenerTools.Functions
 
         [Function("UrlUpdate")]
         public async Task<HttpResponseData> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "api/UrlUpdate")] HttpRequestData req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "UrlUpdate")] HttpRequestData req,
                                     ExecutionContext context
                                 )
         {
             _logger.LogInformation($"HTTP trigger - UrlUpdate");
-
-            string userId = string.Empty;
-            ShortUrlEntity input;
             ShortUrlEntity result;
 
             try
             {
                 // Validation of the inputs
-                if (req == null)
+                ShortUrlEntity input = await InputValidator.ValidateShortUrlEntity(req);
+                if(input == null)
                 {
                     return req.CreateResponse(HttpStatusCode.NotFound);
                 }
 
-                using (var reader = new StreamReader(req.Body))
-                {
-                    var strBody = await reader.ReadToEndAsync();
-                    input = JsonSerializer.Deserialize<ShortUrlEntity>(strBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    if (input == null)
-                    {
-                        return req.CreateResponse(HttpStatusCode.NotFound);
-                    }
-                }
-
-                // If the Url parameter only contains whitespaces or is empty return with BadRequest.
-                if (string.IsNullOrWhiteSpace(input.Url))
-                {
-                    var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
-                    await badRequest.WriteAsJsonAsync(new { Message = "The url parameter can not be empty." });
-                    return badRequest;
-                }
-
-                // Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
-                if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
-                {
-                    var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
-                    await badRequest.WriteAsJsonAsync(new { Message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'." });
-                    return badRequest;
-                }
-
-                StorageTableHelper stgHelper = new StorageTableHelper(_settings.DataStorage);
-
-                result = await stgHelper.UpdateShortUrlEntity(input);
                 var host = string.IsNullOrEmpty(_settings.CustomDomain) ? req.Url.Host : _settings.CustomDomain.ToString();
-                result.ShortUrl = Utility.GetShortUrl(host, result.RowKey);
-
+                var urlServices = new UrlServices(_settings, _logger);
+                result = await urlServices.Update(input, host);
+            }
+            catch (ShortenerToolException shortEx)
+            {
+                var badResponse = req.CreateResponse(shortEx.StatusCode);
+                await badResponse.WriteAsJsonAsync(new { shortEx.Message });
+                return badResponse;
             }
             catch (Exception ex)
             {

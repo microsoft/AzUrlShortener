@@ -24,6 +24,7 @@ Output:
 
 using Cloud5mins.ShortenerTools.Core.Domain;
 using Cloud5mins.ShortenerTools.Core.Messages;
+using Cloud5mins.ShortenerTools.Core.Services;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -51,46 +52,24 @@ namespace Cloud5mins.ShortenerTools.Functions
 
         [Function("UrlClickStatsByDay")]
         public async Task<HttpResponseData> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "api/UrlClickStatsByDay")] HttpRequestData req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "UrlClickStatsByDay")] HttpRequestData req,
         ExecutionContext context)
         {
             _logger.LogInformation($"HTTP trigger: UrlClickStatsByDay");
 
-            string userId = string.Empty;
-            UrlClickStatsRequest input;
             var result = new ClickDateList();
 
-            // Validation of the inputs
-            if (req == null)
+            UrlClickStatsRequest input = await InputValidator.ValidateUrlClickStatsRequest(req);
+            if(input == null)
             {
                 return req.CreateResponse(HttpStatusCode.NotFound);
             }
-
+            
             try
             {
-                using (var reader = new StreamReader(req.Body))
-                {
-                    var strBody = await reader.ReadToEndAsync();
-                    input = JsonSerializer.Deserialize<UrlClickStatsRequest>(strBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    if (input == null)
-                    {
-                        return req.CreateResponse(HttpStatusCode.NotFound);
-                    }
-                }
-
-                StorageTableHelper stgHelper = new StorageTableHelper(_settings.DataStorage);
-
-                var rawStats = await stgHelper.GetAllStatsByVanity(input.Vanity);
-
-                result.Items = rawStats.GroupBy(s => DateTime.Parse(s.Datetime).Date)
-                                            .Select(stat => new ClickDate
-                                            {
-                                                DateClicked = stat.Key.ToString("yyyy-MM-dd"),
-                                                Count = stat.Count()
-                                            }).OrderBy(s => DateTime.Parse(s.DateClicked).Date).ToList<ClickDate>();
-
                 var host = string.IsNullOrEmpty(_settings.CustomDomain) ? req.Url.Host : _settings.CustomDomain.ToString();
-                result.Url = Utility.GetShortUrl(host, input.Vanity);
+                var urlServices = new UrlServices(_settings, _logger);
+                result = await urlServices.ClickStatsByDay(input, host);
             }
             catch (Exception ex)
             {

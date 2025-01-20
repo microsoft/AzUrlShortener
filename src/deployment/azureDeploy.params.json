@@ -3,16 +3,28 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "baseName": {
-            "value": "AzUrlShortTools"
+            "value": "shorter"
         },
         "OwnerName": {
-            "value": "Me"
+            "value": "me"
         },
         "GitHubBranch": {
-            "value": "main"
+            "value": "core-extra"
         },
         "defaultRedirectUrl": {
-            "value": "https://azure.com"
+            "value": "https://github.com"
+        },
+        "existingSWAName": {
+            "value": "short-test3"
+        },
+        "deployingWhat": {
+            "value": "Light UrlShortener"
+        },
+        "GitHubURL": {
+            "value": "https://github.com/fboucheros/AzUrlShortener.git"
+        },
+        "repositoryToken": {
+            "value": "" 
         }
     }
 }

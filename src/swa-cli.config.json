@@ -1,13 +1,17 @@
 {
   "$schema": "https://aka.ms/azure/static-web-apps-cli/schema",
   "configurations": {
-    "AzUrlShortener": {
+    "src": {
       "appLocation": "Cloud5mins.ShortenerTools.TinyBlazorAdmin",
       "apiLocation": "Cloud5mins.ShortenerTools.Functions",
-      "outputLocation": "bin/Debug/net6.0/wwwroot",
+      "outputLocation": "bin\\wwwroot",
+      "apiLanguage": "dotnetisolated",
+      "apiVersion": "6.0",
       "appBuildCommand": "dotnet publish -c Release -o bin",
       "apiBuildCommand": "dotnet publish -c Release",
-      "run": "dotnet watch run"
+      "run": "dotnet watch run",
+      "appDevserverUrl": "http://localhost:5000",
+      "apiPort": 7071
     }
   }
 }
