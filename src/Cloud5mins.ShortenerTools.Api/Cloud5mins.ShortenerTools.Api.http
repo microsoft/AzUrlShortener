@@ -1,0 +1,6 @@
+@Cloud5mins.ShortenerTools.Api_HostAddress = http://localhost:5288
+
+GET {{Cloud5mins.ShortenerTools.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
