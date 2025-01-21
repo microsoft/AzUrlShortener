@@ -8,17 +8,15 @@ namespace Cloud5mins.ShortenerTools.Core.Services;
 
 public class UrlServices
 {
-	private readonly ShortenerSettings _settings;
 	private readonly ILogger _logger;
 	private readonly StorageTableHelper _stgHelper;
 
-	public UrlServices(ShortenerSettings settings, ILogger logger)
+	public UrlServices(ILogger logger)
 	{
-		_settings = settings;
 		_logger = logger;
 	}
 
-	private StorageTableHelper StgHelper => _stgHelper ?? new StorageTableHelper(_settings.DataStorage);
+	private StorageTableHelper StgHelper => _stgHelper ?? new StorageTableHelper(Environment.GetEnvironmentVariable("DataStorage")!);
 
 	public async Task<ShortUrlEntity> Archive(ShortUrlEntity input)
 	{
@@ -32,7 +30,7 @@ public class UrlServices
 		{
 			if (!string.IsNullOrWhiteSpace(shortUrl))
 			{
-				redirectUrl = _settings.DefaultRedirectUrl ?? redirectUrl;
+				redirectUrl = Environment.GetEnvironmentVariable("DefaultRedirectUrl") ?? redirectUrl;
 
 				var tempUrl = new ShortUrlEntity(string.Empty, shortUrl);
 				var newUrl = await StgHelper.GetShortUrlEntity(tempUrl);

@@ -12,13 +12,12 @@ namespace Cloud5mins.ShortenerTools.Functions
     public class UrlRedirect
     {
         private readonly ILogger _logger;
-        private readonly ShortenerSettings _settings;
 
-        public UrlRedirect(ILoggerFactory loggerFactory, ShortenerSettings settings)
+
+        public UrlRedirect(ILoggerFactory loggerFactory)
         {
             _logger = loggerFactory.CreateLogger<UrlRedirect>();
             _logger.LogInformation("UrlRedirect in constructor");
-            _settings = settings;
         }
 
         [Function("UrlRedirect")]
@@ -29,7 +28,7 @@ namespace Cloud5mins.ShortenerTools.Functions
             ExecutionContext context)
         {
             _logger.LogInformation("Function reached");
-            UrlServices UrlServices = new UrlServices(_settings, _logger);
+            UrlServices UrlServices = new UrlServices(_logger);
             _logger.LogInformation("Services created");
             _logger.LogInformation($"Redirecting {shortUrl}");
             string redirectUrl = await UrlServices.Redirect(shortUrl);

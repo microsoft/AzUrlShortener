@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloud5mins.ShortenerTools.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloud5mins.ShortenerTools.FunctionsLight", "Cloud5mins.ShortenerTools.FunctionsLight\Cloud5mins.ShortenerTools.FunctionsLight.csproj", "{1C59956F-01A4-4F22-8B75-39CC48A8290C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloud5mins.ShortenerTools.AppHost", "Cloud5mins.ShortenerTools.AppHost\Cloud5mins.ShortenerTools.AppHost.csproj", "{3DC7E590-FE84-4D0B-B989-9CD6B31B325A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloud5mins.ShortenerTools.ServiceDefaults", "Cloud5mins.ShortenerTools.ServiceDefaults\Cloud5mins.ShortenerTools.ServiceDefaults.csproj", "{6567F739-8BCC-4B4B-8CCC-EEEB9B28465F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{1C59956F-01A4-4F22-8B75-39CC48A8290C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C59956F-01A4-4F22-8B75-39CC48A8290C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C59956F-01A4-4F22-8B75-39CC48A8290C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DC7E590-FE84-4D0B-B989-9CD6B31B325A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DC7E590-FE84-4D0B-B989-9CD6B31B325A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DC7E590-FE84-4D0B-B989-9CD6B31B325A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DC7E590-FE84-4D0B-B989-9CD6B31B325A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6567F739-8BCC-4B4B-8CCC-EEEB9B28465F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6567F739-8BCC-4B4B-8CCC-EEEB9B28465F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6567F739-8BCC-4B4B-8CCC-EEEB9B28465F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6567F739-8BCC-4B4B-8CCC-EEEB9B28465F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

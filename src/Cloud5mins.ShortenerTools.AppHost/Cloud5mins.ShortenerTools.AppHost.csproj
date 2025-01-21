@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsAspireHost>true</IsAspireHost>
+    <UserSecretsId>7de80ffa-2cbf-4a48-aa38-16d6b97e09bf</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="8.2.2" />
+    <PackageReference Include="Aspire.Hosting.Azure.Functions" Version="9.0.0-preview.5.24551.3" />
+    <PackageReference Include="Aspire.Hosting.Azure.Storage" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cloud5mins.ShortenerTools.FunctionsLight\Cloud5mins.ShortenerTools.FunctionsLight.csproj" />
+  </ItemGroup>
+
+</Project>
