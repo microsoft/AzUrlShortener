@@ -20,7 +20,7 @@ namespace Cloud5mins.ShortenerTools
         //sets the length of the unique code to add to vanity
         private const int MinVanityCodeLength = 5;
 
-        public static async Task<string> GetValidEndUrl(string vanity, StorageTableHelper stgHelper)
+        public static async Task<string> GetValidEndUrl(string vanity, IStorageTableHelper stgHelper)
         {
             if (string.IsNullOrEmpty(vanity))
             {

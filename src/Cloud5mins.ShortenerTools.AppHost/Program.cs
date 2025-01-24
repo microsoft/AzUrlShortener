@@ -1,9 +1,21 @@
+
 var builder = DistributedApplication.CreateBuilder(args);
 
-var urlData = builder.AddAzureStorage("urlData");
+var connectionString = builder.AddConnectionString("data-storage-connstr");
+var customDomain = builder.AddParameter("CustomDomain");
+var defaultRedirectUrl = builder.AddParameter("DefaultRedirectUrl");
 
-var azFuncLight = builder.AddAzureFunctionsProject<Projects.Cloud5mins_ShortenerTools_FunctionsLight>("azFuncLight")
-						 	.WithHostStorage(urlData)
+//var urlData = builder.AddAzureStorage("url-data");
+
+var azFuncLight = builder.AddAzureFunctionsProject<Projects.Cloud5mins_ShortenerTools_FunctionsLight>("azfunc-light")
+						 	//.WithHostStorage(urlData)
 							.WithExternalHttpEndpoints();
+
+var manAPI = builder.AddProject<Projects.Cloud5mins_ShortenerTools_Api>("api")
+						.WithEnvironment("data-storage-connstr",connectionString)
+						.WithEnvironment("CustomDomain",customDomain)
+						.WithEnvironment("DefaultRedirectUrl",defaultRedirectUrl)
+						.WithExternalHttpEndpoints();
+
 
 builder.Build().Run();

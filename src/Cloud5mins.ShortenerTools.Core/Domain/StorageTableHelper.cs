@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace Cloud5mins.ShortenerTools.Core.Domain
 {
-    public class StorageTableHelper
+    public class StorageTableHelper: IStorageTableHelper
     {
         private string StorageConnectionString { get; set; }
 

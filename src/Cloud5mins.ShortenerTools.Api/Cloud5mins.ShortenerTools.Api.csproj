@@ -10,4 +10,9 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Cloud5mins.ShortenerTools.Core\Cloud5mins.ShortenerTools.Core.csproj" />
+    <ProjectReference Include="..\Cloud5mins.ShortenerTools.ServiceDefaults\Cloud5mins.ShortenerTools.ServiceDefaults.csproj" />
+  </ItemGroup>
+
 </Project>

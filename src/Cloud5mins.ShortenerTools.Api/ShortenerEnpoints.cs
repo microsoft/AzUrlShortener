@@ -1,0 +1,106 @@
+using System.Data;
+using System.Threading.Tasks.Dataflow;
+using System.Xml.Linq;
+using Cloud5mins.ShortenerTools;
+using Cloud5mins.ShortenerTools.Core.Domain;
+using Cloud5mins.ShortenerTools.Core.Messages;
+using Microsoft.AspNetCore.Http.HttpResults;
+
+public static class ShortenerEnpoints
+{
+	public static void MapShortenerEnpoints(this IEndpointRouteBuilder app)
+	{
+		var endpoints = app.MapGroup("api")
+				.WithOpenApi();
+
+		endpoints.MapPost("/", GetWelcomeMessage)
+			.WithDescription("Welcome to Cloud5mins URL Shortener API");
+
+		endpoints.MapGet("/UrlCreate", UrlCreate)
+			.WithDescription("Create a new note")
+			.WithDisplayName("UrlCreate");
+
+	}
+
+	static private string GetWelcomeMessage()
+	{
+		return "Welcome to Cloud5mins URL Shortener API";
+	}
+
+	static private async Task<Results<
+								Created<ShortResponse>,
+								BadRequest<DetailedBadRequest>,
+								NotFound<DetailedBadRequest>,
+								Conflict<DetailedBadRequest>,
+								InternalServerError<DetailedBadRequest>
+								>> UrlCreate(ShortRequest request, 
+												IStorageTableHelper stgHelper, 
+												HttpContext context, 
+												ILogger logger)
+	{
+
+		logger.LogTrace($"creating shortURL: {request.Url}");
+		var result = new ShortResponse();
+
+		try
+		{
+			// If the Url parameter only contains whitespaces or is empty return with BadRequest.
+			if (string.IsNullOrWhiteSpace(request.Url))
+			{
+				string ErrorMsg = "The url parameter cannot be empty.";
+				logger.LogInformation(ErrorMsg);
+				return TypedResults.NotFound<DetailedBadRequest>(new DetailedBadRequest { Message = ErrorMsg });
+			}
+
+			// Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
+			if (!Uri.IsWellFormedUriString(request.Url, UriKind.Absolute))
+			{
+				string ErrorMsg = $"{request.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.";
+				logger.LogInformation(ErrorMsg);
+				return TypedResults.BadRequest<DetailedBadRequest>(new DetailedBadRequest { Message = ErrorMsg });
+			}
+
+			string longUrl = request.Url.Trim();
+			string vanity = string.IsNullOrWhiteSpace(request.Vanity) ? "" : request.Vanity.Trim();
+			string title = string.IsNullOrWhiteSpace(request.Title) ? "" : request.Title.Trim();
+
+			ShortUrlEntity? newRow;
+
+			if (!string.IsNullOrEmpty(vanity))
+			{
+				newRow = new ShortUrlEntity(longUrl, vanity, title, request.Schedules);
+				if (await stgHelper.IfShortUrlEntityExist(newRow))
+				{
+					// throw new Exception("This Short URL already exist.");
+					string ErrorMsg = "This Short URL already exist.";
+					logger.LogInformation(ErrorMsg);
+					return TypedResults.Conflict<DetailedBadRequest>(new DetailedBadRequest { Message = ErrorMsg });
+				}
+			}
+			else
+			{
+				newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, stgHelper), title, request.Schedules);
+			}
+
+			await stgHelper.SaveShortUrlEntity(newRow);
+
+			string? customDomain = Environment.GetEnvironmentVariable("CustomDomain");
+
+
+			var host = string.IsNullOrEmpty(customDomain) ? context.Request.Host.Value : customDomain;
+			result = new ShortResponse(host!, newRow.Url, newRow.RowKey, newRow.Title);
+
+			logger.LogTrace("Short Url created.");
+
+			return TypedResults.Created($"/api/UrlCreate/{result.ShortUrl}", result);
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"A unexpected error was encountered: {ex.Message}");
+			logger.LogError(ex.Message);
+			return TypedResults.InternalServerError<DetailedBadRequest>(new DetailedBadRequest { Message = ex.Message });
+		}
+	}
+
+}
+
