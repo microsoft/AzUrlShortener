@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloud5mins.ShortenerTools.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloud5mins.ShortenerTools.Api", "Cloud5mins.ShortenerTools.Api\Cloud5mins.ShortenerTools.Api.csproj", "{85C6D9A8-EB37-4FA3-9E83-7178825C9EA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloud5mins.ShortenerTools.TinyBlazorAdmin", "Cloud5mins.ShortenerTools.TinyBlazorAdmin\Cloud5mins.ShortenerTools.TinyBlazorAdmin.csproj", "{88EAB6E9-CD20-4A6B-86A0-38CACA87FC7E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{85C6D9A8-EB37-4FA3-9E83-7178825C9EA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85C6D9A8-EB37-4FA3-9E83-7178825C9EA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85C6D9A8-EB37-4FA3-9E83-7178825C9EA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88EAB6E9-CD20-4A6B-86A0-38CACA87FC7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88EAB6E9-CD20-4A6B-86A0-38CACA87FC7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88EAB6E9-CD20-4A6B-86A0-38CACA87FC7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88EAB6E9-CD20-4A6B-86A0-38CACA87FC7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
