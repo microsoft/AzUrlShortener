@@ -1,13 +1,16 @@
 ## @Cloud5mins.ShortenerTools.Api_HostAddress = http://localhost:5288
 @Cloud5mins.ShortenerTools.Api_HostAddress = https://localhost:7187
 
+### ####################################
+### weatherforecast
 GET {{Cloud5mins.ShortenerTools.Api_HostAddress}}/weatherforecast/
 Accept: application/json
 
+### ####################################
 ### Get a Welcome message
 Get  {{Cloud5mins.ShortenerTools.Api_HostAddress}}/api
 
-
+### ####################################
 ### Create a new short URL
 
 POST  {{Cloud5mins.ShortenerTools.Api_HostAddress}}/api/UrlCreate
@@ -43,5 +46,12 @@ Content-Type: application/json
 	"Url": "That's not a URL",
 	"Title": ".NET Aspire Azure Blob Storage integration"
 }
+
+### ####################################
+### Get list of URLs
+
+GET  {{Cloud5mins.ShortenerTools.Api_HostAddress}}/api/UrlList
+Accept: application/json
+
 
 

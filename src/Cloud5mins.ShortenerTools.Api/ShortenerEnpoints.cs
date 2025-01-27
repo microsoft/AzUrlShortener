@@ -13,12 +13,16 @@ public static class ShortenerEnpoints
 		var endpoints = app.MapGroup("api")
 				.WithOpenApi();
 
-		endpoints.MapPost("/", GetWelcomeMessage)
+		endpoints.MapGet("/", GetWelcomeMessage)
 			.WithDescription("Welcome to Cloud5mins URL Shortener API");
 
-		endpoints.MapGet("/UrlCreate", UrlCreate)
-			.WithDescription("Create a new note")
-			.WithDisplayName("UrlCreate");
+		endpoints.MapPost("/UrlCreate", UrlCreate)
+			.WithDescription("Create a new Short URL")
+			.WithDisplayName("Url Create");
+
+		endpoints.MapGet("/UrlList", UrlList)
+			.WithDescription("List all Urls")
+			.WithDisplayName("Url List");
 
 	}
 
@@ -84,10 +88,7 @@ public static class ShortenerEnpoints
 
 			await stgHelper.SaveShortUrlEntity(newRow);
 
-			string? customDomain = Environment.GetEnvironmentVariable("CustomDomain");
-
-
-			var host = string.IsNullOrEmpty(customDomain) ? context.Request.Host.Value : customDomain;
+			var host = GetHost(context);
 			result = new ShortResponse(host!, newRow.Url, newRow.RowKey, newRow.Title);
 
 			logger.LogTrace("Short Url created.");
@@ -100,6 +101,46 @@ public static class ShortenerEnpoints
 			logger.LogError(ex.Message);
 			return TypedResults.InternalServerError<DetailedBadRequest>(new DetailedBadRequest { Message = ex.Message });
 		}
+	}
+
+
+	static private async Task<Results<
+								Ok<ListResponse>,
+								InternalServerError<DetailedBadRequest>
+								>> UrlList(		IStorageTableHelper stgHelper, 
+												HttpContext context, 
+												ILogger logger)
+	{
+		logger.LogTrace("Starting UrlList...");
+
+		var result = new ListResponse();
+        string userId = string.Empty;
+
+		try
+		{
+			result.UrlList = await stgHelper.GetAllShortUrlEntities();
+			result.UrlList = result.UrlList.Where(p => !(p.IsArchived ?? false)).ToList();
+
+			var host = GetHost(context);
+
+			foreach (ShortUrlEntity url in result.UrlList)
+			{
+				url.ShortUrl = Utility.GetShortUrl(host, url.RowKey);
+			}
+			return TypedResults.Ok(result);
+		}
+		catch (Exception ex)
+		{
+			logger.LogError(ex, "An unexpected error was encountered.");
+			return TypedResults.InternalServerError<DetailedBadRequest>(new DetailedBadRequest { Message = ex.Message });
+		}
+	}
+
+	private static string GetHost(HttpContext context)
+	{
+		string? customDomain = Environment.GetEnvironmentVariable("CustomDomain");
+		var host = string.IsNullOrEmpty(customDomain) ? context.Request.Host.Value : customDomain;
+		return host ?? string.Empty;
 	}
 
 }
