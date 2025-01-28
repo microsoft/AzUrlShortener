@@ -10,11 +10,17 @@ public class UrlManagerClient(HttpClient httpClient)
 	public async Task<IQueryable<ShortUrlEntity>?> GetUrls()
     {
 		IQueryable<ShortUrlEntity> urlList = null;
-        using var response = await httpClient.GetAsync("/api/UrlList");
-		if(response.IsSuccessStatusCode){
-			var urls = await response.Content.ReadFromJsonAsync<ListResponse>();
-			urlList = urls!.UrlList.AsQueryable<ShortUrlEntity>();
+		try{
+			using var response = await httpClient.GetAsync("/api/UrlList");
+			if(response.IsSuccessStatusCode){
+				var urls = await response.Content.ReadFromJsonAsync<ListResponse>();
+				urlList = urls!.UrlList.AsQueryable<ShortUrlEntity>();
+			}
 		}
+		catch(Exception ex){
+			Console.WriteLine(ex.Message);
+		}
+        
 		return urlList;
     }
 }

@@ -7,91 +7,48 @@
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 
+@rendermode InteractiveServer
 
 <PageTitle>Url Manager</PageTitle>
 
 <h1>Urls Manager</h1>
 <h3>Create, Edit, Achives your URLs</h3>
 
-@if (urlList == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <button class="btn btn-primary" @onclick="CreateShortUrl">Add New Url</button>
+<FluentButton OnClick="@(CreateShortUrl)" Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size16.Add())">Add New Url</FluentButton>
 
-    <FluentDataGrid Id="grdUrls" Items="@urlList">
+<div style="height: 380px; overflow-x:auto; display:flex;">
+    <FluentDataGrid Id="grdUrls" 
+                    Items="@urlList"
+                    ResizableColumns=true
+                    AllowSorting=true
+                    Pagination="@pagination">
         <ChildContent>
-            <TemplateColumn Width="70px">
-                @* Add button here *@
+            <TemplateColumn Width="70px" Sortable="false">
+                <FluentButton OnClick="@(async () => await CopyToClipboardAsync(context!.ShortUrl))" IconEnd="@(new Icons.Regular.Size16.Copy())" Title="Copy" />
+            </TemplateColumn>
+            <TemplateColumn Width="115px" Title="Schedule(s)" Sortable="true" SortBy="@sortBySchedules">
+                <span>@(context!.Schedules?.Count ?? 0)</span>
+            </TemplateColumn>
+            <TemplateColumn Title="Vanity" Width="150px" Sortable="true" SortBy="@sortByVanities">
+                <FluentAnchor Href="@context!.ShortUrl" Target="_blank" Appearance="Appearance.Hypertext">@context!.RowKey</FluentAnchor>
             </TemplateColumn>
             <PropertyColumn Title="Title" Property="@(c => c!.Title)" Sortable="true"/>
             <PropertyColumn Title="Url" Property="@(c => c!.Url)" Sortable="true"/>
+            <TemplateColumn Title="Clicks" Width="110px" Align="Align.End" Sortable="true" SortBy="@sortByClicks">
+                <span>@context.Clicks</span>
+                <FluentButton OnClick="@(() => NavigateToStats(context.RowKey))" IconEnd="@(new Icons.Regular.Size16.ChartMultiple())" />
+            </TemplateColumn>
+            <TemplateColumn Width="100px" Sortable="false">
+                <FluentButton OnClick="@(() => EditShortUrl(context))" IconEnd="@(new Icons.Regular.Size16.Edit())" Title="Edit" />
+                <FluentButton OnClick="@(async () => await ArchiveShortUrl(context))" IconEnd="@(new Icons.Regular.Size16.Archive())" Title="Archive" />
+            </TemplateColumn>
         </ChildContent>
         <EmptyContent>
-            <FluentIcon Value="@(new Icons.Filled.Size24.Crown())" Color="@Color.Accent" />&nbsp; Nothing to see here. Carry on!
+            <FluentIcon Value="@(new Icons.Filled.Size16.Crown())" Color="@Color.Accent" />&nbsp; Nothing to see here. Carry on!
         </EmptyContent>
     </FluentDataGrid>
-
-    @* <SfGrid DataSource="@urls.UrlList" id="grdUrls" AllowPaging="true" AllowSorting="true" AllowFiltering="true">
-        <GridPageSettings PageSize="15"></GridPageSettings>
-        <GridColumns>
-            <GridColumn Width="70" AllowFiltering="false" >
-                <Template>
-                    @{
-                    var url = (context as ShortUrlEntity);
-                    <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => CopyToClipboardAsync(url.ShortUrl))">Copy</button>
-                }
-            </Template>
-        </GridColumn>
-        <GridColumn  Width="105" HeaderText="Schedule(s)">
-            <Template>
-                @{
-                    var url = (context as ShortUrlEntity);
-                    if (url.Schedules != null)
-                    {
-                        <span>@url.Schedules.Count</span>
-                    }
-                    else
-                    {
-                        <span>0</span>
-                    };
-                }
-            </Template>
-        </GridColumn>
-        <GridColumn Width="250" Field=@nameof(ShortUrlEntity.RowKey) HeaderText="Vanity">
-            <Template>
-                @{
-                    var url = (context as ShortUrlEntity);
-                    <a href="@url.ShortUrl" target="blank">@url.RowKey</a>
-                }
-            </Template>
-        </GridColumn>
-        <GridColumn Field=@nameof(ShortUrlEntity.Title) HeaderText="Title"></GridColumn>
-        <GridColumn Field=@nameof(ShortUrlEntity.Url) HeaderText="Url"></GridColumn>
-        <GridColumn Width="100" TextAlign="TextAlign.Right" Field=@nameof(ShortUrlEntity.Clicks) HeaderText="Clicks">
-            <Template>
-                @{
-                    var url = (context as ShortUrlEntity);
-                    <span>@url.Clicks</span>
-                    <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() =>
-                        NavigateToStats(url.RowKey))">📊</button>
-                }
-            </Template>
-        </GridColumn>
-        <GridColumn Width="120">
-            <Template>
-            @{
-            var url = (context as ShortUrlEntity);
-            <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => EditShortUrl(url))">Edit</button>
-            <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => ArchiveShortUrl(url))">Archive</button>
-            }
-            </Template>
-            </GridColumn>
-    </GridColumns>
-</SfGrid> *@
-}
+</div>
+<FluentPaginator State="@pagination" />
 
 
 @if (ShowCreatePopup)
@@ -199,13 +156,15 @@ else
     bool ShowEditPopup = false;
     private ListResponse urls = new ListResponse();
 
-    IQueryable<ShortUrlEntity> urlList;
-
+    IQueryable<ShortUrlEntity>? urlList;
+    PaginationState pagination = new PaginationState { ItemsPerPage = 20 };
     ShortUrlRequest shortUrlRequest = new ShortUrlRequest();
     ShortUrlEntity editedUrl;
-    @* SfGrid<ShortUrlEntity> grdUrls; *@
     public List<ShortUrlEntity> gridData { get; set; }
 
+    GridSort<ShortUrlEntity> sortByClicks = GridSort<ShortUrlEntity>.ByDescending(p => p.Clicks);
+    GridSort<ShortUrlEntity> sortBySchedules = GridSort<ShortUrlEntity>.ByDescending(p => p.Schedules.Count);
+    GridSort<ShortUrlEntity> sortByVanities = GridSort<ShortUrlEntity>.ByAscending(p => p.RowKey);
 
     protected override async Task OnInitializedAsync()
     {
@@ -216,21 +175,7 @@ else
     {
         try
         {
-            var urlList = urlManager.GetUrls();
-            @* using var response = await Http.GetAsync("/api/UrlList");
-            if(response.IsSuccessStatusCode){
-                urls = await response.Content.ReadFromJsonAsync<ListResponse>();
-                urlList = urls.UrlList.AsQueryable<ShortUrlEntity>();
-            }
-            else{
-                switch (response.StatusCode)
-                {
-                    case HttpStatusCode.Unauthorized: NavigationManager.NavigateTo("/unauthorized"); 
-                        break;
-                    default: NavigationManager.NavigateTo("/404"); 
-                        break;
-                }
-            } *@
+            urlList = await urlManager.GetUrls();
         }
         catch (Exception ex)
         {
