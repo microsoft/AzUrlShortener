@@ -31,6 +31,7 @@ using System.Net;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
 
 namespace Cloud5mins.ShortenerTools.Functions
 {
@@ -48,7 +49,7 @@ namespace Cloud5mins.ShortenerTools.Functions
 
         [Function("UrlCreate")]
         public async Task<HttpResponseData> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "api/UrlCreate")] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "api/UrlCreate")] HttpRequestData req,
             ExecutionContext context
         )
         {
@@ -97,7 +98,6 @@ namespace Cloud5mins.ShortenerTools.Functions
                 string vanity = string.IsNullOrWhiteSpace(input.Vanity) ? "" : input.Vanity.Trim();
                 string title = string.IsNullOrWhiteSpace(input.Title) ? "" : input.Title.Trim();
 
-
                 ShortUrlEntity newRow;
 
                 if (!string.IsNullOrEmpty(vanity))
@@ -118,7 +118,8 @@ namespace Cloud5mins.ShortenerTools.Functions
                 await stgHelper.SaveShortUrlEntity(newRow);
 
                 var host = string.IsNullOrEmpty(_settings.CustomDomain) ? req.Url.Host : _settings.CustomDomain.ToString();
-                result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
+                var qrCodeUrl = await GetQRCode(newRow.Url);
+                result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title, qrCodeUrl);
 
                 _logger.LogInformation("Short Url created.");
             }
@@ -135,6 +136,29 @@ namespace Cloud5mins.ShortenerTools.Functions
             await response.WriteAsJsonAsync(result);
 
             return response;
+        }
+
+        private async Task<string> GetQRCode(string shortUrl)
+        {
+            // Create the QR Code
+            var redirectUrl = "https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=" + WebUtility.UrlEncode(shortUrl) + "&qzone=0&margin=0&size=250x250&ecc=L";
+            HttpClient client = new HttpClient();
+            var response = await client.GetAsync(redirectUrl);
+            var content = await response.Content.ReadAsByteArrayAsync();
+
+            // Save file as image on Azure blob storage
+            var url = "https://urlshortenerqrcodes.blob.core.windows.net/qr-code-images?sp=r&st=2025-02-03T20:34:26Z&se=2025-02-04T04:34:26Z&spr=https&sv=2022-11-02&sr=c&sig=LZ06Sip3iVq3EmPDGsAtW7unb6RuQdpEkIUNP%2BlBJAg%3D"
+            var blobServiceClient = new BlobServiceClient(url);
+            var containerClient = blobServiceClient.GetBlobContainerClient("qrcodes");
+            var blobClient = containerClient.GetBlobClient($"{Guid.NewGuid()}.png");
+
+            using (var stream = new MemoryStream(content))
+            {
+                await blobClient.UploadAsync(stream, true);
+            }
+
+            // Return the URL to the image
+            return blobClient.Uri.ToString();
         }
     }
 }
