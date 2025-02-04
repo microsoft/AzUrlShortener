@@ -7,10 +7,10 @@
     <DebugType>portable</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Syncfusion.Blazor.Calendars" Version="25.1.40" />
-    <PackageReference Include="Syncfusion.Blazor.Charts" Version="25.1.40" />
-    <PackageReference Include="Syncfusion.Blazor.Grid" Version="25.1.40" />
-    <PackageReference Include="Syncfusion.Blazor.Spinner" Version="25.1.40" />
+    <PackageReference Include="Syncfusion.Blazor.Calendars" Version="28.2.4" />
+    <PackageReference Include="Syncfusion.Blazor.Charts" Version="28.2.4" />
+    <PackageReference Include="Syncfusion.Blazor.Grid" Version="28.2.4" />
+    <PackageReference Include="Syncfusion.Blazor.Spinner" Version="28.2.4" />
     <PackageReference Include="AnthonyChu.AzureStaticWebApps.Blazor.Authentication" Version="0.0.2-preview" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.4" />
