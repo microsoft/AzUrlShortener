@@ -152,8 +152,8 @@ namespace Cloud5mins.ShortenerTools.Functions
                 var content = await response.Content.ReadAsByteArrayAsync();
 
                 // Save file as image on Azure blob storage
-                var url = "https://urlshortenerqrcodes.blob.core.windows.net/qr-code-images?sp=r&st=2025-02-03T20:34:26Z&se=2025-02-04T04:34:26Z&spr=https&sv=2022-11-02&sr=c&sig=LZ06Sip3iVq3EmPDGsAtW7unb6RuQdpEkIUNP%2BlBJAg%3D";
-                var blobServiceClient = new BlobServiceClient(url);
+                var blobStorageConnectionString = _settings.BlobStorageConnectionString;
+                var blobServiceClient = new BlobServiceClient(blobStorageConnectionString);
                 var containerClient = blobServiceClient.GetBlobContainerClient("qrcodes");
                 var blobClient = containerClient.GetBlobClient($"{Guid.NewGuid()}.png");
 
