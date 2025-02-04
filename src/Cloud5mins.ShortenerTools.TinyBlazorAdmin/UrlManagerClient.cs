@@ -23,4 +23,19 @@ public class UrlManagerClient(HttpClient httpClient)
         
 		return urlList;
     }
+
+	public async Task<bool> UrlCreate(ShortRequest url)
+	{
+		try{
+			using var response = await httpClient.PostAsJsonAsync("/api/UrlCreate", url);
+			if(response.IsSuccessStatusCode){
+				return true;
+			}
+		}
+		catch(Exception ex){
+			Console.WriteLine(ex.Message);
+		}
+		
+		return false;
+	}
 }

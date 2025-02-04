@@ -3,8 +3,10 @@
 @using System.Net
 @using Cloud5mins.ShortenerTools.Core.Domain
 @using Cloud5mins.ShortenerTools.Core.Messages;
+@using Cloud5mins.ShortenerTools.TinyBlazorAdmin.Components.Dialogues
 @inject UrlManagerClient urlManager
 @inject IJSRuntime JSRuntime
+@inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 
 @rendermode InteractiveServer
@@ -16,12 +18,14 @@
 
 <FluentButton OnClick="@(CreateShortUrl)" Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size16.Add())">Add New Url</FluentButton>
 
-<div style="height: 380px; overflow-x:auto; display:flex;">
+<div style="height: 400px; overflow-x:auto; display:flex;">
     <FluentDataGrid Id="grdUrls" 
                     Items="@urlList"
                     ResizableColumns=true
                     AllowSorting=true
-                    Pagination="@pagination">
+                    Pagination="@pagination"
+                    RowSize="DataGridRowSize.Medium"
+                    ShowHover=true>
         <ChildContent>
             <TemplateColumn Width="70px" Sortable="false">
                 <FluentButton OnClick="@(async () => await CopyToClipboardAsync(context!.ShortUrl))" IconEnd="@(new Icons.Regular.Size16.Copy())" Title="Copy" />
@@ -69,21 +73,18 @@
                     <DataAnnotationsValidator />
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                            <SfTextBox id="title" Placeholder="Title" FloatLabelType="@FloatLabelType.Auto"
-                                @bind-Value="shortUrlRequest.Title"></SfTextBox>
+                            <FluentTextField id="title" Placeholder="Title" @bind-Value="shortUrlRequest.Title"></FluentTextField>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                            <SfTextBox id="url" Placeholder="Url" FloatLabelType="@FloatLabelType.Auto"
-                                @bind-Value="shortUrlRequest.Url"></SfTextBox>
+                            <FluentTextField id="url" Placeholder="Url" @bind-Value="shortUrlRequest.Url"></FluentTextField>
                             <ValidationMessage For="@(() => shortUrlRequest.Url)" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                            <SfTextBox id="vanity" Placeholder="Vanity" FloatLabelType="@FloatLabelType.Auto"
-                                @bind-Value="shortUrlRequest.Vanity"></SfTextBox>
+                            <FluentTextField id="vanity" Placeholder="Vanity" @bind-Value="shortUrlRequest.Vanity"></FluentTextField>
                         </div>
                     </div>
 
@@ -158,7 +159,7 @@
 
     IQueryable<ShortUrlEntity>? urlList;
     PaginationState pagination = new PaginationState { ItemsPerPage = 20 };
-    ShortUrlRequest shortUrlRequest = new ShortUrlRequest();
+    ShortUrlRequest shortUrlRequest;
     ShortUrlEntity editedUrl;
     public List<ShortUrlEntity> gridData { get; set; }
 
@@ -211,10 +212,30 @@
         ShowEditPopup = false;
     }
 
-    void CreateShortUrl()
+    private async Task CreateShortUrl()
     {
         shortUrlRequest = new ShortUrlRequest();
-        ShowCreatePopup = true;
+        //ShowCreatePopup = true;
+        var dialog = await DialogService.ShowDialogAsync<NewUrlDialog>(shortUrlRequest, new DialogParameters()
+            {
+                Title = "Create a new Short Url",
+                PreventDismissOnOverlayClick = true,
+                PreventScroll = true,
+            });
+        
+        var result = await dialog.Result;
+        if (!result.Cancelled && result.Data != null)
+        {
+            var dialogData = (ShortUrlRequest)result.Data;
+            var urlRequest = new ShortRequest
+            {
+                Title = dialogData.Title ?? string.Empty,
+                Url = dialogData.Url,
+                Vanity = dialogData.Vanity,
+                Schedules = dialogData.Schedules.ToArray()
+            };
+            var response = await urlManager.UrlCreate(urlRequest);
+        }
     }
 
     [Inject] public IJSRuntime JsRuntime { get; set; }

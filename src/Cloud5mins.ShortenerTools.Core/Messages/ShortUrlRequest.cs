@@ -1,4 +1,5 @@
 using Cloud5mins.ShortenerTools.Core.Domain;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cloud5mins.ShortenerTools.Core.Messages
@@ -7,7 +8,7 @@ namespace Cloud5mins.ShortenerTools.Core.Messages
     {
         private string _vanity;
 
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         public string Vanity
         {
@@ -40,6 +41,15 @@ namespace Cloud5mins.ShortenerTools.Core.Messages
             {
                 _schedules = value;
             }
+        }
+
+        public bool Validate()
+        {
+            if (string.IsNullOrEmpty(Url))
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
