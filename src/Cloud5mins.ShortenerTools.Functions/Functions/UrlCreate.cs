@@ -32,6 +32,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
+using System.Net.Http;
 
 namespace Cloud5mins.ShortenerTools.Functions
 {
