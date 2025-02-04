@@ -141,26 +141,37 @@ namespace Cloud5mins.ShortenerTools.Functions
 
         private async Task<string> GetQRCode(string shortUrl)
         {
-            // Create the QR Code
-            var redirectUrl = "https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=" + WebUtility.UrlEncode(shortUrl) + "&qzone=0&margin=0&size=250x250&ecc=L";
-            HttpClient client = new HttpClient();
-            var response = await client.GetAsync(redirectUrl);
-            var content = await response.Content.ReadAsByteArrayAsync();
+            string qrCodeUrl = "";
 
-            // Save file as image on Azure blob storage
-            var url = "https://urlshortenerqrcodes.blob.core.windows.net/qr-code-images?sp=r&st=2025-02-03T20:34:26Z&se=2025-02-04T04:34:26Z&spr=https&sv=2022-11-02&sr=c&sig=LZ06Sip3iVq3EmPDGsAtW7unb6RuQdpEkIUNP%2BlBJAg%3D";
-            var blobServiceClient = new BlobServiceClient(url);
-            var containerClient = blobServiceClient.GetBlobContainerClient("qrcodes");
-            var blobClient = containerClient.GetBlobClient($"{Guid.NewGuid()}.png");
-
-            using (var stream = new MemoryStream(content))
+            try
             {
-                await blobClient.UploadAsync(stream, true);
+                // Create the QR Code
+                var redirectUrl = "https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=" + WebUtility.UrlEncode(shortUrl) + "&qzone=0&margin=0&size=250x250&ecc=L";
+                HttpClient client = new HttpClient();
+                var response = await client.GetAsync(redirectUrl);
+                var content = await response.Content.ReadAsByteArrayAsync();
+
+                // Save file as image on Azure blob storage
+                var url = "https://urlshortenerqrcodes.blob.core.windows.net/qr-code-images?sp=r&st=2025-02-03T20:34:26Z&se=2025-02-04T04:34:26Z&spr=https&sv=2022-11-02&sr=c&sig=LZ06Sip3iVq3EmPDGsAtW7unb6RuQdpEkIUNP%2BlBJAg%3D";
+                var blobServiceClient = new BlobServiceClient(url);
+                var containerClient = blobServiceClient.GetBlobContainerClient("qrcodes");
+                var blobClient = containerClient.GetBlobClient($"{Guid.NewGuid()}.png");
+
+                using (var stream = new MemoryStream(content))
+                {
+                    await blobClient.UploadAsync(stream, true);
+                }
+
+                // Return the URL to the image
+                qrCodeUrl = blobClient.Uri.ToString();
+                _logger.LogInformation($"qrCodeUrl: {qrCodeUrl}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error was encountered.");
+                _logger.LogError($"error message: {ex.Message} - {ex.StackTrace}");
             }
 
-            // Return the URL to the image
-            string qrCodeUrl = blobClient.Uri.ToString();
-            _logger.LogInformation("qrCodeUrl: {qrCodeUrl}", qrCodeUrl);
             return qrCodeUrl;
         }
     }
