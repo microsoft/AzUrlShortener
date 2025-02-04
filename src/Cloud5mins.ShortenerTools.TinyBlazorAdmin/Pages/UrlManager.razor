@@ -28,67 +28,72 @@ else
     <SfGrid DataSource="@urls.UrlList" id="grdUrls" AllowPaging="true" AllowSorting="true" AllowFiltering="true">
         <GridPageSettings PageSize="15"></GridPageSettings>
         <GridColumns>
-            <GridColumn Width="70" AllowFiltering="false" >
+            <GridColumn Width="70" AllowFiltering="false">
                 <Template>
                     @{
-                    var url = (context as ShortUrlEntity);
-                    <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => CopyToClipboardAsync(url.ShortUrl))">Copy</button>
-                }
-            </Template>
-        </GridColumn>
-        <GridColumn  Width="105" HeaderText="Schedule(s)">
-            <Template>
-                @{
-                    var url = (context as ShortUrlEntity);
-                    if (url.Schedules != null)
-                    {
-                        <span>@url.Schedules.Count</span>
+                        var url = (context as ShortUrlEntity);
+                        <button type="button" class="btn btn-outline-primary btn-sm"
+                            @onclick="@(() => CopyToClipboardAsync(url.ShortUrl))">Copy</button>
                     }
-                    else
-                    {
-                        <span>0</span>
-                    };
-                }
             </Template>
         </GridColumn>
-        <GridColumn Width="250" Field=@nameof(ShortUrlEntity.RowKey) HeaderText="Vanity">
+        <GridColumn Width="105" HeaderText="Schedule(s)">
             <Template>
                 @{
-                    var url = (context as ShortUrlEntity);
-                    <a href="@url.ShortUrl" target="blank">@url.RowKey</a>
-                }
-            </Template>
-        </GridColumn>
-        <GridColumn Field=@nameof(ShortUrlEntity.Title) HeaderText="Title"></GridColumn>
-        <GridColumn Field=@nameof(ShortUrlEntity.Url) HeaderText="Url"></GridColumn>
-        <GridColumn Field=@nameof(ShortUrlEntity.Url) HeaderText="QR Code">
-            <Template>
-                @{
-                    var url = (context as ShortUrlEntity);
-                    var imgSrc = GetQRCodeShortUrl(url);
-                    <img src="@imgSrc" alt="QR Code" />
-                }
-            </Template>
-        </GridColumn>
-        <GridColumn Width="100" TextAlign="TextAlign.Right" Field=@nameof(ShortUrlEntity.Clicks) HeaderText="Clicks">
-            <Template>
-                @{
-                    var url = (context as ShortUrlEntity);
-                    <span>@url.Clicks</span>
-                    <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() =>
+                        var url = (context as ShortUrlEntity);
+                        if (url.Schedules != null)
+                        {
+                            <span>@url.Schedules.Count</span>
+                        }
+                        else
+                        {
+                            <span>0</span>
+                        }
+                        ;
+                    }
+                </Template>
+            </GridColumn>
+            <GridColumn Width="250" Field=@nameof(ShortUrlEntity.RowKey) HeaderText="Vanity">
+                <Template>
+                    @{
+                        var url = (context as ShortUrlEntity);
+                        <a href="@url.ShortUrl" target="blank">@url.RowKey</a>
+                    }
+                </Template>
+            </GridColumn>
+            <GridColumn Field=@nameof(ShortUrlEntity.Title) HeaderText="Title"></GridColumn>
+            <GridColumn Field=@nameof(ShortUrlEntity.Url) HeaderText="Url"></GridColumn>
+            <GridColumn Field=@nameof(ShortUrlEntity.Url) HeaderText="QR Code">
+                <Template>
+                    @{
+                        var url = (context as ShortUrlEntity);
+                        //var imgSrc = GetQRCodeShortUrl(url);
+                        var imgSrc = url.QRCode;
+                        <img src="@imgSrc" alt="QR Code" />
+                    }
+                </Template>
+            </GridColumn>
+            <GridColumn Width="100" TextAlign="TextAlign.Right" Field=@nameof(ShortUrlEntity.Clicks) HeaderText="Clicks">
+                <Template>
+                    @{
+                        var url = (context as ShortUrlEntity);
+                        <span>@url.Clicks</span>
+                        <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() =>
                         NavigateToStats(url.RowKey))">📊</button>
-                }
+                    }
             </Template>
         </GridColumn>
         <GridColumn Width="120">
             <Template>
-            @{
-            var url = (context as ShortUrlEntity);
-            <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => EditShortUrl(url))">Edit</button>
-            <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => ArchiveShortUrl(url))">Archive</button>
-            }
+                @{
+                        var url = (context as ShortUrlEntity);
+                        <button type="button" class="btn btn-outline-primary btn-sm"
+                            @onclick="@(() => EditShortUrl(url))">Edit</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm"
+                            @onclick="@(() => ArchiveShortUrl(url))">Archive</button>
+                    }
             </Template>
-            </GridColumn>
+        </GridColumn>
     </GridColumns>
 </SfGrid>
 }
@@ -152,47 +157,49 @@ else
 @if (ShowEditPopup)
 {
     <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Confirm action</h4>
-                    <button type="button" class="close" @onclick="@ClosePopup">&times;</button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <EditForm Model="editedUrl" OnValidSubmit="SaveUpdatedShortUrl">
-                        <DataAnnotationsValidator />
-                        <div>
-                            <label for="edit-title">Title</label>
-                            <InputText id="edit-title" class="form-control" placeholder="Title or description for this URL" @bind-Value="editedUrl.Title" />
-                            <ValidationMessage For="@(() => editedUrl.Title)" />
-                        </div>
-                        <br />
-                        <div>
-                            <label for="edit-url">The Url to redirect</label>
-                            <InputText id="edit-url" class="form-control" placeholder="The Url to redirect" @bind-Value="editedUrl.Url" />
-                            <ValidationMessage For="@(() => editedUrl.Url)" />
-                        </div>
-                        <div>
-                            <SchedulesComponent schedules="@editedUrl.Schedules"></SchedulesComponent>
-                        </div>
-                    </EditForm>
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn" @onclick="@ClosePopup">Cancel</button>
-                    <button type="button" class="btn btn-primary" @onclick=@SaveUpdatedShortUrl>Save</button>
-                </div>
-
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Confirm action</h4>
+                <button type="button" class="close" @onclick="@ClosePopup">&times;</button>
             </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <EditForm Model="editedUrl" OnValidSubmit="SaveUpdatedShortUrl">
+                    <DataAnnotationsValidator />
+                    <div>
+                        <label for="edit-title">Title</label>
+                        <InputText id="edit-title" class="form-control" placeholder="Title or description for this URL"
+                            @bind-Value="editedUrl.Title" />
+                        <ValidationMessage For="@(() => editedUrl.Title)" />
+                    </div>
+                    <br />
+                    <div>
+                        <label for="edit-url">The Url to redirect</label>
+                        <InputText id="edit-url" class="form-control" placeholder="The Url to redirect"
+                            @bind-Value="editedUrl.Url" />
+                        <ValidationMessage For="@(() => editedUrl.Url)" />
+                    </div>
+                    <div>
+                        <SchedulesComponent schedules="@editedUrl.Schedules"></SchedulesComponent>
+                    </div>
+                </EditForm>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn" @onclick="@ClosePopup">Cancel</button>
+                <button type="button" class="btn btn-primary" @onclick=@SaveUpdatedShortUrl>Save</button>
+            </div>
+
         </div>
     </div>
+</div>
 
-} 
+}
 
 @code {
     bool ShowCreatePopup = false;
@@ -213,15 +220,19 @@ else
         try
         {
             using var response = await Http.GetAsync("/api/UrlList");
-            if(response.IsSuccessStatusCode){
-                urls = await response.Content.ReadFromJsonAsync<ListResponse>();    
+            if (response.IsSuccessStatusCode)
+            {
+                urls = await response.Content.ReadFromJsonAsync<ListResponse>();
             }
-            else{
+            else
+            {
                 switch (response.StatusCode)
                 {
-                    case HttpStatusCode.Unauthorized: NavigationManager.NavigateTo("/unauthorized"); 
+                    case HttpStatusCode.Unauthorized:
+                        NavigationManager.NavigateTo("/unauthorized");
                         break;
-                    default: NavigationManager.NavigateTo("/404"); 
+                    default:
+                        NavigationManager.NavigateTo("/404");
                         break;
                 }
             }
@@ -287,7 +298,8 @@ else
         await UpdateUIList();
     }
 
-    private void NavigateToStats(string vanity){
+    private void NavigateToStats(string vanity)
+    {
         NavigationManager.NavigateTo("/Statistics/" + vanity);
     }
 
