@@ -69,7 +69,11 @@ else
                         var url = (context as ShortUrlEntity);
                         //var imgSrc = GetQRCodeShortUrl(url);
                         var imgSrc = url.QrCodeUrl;
-                        <img src="@imgSrc" alt="QR Code" />
+                        if (imgSrc != null &&
+                        imgSrc != "")
+                        {
+                            <img src="@imgSrc" alt="QR Code" />
+                        }
                     }
                 </Template>
             </GridColumn>
