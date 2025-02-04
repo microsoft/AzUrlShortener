@@ -147,8 +147,10 @@ namespace Cloud5mins.ShortenerTools.Functions
             {
                 // Create the QR Code
                 var redirectUrl = "https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=" + WebUtility.UrlEncode(shortUrl) + "&qzone=0&margin=0&size=250x250&ecc=L";
+                _logger.LogInformation($"redirectUrl: {redirectUrl}");
                 HttpClient client = new HttpClient();
                 var response = await client.GetAsync(redirectUrl);
+                _logger.LogInformation($"response status: {response.StatusCode}");
                 var content = await response.Content.ReadAsByteArrayAsync();
 
                 // Save file as image on Azure blob storage
