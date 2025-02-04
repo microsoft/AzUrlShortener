@@ -20,37 +20,38 @@
 <a href="/UrlManager/"> &lt;&lt; Back</a>
 
 <div id="stats">
-@if(clicksHistory != null){
-<SfChart Title="Click Stats">
-    <ChartEvents/>
-    <ChartArea><ChartAreaBorder Width="1"></ChartAreaBorder></ChartArea>
-    <ChartPrimaryXAxis  ValueType="Syncfusion.Blazor.Charts.ValueType.DateTime"  
-                        LabelFormat="y/M/d" 
-                        EdgeLabelPlacement="EdgeLabelPlacement.Shift" RangePadding="ChartRangePadding.Auto">
-        <ChartAxisMajorGridLines Width="1"></ChartAxisMajorGridLines>
-    </ChartPrimaryXAxis>
+    @if (clicksHistory != null)
+    {
+        <SfChart Title="Click Stats">
+            <ChartEvents />
+            <ChartArea>
+                <ChartAreaBorder Width="1"></ChartAreaBorder>
+            </ChartArea>
+            <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.DateTime" LabelFormat="y/M/d"
+                EdgeLabelPlacement="EdgeLabelPlacement.Shift" RangePadding="ChartRangePadding.Auto">
+                <ChartAxisMajorGridLines Width="1"></ChartAxisMajorGridLines>
+            </ChartPrimaryXAxis>
 
-    <ChartPrimaryYAxis  LabelFormat="{value}" >
-            <ChartAxisLineStyle Width="1"></ChartAxisLineStyle>
-            <ChartAxisMajorTickLines Width="1"></ChartAxisMajorTickLines>
-    </ChartPrimaryYAxis>
-    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
-    
-    <ChartSeriesCollection>
-        <ChartSeries    DataSource="@clicksHistory" 
-                        Name="Click(s) by Day"
-                        XName="DateClicked" 
-                        YName="Count" 
-                        Type="ChartSeriesType.Line">
-            <ChartMarker Visible="true" ></ChartMarker>
-        </ChartSeries>
-    </ChartSeriesCollection>
-    
-</SfChart>
-}
-else{
-    <SfSpinner Size="40" Label="Counting all those clicks..." Type="SpinnerType.Material" Visible="@isLoading"></SfSpinner>
-}
+            <ChartPrimaryYAxis LabelFormat="{value}">
+                <ChartAxisLineStyle Width="1"></ChartAxisLineStyle>
+                <ChartAxisMajorTickLines Width="1"></ChartAxisMajorTickLines>
+            </ChartPrimaryYAxis>
+            <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+
+            <ChartSeriesCollection>
+                <ChartSeries DataSource="@clicksHistory" Name="Click(s) by Day" XName="DateClicked" YName="Count"
+                    Type="ChartSeriesType.Line">
+                    <ChartMarker Visible="true"></ChartMarker>
+                </ChartSeries>
+            </ChartSeriesCollection>
+
+        </SfChart>
+    }
+    else
+    {
+        <SfSpinner Size="40" Label="Counting all those clicks..." Type="SpinnerType.Material" Visible="@isLoading">
+        </SfSpinner>
+    }
 </div>
 <div>
     <h3>@((MarkupString)dayCount)</h3>
@@ -67,7 +68,7 @@ else{
     private string subTitle = "";
     private ClickDateList clickStatsList;
     private ObservableCollection<ClickDate> clicksHistory;
-    private readonly Random _random = new Random(); 
+    private readonly Random _random = new Random();
     private string dayCount = string.Empty;
 
     public class ClickData
@@ -80,38 +81,44 @@ else{
 
     private async Task<ObservableCollection<ClickDate>> UpdateUIList()
     {
-        subTitle = (!String.IsNullOrEmpty(vanity))? $"Clicks for: {vanity}": "All clicks";
-        try{
+        subTitle = (!String.IsNullOrEmpty(vanity)) ? $"Clicks for: {vanity}" : "All clicks";
+        try
+        {
             CancellationToken cancellationToken = new CancellationToken();
-            using var response = await Http.PostAsJsonAsync("/api/UrlClickStatsByDay",  new UrlClickStatsRequest(vanity), cancellationToken);
-            if(response.IsSuccessStatusCode){
+            using var response = await Http.PostAsJsonAsync("/api/UrlClickStatsByDay", new UrlClickStatsRequest(vanity),
+            cancellationToken);
+            if (response.IsSuccessStatusCode)
+            {
                 var jsonResult = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"jsonResult: {jsonResult}");
                 clickStatsList = JsonSerializer.Deserialize<ClickDateList>(jsonResult);
-            
+
                 return new ObservableCollection<ClickDate>(clickStatsList.Items);
             }
             switch (response.StatusCode)
             {
-                case HttpStatusCode.Unauthorized: NavigationManager.NavigateTo("/unauthorized"); 
+                case HttpStatusCode.Unauthorized:
+                    NavigationManager.NavigateTo("/unauthorized");
                     break;
-                default: NavigationManager.NavigateTo("/404"); 
+                default:
+                    NavigationManager.NavigateTo("/404");
                     break;
             }
         }
         catch (System.Exception ex)
         {
-            Console.WriteLine(ex.ToString()); 
+            Console.WriteLine(ex.ToString());
         }
         return null;
     }
 
-     protected override async void OnInitialized()
-     {
+    protected override async void OnInitialized()
+    {
         clicksHistory = await UpdateUIList();
         this.isLoading = false;
         StateHasChanged();
-        if(clicksHistory != null)
+        if (clicksHistory != null)
             dayCount = "Day(s): " + clicksHistory.Count.ToString();
-        
+
     }
 }
