@@ -30,11 +30,11 @@ namespace Cloud5mins.Function
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "api/UrlQRCodeCreate")] HttpRequestData req,
             ExecutionContext context)
         {
-           //log.LogInformation($"C# HTTP trigger function processed for Url: {shortUrl}");
+            //log.LogInformation($"C# HTTP trigger function processed for Url: {shortUrl}");
 
-           ShortRequest input;
+            ShortRequest input;
 
-           // Validation of the inputs
+            // Validation of the inputs
             if (req == null)
             {
                 return req.CreateResponse(HttpStatusCode.NotFound);
@@ -50,15 +50,15 @@ namespace Cloud5mins.Function
                 }
             }
 
-           var redirectUrl = "https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data="+WebUtility.UrlEncode(input.Url)+"&qzone=0&margin=0&size=250x250&ecc=L";
+            var redirectUrl = "https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=" + WebUtility.UrlEncode(input.Url) + "&qzone=0&margin=0&size=250x250&ecc=L";
 
             req.FunctionContext.GetHttpResponseData()?.Headers.Add("Access-Control-Allow-Origin", "https://kmpl.fun");
-      
+
             req.Headers.Add("Access-Control-Allow-Origin", "https://kmpl.fun");
-           var res = req.CreateResponse(HttpStatusCode.Redirect);
-           res.Headers.Add("Location", redirectUrl);
-           res.Headers.Add("Access-Control-Allow-Origin", "https://kmpl.fun");
-           return res;
+            var res = req.CreateResponse(HttpStatusCode.Redirect);
+            res.Headers.Add("Location", redirectUrl);
+            res.Headers.Add("Access-Control-Allow-Origin", "https://kmpl.fun");
+            return res;
         }
     }
 }

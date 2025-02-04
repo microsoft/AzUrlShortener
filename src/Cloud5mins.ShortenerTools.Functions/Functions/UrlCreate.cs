@@ -158,7 +158,9 @@ namespace Cloud5mins.ShortenerTools.Functions
             }
 
             // Return the URL to the image
-            return blobClient.Uri.ToString();
+            string qrCodeUrl = blobClient.Uri.ToString();
+            _logger.LogInformation("qrCodeUrl: {qrCodeUrl}", qrCodeUrl);
+            return qrCodeUrl;
         }
     }
 }
