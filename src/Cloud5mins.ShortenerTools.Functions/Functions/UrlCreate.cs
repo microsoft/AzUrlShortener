@@ -150,23 +150,32 @@ namespace Cloud5mins.ShortenerTools.Functions
                 _logger.LogInformation($"redirectUrl: {redirectUrl}");
                 HttpClient client = new HttpClient();
                 var response = await client.GetAsync(redirectUrl);
-                _logger.LogInformation($"response status: {response.StatusCode}");
-                var content = await response.Content.ReadAsByteArrayAsync();
 
-                // Save file as image on Azure blob storage
-                var blobStorageConnectionString = _settings.BlobStorageConnectionString;
-                var blobServiceClient = new BlobServiceClient(blobStorageConnectionString);
-                var containerClient = blobServiceClient.GetBlobContainerClient("qr-code-images");
-                var blobClient = containerClient.GetBlobClient($"{Guid.NewGuid()}.png");
-
-                using (var stream = new MemoryStream(content))
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
                 {
-                    await blobClient.UploadAsync(stream, true);
-                }
+                    _logger.LogInformation($"response status: {response.StatusCode}");
 
-                // Return the URL to the image
-                qrCodeUrl = blobClient.Uri.ToString();
-                _logger.LogInformation($"qrCodeUrl: {qrCodeUrl}");
+                    using (var stream = await response.Content.ReadAsStreamAsync())
+                    {
+                        _logger.LogInformation($"ReadAsStreamAsync auccessful");
+
+                        var memStream = new MemoryStream();
+                        await stream.CopyToAsync(memStream);
+                        memStream.Position = 0;
+
+                        // Save file as image on Azure blob storage
+                        var blobStorageConnectionString = _settings.BlobStorageConnectionString;
+                        var blobServiceClient = new BlobServiceClient(blobStorageConnectionString);
+                        var containerClient = blobServiceClient.GetBlobContainerClient("qr-code-images");
+                        var blobClient = containerClient.GetBlobClient($"{Guid.NewGuid()}.png");
+
+                        await blobClient.UploadAsync(memStream, true);
+
+                        // Return the URL to the image
+                        qrCodeUrl = blobClient.Uri.ToString();
+                        _logger.LogInformation($"qrCodeUrl: {qrCodeUrl}");
+                    }
+                }
             }
             catch (Exception ex)
             {
