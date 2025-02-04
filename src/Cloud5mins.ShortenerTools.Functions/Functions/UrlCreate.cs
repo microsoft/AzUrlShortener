@@ -157,7 +157,7 @@ namespace Cloud5mins.ShortenerTools.Functions
 
                     using (var stream = await response.Content.ReadAsStreamAsync())
                     {
-                        _logger.LogInformation($"ReadAsStreamAsync auccessful");
+                        _logger.LogInformation($"ReadAsStreamAsync successful");
 
                         var memStream = new MemoryStream();
                         await stream.CopyToAsync(memStream);
@@ -165,6 +165,7 @@ namespace Cloud5mins.ShortenerTools.Functions
 
                         // Save file as image on Azure blob storage
                         var blobStorageConnectionString = _settings.BlobStorageConnectionString;
+                        _logger.LogInformation($"blobStorageConnectionString: {blobStorageConnectionString}");
                         var blobServiceClient = new BlobServiceClient(blobStorageConnectionString);
                         var containerClient = blobServiceClient.GetBlobContainerClient("qr-code-images");
                         var blobClient = containerClient.GetBlobClient($"{Guid.NewGuid()}.png");
