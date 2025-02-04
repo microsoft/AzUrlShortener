@@ -101,9 +101,10 @@ namespace Cloud5mins.ShortenerTools.Functions
 
                 ShortUrlEntity newRow;
 
+                var qrCodeUrl = await GetQRCode(longUrl);
                 if (!string.IsNullOrEmpty(vanity))
                 {
-                    newRow = new ShortUrlEntity(longUrl, vanity, title, input.Schedules);
+                    newRow = new ShortUrlEntity(longUrl, vanity, title, input.Schedules, qrCodeUrl);
                     if (await stgHelper.IfShortUrlEntityExist(newRow))
                     {
                         var badResponse = req.CreateResponse(HttpStatusCode.Conflict);
@@ -113,14 +114,13 @@ namespace Cloud5mins.ShortenerTools.Functions
                 }
                 else
                 {
-                    newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, stgHelper), title, input.Schedules);
+                    newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, stgHelper), title, input.Schedules, qrCodeUrl);
                 }
 
                 await stgHelper.SaveShortUrlEntity(newRow);
 
                 var host = string.IsNullOrEmpty(_settings.CustomDomain) ? req.Url.Host : _settings.CustomDomain.ToString();
-                var qrCodeUrl = await GetQRCode(newRow.Url);
-                result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title, qrCodeUrl);
+                result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title, newRow.QrCodeUrl);
 
                 _logger.LogInformation("Short Url created.");
             }
