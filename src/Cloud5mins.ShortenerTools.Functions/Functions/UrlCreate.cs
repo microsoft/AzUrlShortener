@@ -156,7 +156,7 @@ namespace Cloud5mins.ShortenerTools.Functions
                 // Save file as image on Azure blob storage
                 var blobStorageConnectionString = _settings.BlobStorageConnectionString;
                 var blobServiceClient = new BlobServiceClient(blobStorageConnectionString);
-                var containerClient = blobServiceClient.GetBlobContainerClient("qrcodes");
+                var containerClient = blobServiceClient.GetBlobContainerClient("qr-code-images");
                 var blobClient = containerClient.GetBlobClient($"{Guid.NewGuid()}.png");
 
                 using (var stream = new MemoryStream(content))
