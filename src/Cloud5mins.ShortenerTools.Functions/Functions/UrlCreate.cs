@@ -147,7 +147,7 @@ namespace Cloud5mins.ShortenerTools.Functions
             {
                 // Create the QR Code
                 var redirectUrl = "https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=" + WebUtility.UrlEncode(shortUrl) + "&qzone=0&margin=0&size=250x250&ecc=L";
-                _logger.LogInformation($"redirectUrl: {redirectUrl}");
+                //_logger.LogInformation($"redirectUrl: {redirectUrl}");
                 HttpClient client = new HttpClient();
                 var response = await client.GetAsync(redirectUrl);
 
@@ -165,9 +165,9 @@ namespace Cloud5mins.ShortenerTools.Functions
 
                         // Save file as image on Azure blob storage
                         var blobStorageConnectionString = _settings.BlobStorageConnectionString;
-                        _logger.LogInformation($"blobStorageConnectionString: {blobStorageConnectionString}");
                         var blobServiceClient = new BlobServiceClient(blobStorageConnectionString);
-                        var containerClient = blobServiceClient.GetBlobContainerClient("qr-code-images");
+                        var blobStorageContainer = _settings.BlobStorageContainer;
+                        var containerClient = blobServiceClient.GetBlobContainerClient(blobStorageContainer);
                         var blobClient = containerClient.GetBlobClient($"{Guid.NewGuid()}.png");
 
                         await blobClient.UploadAsync(memStream, true);

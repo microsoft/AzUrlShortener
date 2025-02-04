@@ -67,7 +67,6 @@ else
                 <Template>
                     @{
                         var url = (context as ShortUrlEntity);
-                        //var imgSrc = GetQRCodeShortUrl(url);
                         var imgSrc = url.QrCodeUrl;
                         if (imgSrc != null &&
                         imgSrc != "")
@@ -156,7 +155,6 @@ else
 </div>
 
 }
-
 
 @if (ShowEditPopup)
 {
@@ -288,7 +286,6 @@ else
         await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", url);
     }
 
-
     void EditShortUrl(ShortUrlEntity urlEntity)
     {
         editedUrl = urlEntity;
@@ -310,12 +307,6 @@ else
     public async Task ArchiveShortUrl(ShortUrlEntity urlEntity)
     {
         await Http.PostAsJsonAsync<ShortUrlEntity>("/api/UrlArchive", urlEntity);
-        await UpdateUIList();
-    }
-
-    public async Task GetQRCodeShortUrl(ShortUrlEntity urlEntity)
-    {
-        var res = await Http.PostAsJsonAsync<ShortUrlEntity>("/api/UrlQRCodeCreate", urlEntity);
         await UpdateUIList();
     }
 }

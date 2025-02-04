@@ -6,5 +6,6 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
         public string CustomDomain { get; set; }
         public string DataStorage { get; set; }
         public string BlobStorageConnectionString { get; set; }
+        public string BlobStorageContainer { get; set; }
     }
 }
