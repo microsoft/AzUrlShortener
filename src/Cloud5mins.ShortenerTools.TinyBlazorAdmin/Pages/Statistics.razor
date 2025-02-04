@@ -85,6 +85,7 @@
         try
         {
             CancellationToken cancellationToken = new CancellationToken();
+            Console.WriteLine($"vanity: {vanity}");
             using var response = await Http.PostAsJsonAsync("/api/UrlClickStatsByDay", new UrlClickStatsRequest(vanity),
             cancellationToken);
             if (response.IsSuccessStatusCode)
@@ -92,7 +93,7 @@
                 var jsonResult = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"jsonResult: {jsonResult}");
                 clickStatsList = JsonSerializer.Deserialize<ClickDateList>(jsonResult);
-
+                Console.WriteLine($"clickStatsList: {clickStatsList}");
                 return new ObservableCollection<ClickDate>(clickStatsList.Items);
             }
             switch (response.StatusCode)
