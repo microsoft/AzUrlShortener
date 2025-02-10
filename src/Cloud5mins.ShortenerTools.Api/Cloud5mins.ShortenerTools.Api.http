@@ -1,19 +1,19 @@
-## @Cloud5mins.ShortenerTools.Api_HostAddress = http://localhost:5288
-@Cloud5mins.ShortenerTools.Api_HostAddress = https://localhost:7187
+## @Api_HostAddress = http://localhost:5288
+@Api_HostAddress = https://localhost:7187
 
 ### ####################################
 ### weatherforecast
-GET {{Cloud5mins.ShortenerTools.Api_HostAddress}}/weatherforecast/
+GET {{Api_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ### ####################################
 ### Get a Welcome message
-Get  {{Cloud5mins.ShortenerTools.Api_HostAddress}}/api
+Get  {{Api_HostAddress}}/api
 
 ### ####################################
 ### Create a new short URL
 
-POST  {{Cloud5mins.ShortenerTools.Api_HostAddress}}/api/UrlCreate
+POST  {{Api_HostAddress}}/api/UrlCreate
 Accept: application/json
 Content-Type: application/json
 
@@ -25,7 +25,7 @@ Content-Type: application/json
 
 ### ERROR no URL
 
-POST  {{Cloud5mins.ShortenerTools.Api_HostAddress}}/api/UrlCreate
+POST  {{Api_HostAddress}}/api/UrlCreate
 Accept: application/json
 Content-Type: application/json
 
@@ -37,7 +37,7 @@ Content-Type: application/json
 
 ### ERROR URL no valide
 
-POST  {{Cloud5mins.ShortenerTools.Api_HostAddress}}/api/UrlCreate
+POST  {{Api_HostAddress}}/api/UrlCreate
 Accept: application/json
 Content-Type: application/json
 
@@ -50,7 +50,7 @@ Content-Type: application/json
 ### ####################################
 ### Get list of URLs
 
-GET  {{Cloud5mins.ShortenerTools.Api_HostAddress}}/api/UrlList
+GET  {{Api_HostAddress}}/api/UrlList
 Accept: application/json
 
 

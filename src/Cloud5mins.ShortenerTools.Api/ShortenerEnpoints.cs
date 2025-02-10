@@ -1,9 +1,11 @@
 using System.Data;
 using System.Threading.Tasks.Dataflow;
 using System.Xml.Linq;
+using Azure.Data.Tables;
 using Cloud5mins.ShortenerTools;
 using Cloud5mins.ShortenerTools.Core.Domain;
 using Cloud5mins.ShortenerTools.Core.Messages;
+using Cloud5mins.ShortenerTools.Core.Service;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 public static class ShortenerEnpoints
@@ -37,14 +39,15 @@ public static class ShortenerEnpoints
 								NotFound<DetailedBadRequest>,
 								Conflict<DetailedBadRequest>,
 								InternalServerError<DetailedBadRequest>
-								>> UrlCreate(ShortRequest request, 
-												IStorageTableHelper stgHelper, 
+								>> UrlCreate(ShortRequest request,  
+												TableServiceClient tblClient, 
 												HttpContext context, 
 												ILogger logger)
 	{
 
 		logger.LogTrace($"creating shortURL: {request.Url}");
 		var result = new ShortResponse();
+		IAzStrorageTablesService stgHelper = new AzStrorageTablesService(tblClient);
 
 		try
 		{
@@ -70,26 +73,28 @@ public static class ShortenerEnpoints
 
 			ShortUrlEntity? newRow;
 
-			if (!string.IsNullOrEmpty(vanity))
-			{
-				newRow = new ShortUrlEntity(longUrl, vanity, title, request.Schedules);
-				if (await stgHelper.IfShortUrlEntityExist(newRow))
-				{
-					// throw new Exception("This Short URL already exist.");
-					string ErrorMsg = "This Short URL already exist.";
-					logger.LogInformation(ErrorMsg);
-					return TypedResults.Conflict<DetailedBadRequest>(new DetailedBadRequest { Message = ErrorMsg });
-				}
-			}
-			else
-			{
-				newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, stgHelper), title, request.Schedules);
-			}
+			// if (!string.IsNullOrEmpty(vanity))
+			// {
+			// 	newRow = new ShortUrlEntity(longUrl, vanity, title, request.Schedules);
+			// 	if (await stgHelper.IfShortUrlEntityExist(newRow))
+			// 	{
+			// 		// throw new Exception("This Short URL already exist.");
+			// 		string ErrorMsg = "This Short URL already exist.";
+			// 		logger.LogInformation(ErrorMsg);
+			// 		return TypedResults.Conflict<DetailedBadRequest>(new DetailedBadRequest { Message = ErrorMsg });
+			// 	}
+			// }
+			// else
+			// {
+			// 	newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, stgHelper), title, request.Schedules);
+			// }
 
-			await stgHelper.SaveShortUrlEntity(newRow);
+			ShortUrlEntity2 newRow2 = new ShortUrlEntity2(longUrl, vanity, title, request.Schedules);
+
+			await stgHelper.SaveShortUrlEntity(newRow2);
 
 			var host = GetHost(context);
-			result = new ShortResponse(host!, newRow.Url, newRow.RowKey, newRow.Title);
+			result = new ShortResponse(host!, newRow2.Url, newRow2.RowKey, newRow2.Title);
 
 			logger.LogTrace("Short Url created.");
 
@@ -107,19 +112,39 @@ public static class ShortenerEnpoints
 	static private async Task<Results<
 								Ok<ListResponse>,
 								InternalServerError<DetailedBadRequest>
-								>> UrlList(		IStorageTableHelper stgHelper, 
-												HttpContext context, 
+								>> UrlList(		//IAzStrorageTablesService stgHelper, 
+												TableServiceClient tblClient,
+												HttpContext context,
 												ILogger logger)
 	{
 		logger.LogTrace("Starting UrlList...");
 
 		var result = new ListResponse();
         string userId = string.Empty;
+		IAzStrorageTablesService stgHelper = new AzStrorageTablesService(tblClient);
 
 		try
 		{
-			result.UrlList = await stgHelper.GetAllShortUrlEntities();
-			result.UrlList = result.UrlList.Where(p => !(p.IsArchived ?? false)).ToList();
+			// result.UrlList = await stgHelper.GetAllShortUrlEntities();
+			// result.UrlList = result.UrlList.Where(p => !(p.IsArchived ?? false)).ToList();
+			
+
+			List<ShortUrlEntity2> allUrls = await stgHelper.GetAllShortUrlEntities();
+			var filtredUlrs = allUrls.Where(p => !(p.IsArchived ?? false)).ToList();
+
+			// Insert into result.UrlList all filtredUlrs mapping all properties
+			result.UrlList = filtredUlrs.Select(p => new ShortUrlEntity
+			{
+				PartitionKey = p.PartitionKey,
+				RowKey = p.RowKey,
+				Url = p.Url,
+				Title = p.Title,
+				Clicks = p.Clicks,
+				IsArchived = p.IsArchived,
+				Schedules = p.Schedules
+			}).ToList();
+
+
 
 			var host = GetHost(context);
 

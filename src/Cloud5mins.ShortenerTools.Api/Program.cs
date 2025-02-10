@@ -1,4 +1,5 @@
 using Cloud5mins.ShortenerTools.Core.Domain;
+using Cloud5mins.ShortenerTools.Core.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,9 +9,8 @@ builder.AddServiceDefaults();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-string connStr = Environment.GetEnvironmentVariable("data-storage-connstr")?? string.Empty;
+builder.AddAzureTableClient("strTables");
 
-builder.Services.AddTransient<IStorageTableHelper, StorageTableHelper>(sp => new StorageTableHelper(connStr));
 builder.Services.AddTransient<ILogger>(sp => 
 {
     var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
@@ -29,6 +29,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+
 
 app.UseHttpsRedirection();
 
