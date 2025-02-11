@@ -6,7 +6,15 @@ namespace Cloud5mins.ShortenerTools.Core.Service;
 
 public interface IAzStrorageTablesService
 {
-    Task<List<ShortUrlEntity2>> GetAllShortUrlEntities();
-    Task<ShortUrlEntity2> SaveShortUrlEntity(ShortUrlEntity2 newRow2);
-
+    Task<int> GetNextTableId();
+    Task<List<ShortUrlEntity>> GetAllShortUrlEntities();
+    Task<ShortUrlEntity> SaveShortUrlEntity(ShortUrlEntity newRow2);
+    Task<ShortUrlEntity> GetShortUrlEntity(ShortUrlEntity row);
+    Task<bool> IfShortUrlEntityExist(ShortUrlEntity row);
+    Task<ShortUrlEntity> UpdateShortUrlEntity(ShortUrlEntity urlEntity);
+    Task<ShortUrlEntity?> GetShortUrlEntityByVanity(string vanity);
+    Task<bool> IfShortUrlEntityExistByVanity(string vanity);
+    Task<ShortUrlEntity> ArchiveShortUrlEntity(ShortUrlEntity urlEntity);
+    Task<List<ClickStatsEntity>> GetAllStatsByVanity(string vanity);
+    Task SaveClickStatsEntity(ClickStatsEntity newStats);
 }

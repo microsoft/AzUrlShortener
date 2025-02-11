@@ -29,8 +29,8 @@ var manAPI = builder.AddProject<Projects.Cloud5mins_ShortenerTools_Api>("api")
 						.WithEnvironment("DefaultRedirectUrl",defaultRedirectUrl)
 						.WithExternalHttpEndpoints(); // only while debugging
 
-// builder.AddProject<Projects.Cloud5mins_ShortenerTools_TinyBlazorAdmin>("admin")
-// 		.WithExternalHttpEndpoints()
-// 		.WithReference(manAPI);
+builder.AddProject<Projects.Cloud5mins_ShortenerTools_TinyBlazorAdmin>("admin")
+		.WithExternalHttpEndpoints()
+		.WithReference(manAPI);
 
 builder.Build().Run();

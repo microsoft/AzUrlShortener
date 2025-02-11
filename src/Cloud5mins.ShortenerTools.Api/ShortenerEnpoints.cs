@@ -73,28 +73,26 @@ public static class ShortenerEnpoints
 
 			ShortUrlEntity? newRow;
 
-			// if (!string.IsNullOrEmpty(vanity))
-			// {
-			// 	newRow = new ShortUrlEntity(longUrl, vanity, title, request.Schedules);
-			// 	if (await stgHelper.IfShortUrlEntityExist(newRow))
-			// 	{
-			// 		// throw new Exception("This Short URL already exist.");
-			// 		string ErrorMsg = "This Short URL already exist.";
-			// 		logger.LogInformation(ErrorMsg);
-			// 		return TypedResults.Conflict<DetailedBadRequest>(new DetailedBadRequest { Message = ErrorMsg });
-			// 	}
-			// }
-			// else
-			// {
-			// 	newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, stgHelper), title, request.Schedules);
-			// }
+			if (!string.IsNullOrEmpty(vanity))
+			{
+				newRow = new ShortUrlEntity(longUrl, vanity, title, request.Schedules);
+				if (await stgHelper.IfShortUrlEntityExist(newRow))
+				{
+					// throw new Exception("This Short URL already exist.");
+					string ErrorMsg = "This Short URL already exist.";
+					logger.LogInformation(ErrorMsg);
+					return TypedResults.Conflict<DetailedBadRequest>(new DetailedBadRequest { Message = ErrorMsg });
+				}
+			}
+			else
+			{
+				newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, stgHelper), title, request.Schedules);
+			}
 
-			ShortUrlEntity2 newRow2 = new ShortUrlEntity2(longUrl, vanity, title, request.Schedules);
-
-			await stgHelper.SaveShortUrlEntity(newRow2);
+			await stgHelper.SaveShortUrlEntity(newRow);
 
 			var host = GetHost(context);
-			result = new ShortResponse(host!, newRow2.Url, newRow2.RowKey, newRow2.Title);
+			result = new ShortResponse(host!, newRow.Url, newRow.RowKey, newRow.Title);
 
 			logger.LogTrace("Short Url created.");
 
@@ -112,8 +110,7 @@ public static class ShortenerEnpoints
 	static private async Task<Results<
 								Ok<ListResponse>,
 								InternalServerError<DetailedBadRequest>
-								>> UrlList(		//IAzStrorageTablesService stgHelper, 
-												TableServiceClient tblClient,
+								>> UrlList(		TableServiceClient tblClient,
 												HttpContext context,
 												ILogger logger)
 	{
@@ -125,11 +122,7 @@ public static class ShortenerEnpoints
 
 		try
 		{
-			// result.UrlList = await stgHelper.GetAllShortUrlEntities();
-			// result.UrlList = result.UrlList.Where(p => !(p.IsArchived ?? false)).ToList();
-			
-
-			List<ShortUrlEntity2> allUrls = await stgHelper.GetAllShortUrlEntities();
+			List<ShortUrlEntity> allUrls = await stgHelper.GetAllShortUrlEntities();
 			var filtredUlrs = allUrls.Where(p => !(p.IsArchived ?? false)).ToList();
 
 			// Insert into result.UrlList all filtredUlrs mapping all properties
@@ -143,7 +136,6 @@ public static class ShortenerEnpoints
 				IsArchived = p.IsArchived,
 				Schedules = p.Schedules
 			}).ToList();
-
 
 
 			var host = GetHost(context);

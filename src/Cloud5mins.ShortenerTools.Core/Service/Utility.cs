@@ -7,6 +7,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Cloud5mins.ShortenerTools.Core.Service;
 
 
 
@@ -20,7 +21,7 @@ namespace Cloud5mins.ShortenerTools
         //sets the length of the unique code to add to vanity
         private const int MinVanityCodeLength = 5;
 
-        public static async Task<string> GetValidEndUrl(string vanity, IStorageTableHelper stgHelper)
+        public static async Task<string> GetValidEndUrl(string vanity, IAzStrorageTablesService stgHelper)
         {
             if (string.IsNullOrEmpty(vanity))
             {

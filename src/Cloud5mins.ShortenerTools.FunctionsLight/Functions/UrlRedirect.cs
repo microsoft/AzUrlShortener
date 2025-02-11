@@ -6,18 +6,20 @@ using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Cloud5mins.ShortenerTools.Core.Service;
 
 namespace Cloud5mins.ShortenerTools.Functions
 {
     public class UrlRedirect
     {
         private readonly ILogger _logger;
+        private IAzStrorageTablesService _stgHelper;
 
-
-        public UrlRedirect(ILoggerFactory loggerFactory)
+        public UrlRedirect(ILoggerFactory loggerFactory, IAzStrorageTablesService stgHelper)
         {
             _logger = loggerFactory.CreateLogger<UrlRedirect>();
             _logger.LogInformation("UrlRedirect in constructor");
+            _stgHelper = stgHelper;
         }
 
         [Function("UrlRedirect")]
@@ -28,7 +30,7 @@ namespace Cloud5mins.ShortenerTools.Functions
             ExecutionContext context)
         {
             _logger.LogInformation("Function reached");
-            UrlServices UrlServices = new UrlServices(_logger);
+            UrlServices UrlServices = new UrlServices(_logger, _stgHelper);
             _logger.LogInformation("Services created");
             _logger.LogInformation($"Redirecting {shortUrl}");
             string redirectUrl = await UrlServices.Redirect(shortUrl);

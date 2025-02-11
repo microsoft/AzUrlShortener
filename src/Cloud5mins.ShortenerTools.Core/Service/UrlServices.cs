@@ -1,6 +1,7 @@
 using Cloud5mins.ShortenerTools;
 using Cloud5mins.ShortenerTools.Core.Domain;
 using Cloud5mins.ShortenerTools.Core.Messages;
+using Cloud5mins.ShortenerTools.Core.Service;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
@@ -9,14 +10,13 @@ namespace Cloud5mins.ShortenerTools.Core.Services;
 public class UrlServices
 {
 	private readonly ILogger _logger;
-	private readonly StorageTableHelper _stgHelper;
+	private readonly IAzStrorageTablesService _stgHelper;
 
-	public UrlServices(ILogger logger)
+	public UrlServices(ILogger logger, IAzStrorageTablesService stgHelper)
 	{
 		_logger = logger;
+		_stgHelper = stgHelper;
 	}
-
-	private StorageTableHelper StgHelper => _stgHelper ?? new StorageTableHelper(Environment.GetEnvironmentVariable("DataStorage")!);
 
 	public async Task<ShortUrlEntity> Archive(ShortUrlEntity input)
 	{
@@ -33,14 +33,14 @@ public class UrlServices
 				redirectUrl = Environment.GetEnvironmentVariable("DefaultRedirectUrl") ?? redirectUrl;
 
 				var tempUrl = new ShortUrlEntity(string.Empty, shortUrl);
-				var newUrl = await StgHelper.GetShortUrlEntity(tempUrl);
+				var newUrl = await _stgHelper.GetShortUrlEntity(tempUrl);
 
 				if (newUrl != null)
 				{
 					_logger.LogInformation($"Found it: {newUrl.Url}");
 					newUrl.Clicks++;
-					await StgHelper.SaveClickStatsEntity(new ClickStatsEntity(newUrl.RowKey));
-					await StgHelper.SaveShortUrlEntity(newUrl);
+					await _stgHelper.SaveClickStatsEntity(new ClickStatsEntity(newUrl.RowKey));
+					await _stgHelper.SaveShortUrlEntity(newUrl);
 					redirectUrl = WebUtility.UrlDecode(newUrl.ActiveUrl);
 				}
 			}
@@ -65,7 +65,7 @@ public class UrlServices
 
 		try
 		{
-			result.UrlList = await StgHelper.GetAllShortUrlEntities();
+			result.UrlList = await _stgHelper.GetAllShortUrlEntities();
 			result.UrlList = result.UrlList.Where(p => !(p.IsArchived ?? false)).ToList();
 			foreach (ShortUrlEntity url in result.UrlList)
 			{
@@ -110,17 +110,17 @@ public class UrlServices
 			{
 				newRow = new ShortUrlEntity(longUrl, vanity, title, input.Schedules);
 
-				if (await StgHelper.IfShortUrlEntityExist(newRow))
+				if (await _stgHelper.IfShortUrlEntityExist(newRow))
 				{
 					throw new ShortenerToolException(HttpStatusCode.Conflict, "This Short URL already exist.");
 				}
 			}
 			else
 			{
-				newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, StgHelper), title, input.Schedules);
+				newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, _stgHelper), title, input.Schedules);
 			}
 
-			await StgHelper.SaveShortUrlEntity(newRow);
+			await _stgHelper.SaveShortUrlEntity(newRow);
 
 			result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
 
@@ -153,7 +153,7 @@ public class UrlServices
 				throw new ShortenerToolException(HttpStatusCode.BadRequest, $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
 			}
 
-			result = await StgHelper.UpdateShortUrlEntity(input);
+			result = await _stgHelper.UpdateShortUrlEntity(input);
 			result.ShortUrl = Utility.GetShortUrl(host, result.RowKey);
 
 		}
@@ -172,7 +172,7 @@ public class UrlServices
 		var result = new ClickDateList();
 		try
 		{
-			var rawStats = await StgHelper.GetAllStatsByVanity(input.Vanity);
+			var rawStats = await _stgHelper.GetAllStatsByVanity(input.Vanity);
 
 			result.Items = rawStats.GroupBy(s => DateTime.Parse(s.Datetime).Date)
 										.Select(stat => new ClickDate
