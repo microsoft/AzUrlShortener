@@ -17,8 +17,6 @@ builder.Services.AddTransient<ILogger>(sp =>
     return loggerFactory.CreateLogger("shortenerLogger");
 });
 
-//to remove just while migration
-builder.Services.AddSingleton<WeatherService>(); // Register WeatherService
 
 var app = builder.Build();
 
@@ -30,14 +28,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-
-
 app.UseHttpsRedirection();
 
 app.MapShortenerEnpoints();
-
-app.MapGet("/weatherforecast", (WeatherService weatherService) => weatherService.GetWeatherForecast())
-   .WithName("GetWeatherForecast");
 
 app.Run();
 

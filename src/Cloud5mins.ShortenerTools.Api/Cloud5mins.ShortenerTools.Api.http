@@ -1,27 +1,11 @@
 ## @Api_HostAddress = http://localhost:5288
 @Api_HostAddress = https://localhost:7187
 
-### ####################################
-### weatherforecast
-GET {{Api_HostAddress}}/weatherforecast/
-Accept: application/json
 
 ### ####################################
 ### Get a Welcome message
 Get  {{Api_HostAddress}}/api
 
-### ####################################
-### Create a new short URL
-
-POST  {{Api_HostAddress}}/api/UrlCreate
-Accept: application/json
-Content-Type: application/json
-
-{
-	"Vanity": "1111-test",
-	"Url": "https://learn.microsoft.com/en-us/dotnet/aspire/storage/azure-storage-blobs-integration?tabs=dotnet-cli",
-	"Title": ".NET Aspire Azure Blob Storage integration"
-}
 
 ### ERROR no URL
 
@@ -48,6 +32,19 @@ Content-Type: application/json
 }
 
 ### ####################################
+### Create a new short URL
+
+POST  {{Api_HostAddress}}/api/UrlCreate
+Accept: application/json
+Content-Type: application/json
+
+{
+	"Vanity": "1111-test",
+	"Url": "https://learn.microsoft.com/en-us/dotnet/aspire/storage/azure-storage-blobs-integration?tabs=dotnet-cli",
+	"Title": ".NET Aspire Azure Blob Storage integration"
+}
+
+### ####################################
 ### Get list of URLs
 
 GET  {{Api_HostAddress}}/api/UrlList
@@ -55,3 +52,49 @@ Accept: application/json
 
 
 
+### ####################################
+### Update existing URL
+
+POST  {{Api_HostAddress}}/api/UrlUpdate
+Accept: application/json
+Content-Type: application/json
+
+{
+	"partitionKey": "1",
+    "rowKey": "1111-test",
+	"Vanity": "1111-test",
+	"Url": "https://learn.microsoft.com",
+	"Title": "Microsoft Learn",
+	"Archived": false
+}
+
+
+
+### ####################################
+### Archive a new short URL
+
+POST  {{Api_HostAddress}}/api/UrlArchive
+Accept: application/json
+Content-Type: application/json
+
+{
+	"partitionKey": "1",
+    "rowKey": "1111-test",
+	"Vanity": "1111-test",
+	"Url": "https://learn.microsoft.com/en-us/dotnet/aspire/storage/azure-storage-blobs-integration?tabs=dotnet-cli",
+	"Title": ".NET Aspire Azure Blob Storage integration"
+}
+
+
+
+
+### ####################################
+### Get Stats
+
+POST  {{Api_HostAddress}}/api/UrlClickStatsByDay
+Accept: application/json
+Content-Type: application/json
+
+{
+	"Vanity": "1111-test"
+}

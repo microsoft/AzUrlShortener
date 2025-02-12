@@ -7,19 +7,20 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Cloud5mins.ShortenerTools.Core.Service;
+using Azure.Data.Tables;
 
 namespace Cloud5mins.ShortenerTools.Functions
 {
     public class UrlRedirect
     {
         private readonly ILogger _logger;
-        private IAzStrorageTablesService _stgHelper;
+        private TableServiceClient _tblClient;
 
-        public UrlRedirect(ILoggerFactory loggerFactory, IAzStrorageTablesService stgHelper)
+        public UrlRedirect(ILoggerFactory loggerFactory, TableServiceClient tblClient)
         {
             _logger = loggerFactory.CreateLogger<UrlRedirect>();
             _logger.LogInformation("UrlRedirect in constructor");
-            _stgHelper = stgHelper;
+            _tblClient = tblClient;
         }
 
         [Function("UrlRedirect")]
@@ -30,7 +31,7 @@ namespace Cloud5mins.ShortenerTools.Functions
             ExecutionContext context)
         {
             _logger.LogInformation("Function reached");
-            UrlServices UrlServices = new UrlServices(_logger, _stgHelper);
+            UrlServices UrlServices = new UrlServices(_logger, new AzStrorageTablesService(_tblClient));
             _logger.LogInformation("Services created");
             _logger.LogInformation($"Redirecting {shortUrl}");
             string redirectUrl = await UrlServices.Redirect(shortUrl);

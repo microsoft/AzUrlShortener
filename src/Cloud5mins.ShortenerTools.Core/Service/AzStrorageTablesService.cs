@@ -18,6 +18,7 @@ public class AzStrorageTablesService(TableServiceClient client) : IAzStrorageTab
 
 	private TableClient GetStatsTable()
 	{
+		client.CreateTableIfNotExists("ClickStats");
 		TableClient table = client.GetTableClient("ClickStats");
 		return table;
 	}
@@ -128,8 +129,9 @@ public class AzStrorageTablesService(TableServiceClient client) : IAzStrorageTab
 
 	public async Task<bool> IfShortUrlEntityExist(ShortUrlEntity row)
 	{
-		ShortUrlEntity eShortUrl = await GetShortUrlEntity(row);
-		return (eShortUrl != null);
+		TableClient tblUrls = GetUrlsTable();
+		var result = await tblUrls.GetEntityIfExistsAsync<ShortUrlEntity>(row.PartitionKey, row.RowKey);
+		return result.HasValue;
 	}
 
 	public async Task<ShortUrlEntity> ArchiveShortUrlEntity(ShortUrlEntity urlEntity)
