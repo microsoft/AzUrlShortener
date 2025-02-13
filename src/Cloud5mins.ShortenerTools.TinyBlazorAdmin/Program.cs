@@ -1,6 +1,7 @@
 using Microsoft.FluentUI.AspNetCore.Components;
 using Cloud5mins.ShortenerTools.TinyBlazorAdmin.Components;
 using Cloud5mins.ShortenerTools.TinyBlazorAdmin;
+using Microsoft.FluentUI.AspNetCore.Components.Components.Tooltip;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ builder.Services.AddHttpClient<UrlManagerClient>(client =>
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddFluentUIComponents();
+builder.Services.AddScoped<ITooltipService, TooltipService>();
 
 var app = builder.Build();
 app.MapDefaultEndpoints();

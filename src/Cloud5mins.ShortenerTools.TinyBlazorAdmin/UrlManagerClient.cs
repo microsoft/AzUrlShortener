@@ -38,4 +38,38 @@ public class UrlManagerClient(HttpClient httpClient)
 		
 		return false;
 	}
+
+	public async Task<bool> UrlArchive(ShortUrlEntity shortUrl)
+	{
+		try{
+			using var response = await httpClient.PostAsJsonAsync("/api/UrlArchive", shortUrl);
+			if(response.IsSuccessStatusCode){
+				return true;
+			}
+		}
+		catch(Exception ex){
+			Console.WriteLine(ex.Message);
+		}
+		
+		return false;
+	}
+
+	public async Task<ShortUrlEntity?> UrlUpdate(ShortUrlEntity shortUrl)
+	{
+		try
+		{
+			using var response = await httpClient.PostAsJsonAsync("/api/UrlUpdate", shortUrl);
+			if (response.IsSuccessStatusCode)
+			{
+				var updatedUrl = await response.Content.ReadFromJsonAsync<ShortUrlEntity>();
+				return updatedUrl;
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+
+		return null;
+	}
 }

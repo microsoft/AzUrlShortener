@@ -7,6 +7,7 @@
 @inject UrlManagerClient urlManager
 @inject IJSRuntime JSRuntime
 @inject IDialogService DialogService
+@inject IToastService toastService
 @inject NavigationManager NavigationManager
 
 @rendermode InteractiveServer
@@ -235,6 +236,11 @@
                 Schedules = dialogData.Schedules.ToArray()
             };
             var response = await urlManager.UrlCreate(urlRequest);
+            if (response)
+            {
+                await UpdateUIList();
+                toastService.ShowSuccess("Short URL created successfully");
+            }
         }
     }
 
@@ -245,10 +251,27 @@
     }
 
 
-    void EditShortUrl(ShortUrlEntity urlEntity)
+    private async Task EditShortUrl(ShortUrlEntity urlEntity)
     {
-        editedUrl = urlEntity;
-        ShowEditPopup = true;
+        var dialog = await DialogService.ShowDialogAsync<UpdateUrlDialog>(urlEntity, new DialogParameters()
+            {
+                Title = $"Update Url: {urlEntity.RowKey}",
+                PreventDismissOnOverlayClick = true,
+                PreventScroll = true,
+            });
+        
+        var result = await dialog.Result;
+        if (!result.Cancelled && result.Data != null)
+        {
+            var dialogData = (ShortUrlEntity)result.Data;
+
+            var response = await urlManager.UrlUpdate(urlEntity);
+            if (response != null)
+            {
+                await UpdateUIList();
+                toastService.ShowSuccess("Short URL updated successfully");
+            }
+        }
     }
 
     private async Task SaveUpdatedShortUrl()
@@ -264,8 +287,12 @@
 
     public async Task ArchiveShortUrl(ShortUrlEntity urlEntity)
     {
-        @* await Http.PostAsJsonAsync<ShortUrlEntity>("/api/UrlArchive", urlEntity);
-        await UpdateUIList(); *@
+        var result = await urlManager.UrlArchive(urlEntity);
+        if (result)
+        {
+            await UpdateUIList();
+            toastService.ShowSuccess("Short URL archived successfully");
+        }
     }
 
 }

@@ -135,6 +135,16 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
             }
             return link;
         }
+
+        public bool Validate()
+        {
+            //TODO: Add more validation
+            if (string.IsNullOrEmpty(Url))
+            {
+                return false;
+            }
+            return true;
+        }
     }
 
 }
