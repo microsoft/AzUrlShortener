@@ -72,4 +72,23 @@ public class UrlManagerClient(HttpClient httpClient)
 
 		return null;
 	}
+
+	public async Task<ClickDateList?> UrlClickStatsByDay(UrlClickStatsRequest statsRequest)
+	{
+		try
+		{
+			using var response = await httpClient.PostAsJsonAsync("/api/UrlClickStatsByDay", statsRequest);
+			if (response.IsSuccessStatusCode)
+			{
+				var clickStats = await response.Content.ReadFromJsonAsync<ClickDateList>();
+				return clickStats;
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+
+		return null;
+	}
 }

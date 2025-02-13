@@ -98,3 +98,13 @@ Content-Type: application/json
 {
 	"Vanity": "1111-test"
 }
+
+
+### ####################################
+### Get All Stats
+
+POST  {{Api_HostAddress}}/api/UrlClickStatsByDay
+Accept: application/json
+Content-Type: application/json
+
+{}

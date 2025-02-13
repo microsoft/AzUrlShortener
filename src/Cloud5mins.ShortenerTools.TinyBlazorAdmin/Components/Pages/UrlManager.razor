@@ -58,106 +58,9 @@
 <FluentPaginator State="@pagination" />
 
 
-@if (ShowCreatePopup)
-{
-    @* <div class="modal fade show" id="createPopup" style="display:block" aria-modal="true" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Short Url Request</h4>
-                <button type="button" class="close" @onclick="@ClosePopup">&times;</button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-                <EditForm Model="shortUrlRequest" OnValidSubmit="SaveShortUrl">
-                    <DataAnnotationsValidator />
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                            <FluentTextField id="title" Placeholder="Title" @bind-Value="shortUrlRequest.Title"></FluentTextField>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                            <FluentTextField id="url" Placeholder="Url" @bind-Value="shortUrlRequest.Url"></FluentTextField>
-                            <ValidationMessage For="@(() => shortUrlRequest.Url)" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                            <FluentTextField id="vanity" Placeholder="Vanity" @bind-Value="shortUrlRequest.Vanity"></FluentTextField>
-                        </div>
-                    </div>
-
-                    <div>
-                        <SchedulesComponent schedules="shortUrlRequest.Schedules"></SchedulesComponent>
-                    </div>
-                </EditForm>
-            </div>
-
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn" @onclick="@ClosePopup">Cancel</button>
-                <button type="button" class="btn btn-primary" @onclick=@SaveShortUrl>Save</button>
-            </div>
-
-        </div>
-    </div>
-</div> *@
-
-}
-
-
-@if (ShowEditPopup)
-{
-    @* <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Confirm action</h4>
-                    <button type="button" class="close" @onclick="@ClosePopup">&times;</button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <EditForm Model="editedUrl" OnValidSubmit="SaveUpdatedShortUrl">
-                        <DataAnnotationsValidator />
-                        <div>
-                            <label for="edit-title">Title</label>
-                            <InputText id="edit-title" class="form-control" placeholder="Title or description for this URL" @bind-Value="editedUrl.Title" />
-                            <ValidationMessage For="@(() => editedUrl.Title)" />
-                        </div>
-                        <br />
-                        <div>
-                            <label for="edit-url">The Url to redirect</label>
-                            <InputText id="edit-url" class="form-control" placeholder="The Url to redirect" @bind-Value="editedUrl.Url" />
-                            <ValidationMessage For="@(() => editedUrl.Url)" />
-                        </div>
-                        <div>
-                            <SchedulesComponent schedules="@editedUrl.Schedules"></SchedulesComponent>
-                        </div>
-                    </EditForm>
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn" @onclick="@ClosePopup">Cancel</button>
-                    <button type="button" class="btn btn-primary" @onclick=@SaveUpdatedShortUrl>Save</button>
-                </div>
-
-            </div>
-        </div>
-    </div> *@
-
-} 
 
 @code {
-    bool ShowCreatePopup = false;
-    bool ShowEditPopup = false;
+
     private ListResponse urls = new ListResponse();
 
     IQueryable<ShortUrlEntity>? urlList;
@@ -192,33 +95,10 @@
         await RefreshGrid();
         StateHasChanged();
     }
-    private async Task SaveShortUrl()
-    {
-        @* ShowCreatePopup = false;
-
-        try
-        {
-            await Http.PostAsJsonAsync<ShortUrlRequest>("/api/UrlCreate", shortUrlRequest);
-            await UpdateUIList(); *@
-            @* await grdUrls.ClearFilteringAsync();
-                await grdUrls.FilterByColumnAsync("RowKey", "equal", shortUrlRequest.Vanity); *@
-        @* }
-        catch (System.Exception ex)
-        {
-            Console.WriteLine(ex.ToString());
-        }  *@
-    }
-
-    void ClosePopup()
-    {
-        ShowCreatePopup = false;
-        ShowEditPopup = false;
-    }
 
     private async Task CreateShortUrl()
     {
         shortUrlRequest = new ShortUrlRequest();
-        //ShowCreatePopup = true;
         var dialog = await DialogService.ShowDialogAsync<NewUrlDialog>(shortUrlRequest, new DialogParameters()
             {
                 Title = "Create a new Short Url",
@@ -278,12 +158,6 @@
         }
     }
 
-    private async Task SaveUpdatedShortUrl()
-    {
-        @* ShowEditPopup = false;
-        await Http.PostAsJsonAsync<ShortUrlEntity>("/api/UrlUpdate", editedUrl);
-        await UpdateUIList(); *@
-    }
 
     private void NavigateToStats(string vanity){
         NavigationManager.NavigateTo("/Statistics/" + vanity);
