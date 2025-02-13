@@ -32,7 +32,7 @@
                 <FluentButton OnClick="@(async () => await CopyToClipboardAsync(context!.ShortUrl))" IconEnd="@(new Icons.Regular.Size16.Copy())" Title="Copy" />
             </TemplateColumn>
             <TemplateColumn Width="115px" Title="Schedule(s)" Sortable="true" SortBy="@sortBySchedules">
-                <span>@(context!.Schedules?.Count ?? 0)</span>
+                @(context!.Schedules?.Count ?? 0)
             </TemplateColumn>
             <TemplateColumn Title="Vanity" Width="150px" Sortable="true" SortBy="@sortByVanities">
                 <FluentAnchor Href="@context!.ShortUrl" Target="_blank" Appearance="Appearance.Hypertext">@context!.RowKey</FluentAnchor>
@@ -40,8 +40,10 @@
             <PropertyColumn Title="Title" Property="@(c => c!.Title)" Sortable="true"/>
             <PropertyColumn Title="Url" Property="@(c => c!.Url)" Sortable="true"/>
             <TemplateColumn Title="Clicks" Width="110px" Align="Align.End" Sortable="true" SortBy="@sortByClicks">
-                <span>@context.Clicks</span>
-                <FluentButton OnClick="@(() => NavigateToStats(context.RowKey))" IconEnd="@(new Icons.Regular.Size16.ChartMultiple())" />
+                <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center">
+                    @context.Clicks
+                    <FluentButton OnClick="@(() => NavigateToStats(context.RowKey))" IconEnd="@(new Icons.Regular.Size16.ChartMultiple())" />
+                </FluentStack>
             </TemplateColumn>
             <TemplateColumn Width="100px" Sortable="false">
                 <FluentButton OnClick="@(() => EditShortUrl(context))" IconEnd="@(new Icons.Regular.Size16.Edit())" Title="Edit" />
@@ -222,6 +224,7 @@
                 Title = "Create a new Short Url",
                 PreventDismissOnOverlayClick = true,
                 PreventScroll = true,
+                Width = "600px"
             });
         
         var result = await dialog.Result;
@@ -258,6 +261,7 @@
                 Title = $"Update Url: {urlEntity.RowKey}",
                 PreventDismissOnOverlayClick = true,
                 PreventScroll = true,
+                Width = "600px"
             });
         
         var result = await dialog.Result;

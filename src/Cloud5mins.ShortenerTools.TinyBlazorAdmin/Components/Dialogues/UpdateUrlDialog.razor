@@ -1,7 +1,7 @@
 ﻿@using Cloud5mins.ShortenerTools.Core.Domain;
+@using Cloud5mins.ShortenerTools.TinyBlazorAdmin.Components.Shared
 @using Microsoft.FluentUI.AspNetCore.Components.Components.Tooltip
 @implements IDialogContentComponent<ShortUrlEntity>
-@* @inject ITooltipService tooltipService *@
 
 @rendermode InteractiveServer
 
@@ -18,28 +18,31 @@
 	<EditForm Model="@_shortUrl" FormName="updateUrlForm">
         <DataAnnotationsValidator />
 		
-		<div>
-			<FluentTextArea Name="Title" Label="Title" @bind-Value="_shortUrl.Title" Required="false" />
-			<FluentValidationMessage For="@(() => _shortUrl.Title)" />
-		</div>
+        <FluentStack Orientation="Orientation.Vertical" VerticalGapGap="10"  Width="100%">
 
-		<div>
-			<FluentTextField Name="Url" Label="Url" @bind-Value="_shortUrl.Url" Required="true" />
-			<FluentValidationMessage For="@(() => _shortUrl.Url)" />
-		</div>
+            <div style="width: 100%;">
+                <FluentTextField Name="Title" Label="Title" @bind-Value="_shortUrl.Title" Required="false" style="width: 100%;" />
+                <FluentValidationMessage For="@(() => _shortUrl.Title)" />
+            </div>
 
-		<div>
-			<FluentTextField Name="Vanity" Label="Vanity" @bind-Value="_shortUrl.RowKey" ReadOnly="true" /><FluentIcon Id="vanityInfo" Icon="Icons.Regular.Size16.Info" />
+            <div style="width: 100%;">
+                <FluentTextField Name="Url" Label="Url" @bind-Value="_shortUrl.Url" Required="true" style="width: 100%;" />
+                <FluentValidationMessage For="@(() => _shortUrl.Url)" />
+            </div>
 
-            <FluentTooltip Anchor="vanityInfo">
-                The <b>vanity</b> cannot be updated it's The identifier for the short URL.
-            </FluentTooltip>
-		</div>
+            <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center">
+                <FluentTextField Name="Vanity" Label="Vanity" @bind-Value="_shortUrl.RowKey" ReadOnly="true" style="width: 95%;" /><FluentIcon Id="vanityInfo" Icon="Icons.Regular.Size16.Info" />
 
-		<div>
-			@* <SchedulesComponent Schedules="_shortUrl.Schedules"></SchedulesComponent> *@
-		</div>
+                <FluentTooltip Anchor="vanityInfo">
+                    The <b>vanity</b> cannot be updated it's The identifier for the short URL.
+                </FluentTooltip>
+            </FluentStack>
 
+            <div>
+                <SchedulesComponent Schedules="_shortUrl.Schedules"></SchedulesComponent>
+            </div>
+
+        </FluentStack>
 	</EditForm>
 	
 </FluentDialogBody>

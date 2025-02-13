@@ -1,4 +1,5 @@
 ﻿@using Cloud5mins.ShortenerTools.Core.Messages
+@using Cloud5mins.ShortenerTools.TinyBlazorAdmin.Components.Shared
 @implements IDialogContentComponent<ShortUrlRequest>
 
 @rendermode InteractiveServer
@@ -16,24 +17,28 @@
 	<EditForm Model="@_shortUrl" FormName="new_note">
         <DataAnnotationsValidator />
 		
-		<div>
-			<FluentTextArea Name="Title" Label="Title" @bind-Value="_shortUrl.Title" Required="false" />
-			<FluentValidationMessage For="@(() => _shortUrl.Title)" />
-		</div>
+        <FluentStack Orientation="Orientation.Vertical" VerticalGapGap="10"  Width="100%">
 
-		<div>
-			<FluentTextField Name="Url" Label="Url" @bind-Value="_shortUrl.Url" Required="true" />
-			<FluentValidationMessage For="@(() => _shortUrl.Url)" />
-		</div>
+            <div style="width: 100%;">
+                <FluentTextField Name="Title" Label="Title" @bind-Value="_shortUrl.Title" Required="false" style="width: 100%;" />
+                <FluentValidationMessage For="@(() => _shortUrl.Title)" />
+            </div>
 
-		<div>
-			<FluentTextField Name="Vanity" Label="Vanity" @bind-Value="_shortUrl.Vanity" Required="false" />
-			<FluentValidationMessage For="@(() => _shortUrl.Vanity)" />
-		</div>
+            <div style="width: 100%;">
+                <FluentTextField Name="Url" Label="Url" @bind-Value="_shortUrl.Url" Required="true" style="width: 100%;" />
+                <FluentValidationMessage For="@(() => _shortUrl.Url)" />
+            </div>
 
-		<div>
-			@* <SchedulesComponent Schedules="_shortUrl.Schedules"></SchedulesComponent> *@
-		</div>
+            <div style="width: 100%;">
+                <FluentTextField Name="Vanity" Label="Vanity" @bind-Value="_shortUrl.Vanity" Required="false" style="width: 100%;" />
+                <FluentValidationMessage For="@(() => _shortUrl.Vanity)" />
+            </div>
+
+            <div style="width: 100%;">
+                <SchedulesComponent Schedules="_shortUrl.Schedules"></SchedulesComponent>
+            </div>
+
+        </FluentStack>
 
 	</EditForm>
 	

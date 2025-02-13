@@ -1,4 +1,6 @@
 ﻿@page "/counter"
+@using Cloud5mins.ShortenerTools.Core.Domain
+@using Cloud5mins.ShortenerTools.TinyBlazorAdmin.Components.Shared
 @rendermode InteractiveServer
 
 <PageTitle>Counter</PageTitle>
@@ -9,8 +11,14 @@
 
 <FluentButton Appearance="Appearance.Accent" @onclick="IncrementCount">Click me</FluentButton>
 
+<div>
+    <SchedulesComponent schedules="@editedUrl.Schedules"></SchedulesComponent>
+</div>
+
 @code {
     private int currentCount = 0;
+
+    private ShortUrlEntity editedUrl = new ShortUrlEntity();
 
     private void IncrementCount()
     {
