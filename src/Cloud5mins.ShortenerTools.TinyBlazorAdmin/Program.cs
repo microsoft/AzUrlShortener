@@ -21,7 +21,7 @@ builder.Services.AddScoped<ITooltipService, TooltipService>();
 
 // regiser fusion blazor service
 // Community Licence for your personal use ONLY. Thank you Syncfusion for this generous offer.
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzYyMzI1QDMyMzAyZTMxMmUzMFY0cEZ3MVozdkwvekVhek8xTWdPMkg2NlhvdVFNR1lvZHdhQWJWUlNjZW89"); 
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NHaF5cWWdCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdmWX1fdHVQR2RYVUNxW0c="); 
 builder.Services.AddSyncfusionBlazor();
 
 var app = builder.Build();

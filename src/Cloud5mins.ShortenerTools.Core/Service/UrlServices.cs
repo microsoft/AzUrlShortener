@@ -117,7 +117,8 @@ public class UrlServices
 			}
 			else
 			{
-				newRow = new ShortUrlEntity(longUrl, await Utility.GetValidEndUrl(vanity, _stgHelper), title, input.Schedules);
+				var generatedVanity = await Utility.GetValidEndUrl(vanity, _stgHelper);
+				newRow = new ShortUrlEntity(longUrl, generatedVanity, title, input.Schedules);
 			}
 
 			await _stgHelper.SaveShortUrlEntity(newRow);
@@ -128,7 +129,7 @@ public class UrlServices
 		}
 		catch (Exception ex)
 		{
-			_logger.LogError(ex, "An unexpected error was encountered.");
+			_logger.LogError(ex, ex.Message);
 			throw;
 		}
 
@@ -177,9 +178,9 @@ public class UrlServices
 			result.Items = rawStats.GroupBy(s => DateTime.Parse(s.Datetime).Date)
 										.Select(stat => new ClickDate
 										{
-											DateClicked = stat.Key.ToString("yyyy-MM-dd"),
+											DateClicked = DateTime.Parse( stat.Key.ToString("yyyy-MM-dd")),
 											Count = stat.Count()
-										}).OrderBy(s => DateTime.Parse(s.DateClicked).Date).ToList<ClickDate>();
+										}).OrderBy(s => s.DateClicked).ToList<ClickDate>();
 
 			result.Url = Utility.GetShortUrl(host, input.Vanity);
 		}

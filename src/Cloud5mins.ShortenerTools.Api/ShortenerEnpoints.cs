@@ -9,6 +9,7 @@ using Cloud5mins.ShortenerTools.Core.Messages;
 using Cloud5mins.ShortenerTools.Core.Service;
 using Cloud5mins.ShortenerTools.Core.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Options;
 
 public static class ShortenerEnpoints
 {
@@ -44,6 +45,12 @@ public static class ShortenerEnpoints
 		endpoints.MapPost("/UrlClickStatsByDay", UrlClickStatsByDay)
 			.WithDescription("Provide Click Statistics by Day")
 			.WithDisplayName("Url Click Statistics By Day");
+
+		// REMOVE THIS Only for debug purposes
+		endpoints.MapPost("/GenerateClicks", GenerateClicks)
+			.WithDescription("REMOVE THIS Only for debug purposes")
+			.WithDisplayName("Generate 20 Clicks with dates in Thread past");
+		
 	}
 
 	static private string GetWelcomeMessage()
@@ -157,11 +164,6 @@ public static class ShortenerEnpoints
 	}
 
 
-
-
-
-
-
 	static private async Task<Results<
 								Ok<ListResponse>,
 								InternalServerError<DetailedBadRequest>>>
@@ -188,6 +190,31 @@ public static class ShortenerEnpoints
 		string? customDomain = Environment.GetEnvironmentVariable("CustomDomain");
 		var host = string.IsNullOrEmpty(customDomain) ? context.Request.Host.Value : customDomain;
 		return host ?? string.Empty;
+	}
+
+
+	private static async Task GenerateClicks(UrlClickStatsRequest statsRequest, 
+										TableServiceClient tblClient,
+										HttpContext context,
+										ILogger logger)
+	{
+
+		var urlServices = new AzStrorageTablesService(tblClient);
+		var rand = new Random();
+
+		var url = await urlServices.GetShortUrlEntityByVanity(statsRequest.Vanity);
+
+		for (int i = 0; i < 20; i++)
+		{
+			int d = rand.Next(1, 10);
+
+			var fakeClick = new ClickStatsEntity(statsRequest.Vanity);
+			fakeClick.Datetime = DateTime.UtcNow.AddDays(-d).ToString("yyyy-MM-dd HH:mm");
+			await urlServices.SaveClickStatsEntity(fakeClick);
+		}
+		url.Clicks = 20;
+		await urlServices.SaveShortUrlEntity(url);
+
 	}
 
 }

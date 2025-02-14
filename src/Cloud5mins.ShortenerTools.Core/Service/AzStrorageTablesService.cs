@@ -27,11 +27,15 @@ public class AzStrorageTablesService(TableServiceClient client) : IAzStrorageTab
 	{
 		//Get current ID
 		TableClient tblUrls = GetUrlsTable();
-		var result = await tblUrls.GetEntityAsync<NextId>("1", "KEY");
-		NextId entity = result.Value as NextId;
+		NextId entity;
 
-		if (entity == null)
+		var check = await tblUrls.GetEntityIfExistsAsync<NextId>("1", "KEY");
+		if (check.HasValue)
 		{
+			var result = await tblUrls.GetEntityAsync<NextId>("1", "KEY");
+			entity = result.Value as NextId;
+		}
+		else{
 			entity = new NextId
 			{
 				PartitionKey = "1",
@@ -39,6 +43,7 @@ public class AzStrorageTablesService(TableServiceClient client) : IAzStrorageTab
 				Id = 1024
 			};
 		}
+
 		entity.Id++;
 
 		//Update

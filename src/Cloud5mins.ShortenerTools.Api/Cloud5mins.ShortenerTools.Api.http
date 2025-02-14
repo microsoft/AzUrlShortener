@@ -108,3 +108,45 @@ Accept: application/json
 Content-Type: application/json
 
 {}
+
+
+
+
+### ####################################
+### Create a new short URL no Vanity
+
+POST  {{Api_HostAddress}}/api/UrlCreate
+Accept: application/json
+Content-Type: application/json
+
+{
+	"Url": "https://learn.microsoft.com",
+	"Title": "Microsoft Learn"
+}
+
+
+
+### ####################################
+### Create a new short URL
+
+POST  {{Api_HostAddress}}/api/UrlCreate
+Accept: application/json
+Content-Type: application/json
+
+{
+	"Vanity": "blazor",
+	"Url": "https://www.fluentui-blazor.net/",
+	"Title": "Fluent UI Blazor library"
+}
+
+
+### ####################################
+### Generate Clicks
+
+POST  {{Api_HostAddress}}/api/GenerateClicks
+Accept: application/json
+Content-Type: application/json
+
+{
+	"Vanity": "blazor"
+}

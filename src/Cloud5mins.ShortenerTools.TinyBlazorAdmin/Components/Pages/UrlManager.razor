@@ -118,11 +118,21 @@
                 Vanity = dialogData.Vanity,
                 Schedules = dialogData.Schedules.ToArray()
             };
-            var response = await urlManager.UrlCreate(urlRequest);
-            if (response)
+            try{
+                var response = await urlManager.UrlCreate(urlRequest);
+                if (response.Item1)
+                {
+                    await UpdateUIList();
+                    toastService.ShowSuccess("Short URL created successfully");
+                }
+                else
+                {
+                    toastService.ShowError(response.Item2);
+                }
+            }
+            catch (Exception ex)
             {
-                await UpdateUIList();
-                toastService.ShowSuccess("Short URL created successfully");
+                toastService.ShowError(ex.Message);
             }
         }
     }

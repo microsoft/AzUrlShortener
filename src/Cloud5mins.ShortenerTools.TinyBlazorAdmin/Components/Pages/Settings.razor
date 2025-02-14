@@ -12,7 +12,7 @@
 <h3>Settings</h3>
 
 <div>
-	<FluentStack Orientation="Orientation.Vertical">
+	<FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Vertical">
 		<FluentSelect   Label="Theme" Width="150px"
 						Items="@(Enum.GetValues<DesignThemeModes>())"
 						@bind-SelectedOption="@Mode" />
@@ -34,12 +34,12 @@
     public DesignThemeModes Mode { get; set; }
     public OfficeColor? OfficeColor { get; set; }
 
-	void OnLoaded(LoadedEventArgs e)
+	void OnLoaded(Microsoft.FluentUI.AspNetCore.Components.LoadedEventArgs e)
     {
         Logger.LogInformation($"Loaded: {(e.Mode == DesignThemeModes.System ? "System" : "")} {(e.IsDark ? "Dark" : "Light")}");
     }
 
-    void OnLuminanceChanged(LuminanceChangedEventArgs e)
+    void OnLuminanceChanged(Microsoft.FluentUI.AspNetCore.Components.LuminanceChangedEventArgs e)
     {
         Logger.LogInformation($"Changed: {(e.Mode == DesignThemeModes.System ? "System" : "")} {(e.IsDark ? "Dark" : "Light")}");
     }

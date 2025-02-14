@@ -24,19 +24,24 @@ public class UrlManagerClient(HttpClient httpClient)
 		return urlList;
     }
 
-	public async Task<bool> UrlCreate(ShortRequest url)
+	public async Task<(bool , string)> UrlCreate(ShortRequest url)
 	{
+		(bool , string) result = (false, "Failed");
 		try{
-			using var response = await httpClient.PostAsJsonAsync("/api/UrlCreate", url);
+			using var response = await httpClient.PostAsJsonAsync<ShortRequest>("/api/UrlCreate", url);
 			if(response.IsSuccessStatusCode){
-				return true;
+				result = (true, "Success");
+			}
+			else{
+				var errorDetails = await response.Content.ReadFromJsonAsync<DetailedBadRequest>();
+				result = (false, errorDetails!.Message);
 			}
 		}
 		catch(Exception ex){
 			Console.WriteLine(ex.Message);
+			result = (false, ex.Message);
 		}
-		
-		return false;
+		return result;
 	}
 
 	public async Task<bool> UrlArchive(ShortUrlEntity shortUrl)
