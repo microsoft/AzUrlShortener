@@ -19,7 +19,7 @@ Content-Type: application/json
 	"Title": ".NET Aspire Azure Blob Storage integration"
 }
 
-### ERROR URL no valide
+### ERROR URL not valid
 
 POST  {{Api_HostAddress}}/api/UrlCreate
 Accept: application/json
