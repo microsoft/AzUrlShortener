@@ -23,15 +23,15 @@ public class UrlServices
 		ShortUrlEntity result = await _stgHelper.ArchiveShortUrlEntity(input);
 		return result;
 	}
-	public async Task<string> Redirect(string shortUrl)
+	public async Task<string> Redirect(string? shortUrl)
 	{
 		string redirectUrl = "https://azure.com";
 		try
 		{
+			redirectUrl = Environment.GetEnvironmentVariable("DefaultRedirectUrl") ?? redirectUrl;
+
 			if (!string.IsNullOrWhiteSpace(shortUrl))
 			{
-				redirectUrl = Environment.GetEnvironmentVariable("DefaultRedirectUrl") ?? redirectUrl;
-
 				var tempUrl = new ShortUrlEntity(string.Empty, shortUrl);
 				var newUrl = await _stgHelper.GetShortUrlEntity(tempUrl);
 
@@ -43,10 +43,10 @@ public class UrlServices
 					await _stgHelper.SaveShortUrlEntity(newUrl);
 					redirectUrl = WebUtility.UrlDecode(newUrl.ActiveUrl);
 				}
-			}
-			else
-			{
-				_logger.LogInformation("Bad Link, resorting to fallback.");
+				else
+				{
+					_logger.LogInformation("Bad Link, resorting to fallback.");
+				}
 			}
 		}
 		catch (Exception ex)
