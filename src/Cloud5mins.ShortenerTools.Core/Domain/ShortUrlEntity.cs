@@ -1,12 +1,14 @@
-using Microsoft.Azure.Cosmos.Table;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text.Json;
+using Azure;
+using Azure.Data.Tables;
 
 namespace Cloud5mins.ShortenerTools.Core.Domain
 {
-    public class ShortUrlEntity : TableEntity
+    public class ShortUrlEntity: ITableEntity
     {
         public string Url { get; set; }
         private string _activeUrl { get; set; }
@@ -33,7 +35,8 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
 
         private List<Schedule> _schedules { get; set; }
 
-        [IgnoreProperty]
+        //[IgnoreProperty]
+        [IgnoreDataMember]
         public List<Schedule> Schedules
         {
             get
@@ -56,6 +59,12 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
                 _schedules = value;
             }
         }
+
+        public string PartitionKey { get; set; }
+        public string RowKey { get; set; }
+        public DateTimeOffset? Timestamp { get; set; }
+        public ETag ETag { get; set; }
+
 
         public ShortUrlEntity() { }
 
@@ -125,6 +134,16 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
                 }
             }
             return link;
+        }
+
+        public bool Validate()
+        {
+            //TODO: Add more validation
+            if (string.IsNullOrEmpty(Url))
+            {
+                return false;
+            }
+            return true;
         }
     }
 

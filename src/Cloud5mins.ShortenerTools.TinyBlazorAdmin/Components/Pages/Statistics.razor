@@ -1,0 +1,113 @@
+@page "/statistics"
+@page "/statistics/{vanity}"
+
+@using Cloud5mins.ShortenerTools.Core.Messages;
+@using Cloud5mins.ShortenerTools.Core.Domain
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Charts
+@using Syncfusion.Blazor.Spinner
+@using Microsoft.AspNetCore.Authorization
+@using System.Collections.ObjectModel
+@using System.Text.Json
+@using System.Net
+@inject IJSRuntime JSRuntime
+@inject UrlManagerClient urlManager
+
+@rendermode InteractiveServer
+
+<h1>Click Statistics</h1>
+<h3>@subTitle</h3>
+<a href="/UrlManager/"> &lt;&lt; Back</a>
+
+<div id="stats" >
+@if(clicksHistory != null){
+<SfChart Title="Click Stats" Width="900px" >
+    <ChartEvents/>
+    <ChartArea><ChartAreaBorder Width="1"></ChartAreaBorder></ChartArea>
+    <ChartPrimaryXAxis  ValueType="Syncfusion.Blazor.Charts.ValueType.DateTime"  
+                        LabelFormat="y/M/d" 
+                        EdgeLabelPlacement="EdgeLabelPlacement.Shift" RangePadding="ChartRangePadding.Auto">
+        <ChartAxisMajorGridLines Width="1"></ChartAxisMajorGridLines>
+    </ChartPrimaryXAxis>
+
+    <ChartPrimaryYAxis  LabelFormat="{value}" >
+            <ChartAxisLineStyle Width="1"></ChartAxisLineStyle>
+            <ChartAxisMajorTickLines Width="1"></ChartAxisMajorTickLines>
+    </ChartPrimaryYAxis>
+    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+    
+    <ChartSeriesCollection>
+        <ChartSeries    DataSource="@clicksHistory" 
+                        Name="Click(s) by Day"
+                        XName="DateClicked" 
+                        YName="Count" 
+                        Type="ChartSeriesType.Line">
+            <ChartMarker Visible="true" ></ChartMarker>
+        </ChartSeries>
+    </ChartSeriesCollection>
+    
+</SfChart>
+}
+else{
+    <SfSpinner Size="40" Label="Counting all those clicks..." Type="SpinnerType.Material" Visible="@isLoading"></SfSpinner>
+}
+</div>
+<div>
+    <h3>@dayCount</h3>
+</div>
+
+@code {
+
+    [Parameter]
+#nullable enable
+    public string? vanity { get; set; }
+#nullable disable
+
+    private bool isLoading { get; set; } = true;
+    private string subTitle = "";
+
+    private ObservableCollection<ClickDate>? clicksHistory = null;
+    private readonly Random _random = new Random(); 
+    private string dayCount = string.Empty;
+
+    private async Task<ObservableCollection<ClickDate>> UpdateUIList()
+    {
+        subTitle = (!String.IsNullOrEmpty(vanity))? $"Clicks for: {vanity}": "All clicks";
+        try{
+
+            var response = await urlManager.UrlClickStatsByDay( new UrlClickStatsRequest(vanity));
+            if(response != null){            
+                return new ObservableCollection<ClickDate>(response.Items);
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Console.WriteLine(ex.ToString()); 
+        }
+        return null;
+    }
+
+
+    @* protected override void OnInitialized()
+    {
+        clicksHistory = UpdateUIList().Result;
+        
+        if(clicksHistory != null){
+            dayCount = "Day(s): " + clicksHistory.Count.ToString();
+        }
+        this.isLoading = false;
+        StateHasChanged();
+
+    } *@
+    protected override async Task OnInitializedAsync()
+    {
+        clicksHistory = await UpdateUIList();
+        
+        if(clicksHistory != null){
+            dayCount = "Day(s): " + clicksHistory.Count.ToString();
+        }
+        this.isLoading = false;
+        StateHasChanged();
+
+    }
+}

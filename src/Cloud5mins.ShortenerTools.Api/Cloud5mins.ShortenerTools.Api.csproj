@@ -7,14 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.*-* " />
-    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.*-* " />
-    <PackageReference Include="Syncfusion.Blazor.Charts" Version="28.2.6" />
-    <PackageReference Include="Syncfusion.Blazor.Spinner" Version="28.2.6" />
+    <PackageReference Include="Aspire.Azure.Data.Tables" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Cloud5mins.ShortenerTools.Core\Cloud5mins.ShortenerTools.Core.csproj" />
     <ProjectReference Include="..\Cloud5mins.ShortenerTools.ServiceDefaults\Cloud5mins.ShortenerTools.ServiceDefaults.csproj" />
   </ItemGroup>
+
 </Project>

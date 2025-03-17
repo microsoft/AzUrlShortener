@@ -1,0 +1,92 @@
+﻿@using Cloud5mins.ShortenerTools.Core.Domain;
+@using Cloud5mins.ShortenerTools.TinyBlazorAdmin.Components.Shared
+@using Microsoft.FluentUI.AspNetCore.Components.Components.Tooltip
+@implements IDialogContentComponent<ShortUrlEntity>
+
+@rendermode InteractiveServer
+
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Dialog!.Instance.Parameters.Title
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+<FluentDialogBody>
+	<EditForm Model="@_shortUrl" FormName="updateUrlForm">
+        <DataAnnotationsValidator />
+		
+        <FluentStack Orientation="Orientation.Vertical" VerticalGapGap="10"  Width="100%">
+
+            <div style="width: 100%;">
+                <FluentTextField Name="Title" Label="Title" @bind-Value="_shortUrl.Title" Required="false" style="width: 100%;" />
+                <FluentValidationMessage For="@(() => _shortUrl.Title)" />
+            </div>
+
+            <div style="width: 100%;">
+                <FluentTextField Name="Url" Label="Url" @bind-Value="_shortUrl.Url" Required="true" style="width: 100%;" />
+                <FluentValidationMessage For="@(() => _shortUrl.Url)" />
+            </div>
+
+            <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center">
+                <FluentTextField Name="Vanity" Label="Vanity" @bind-Value="_shortUrl.RowKey" ReadOnly="true" style="width: 95%;" /><FluentIcon Id="vanityInfo" Icon="Icons.Regular.Size16.Info" />
+
+                <FluentTooltip Anchor="vanityInfo">
+                    The <b>vanity</b> cannot be updated it's The identifier for the short URL.
+                </FluentTooltip>
+            </FluentStack>
+
+            <div>
+                <SchedulesComponent Schedules="_shortUrl.Schedules"></SchedulesComponent>
+            </div>
+
+        </FluentStack>
+	</EditForm>
+	
+</FluentDialogBody>
+
+
+
+<FluentDialogFooter>
+    <FluentButton Appearance="Appearance.Accent"
+                  Disabled="@(!_shortUrl.Validate())" 
+                  OnClick="@SaveAsync">Save</FluentButton>
+    <FluentButton Appearance="Appearance.Neutral"
+                  OnClick="@CancelAsync">Cancel</FluentButton>
+</FluentDialogFooter>
+
+
+@code {
+	[Parameter]
+    public ShortUrlEntity Content { get; set; } = default!;
+
+    [CascadingParameter]
+    public FluentDialog? Dialog { get; set; } = default!;
+
+	private ShortUrlEntity _shortUrl = new ShortUrlEntity();
+
+
+    protected override void OnInitialized()
+    {
+        _shortUrl = Content;
+    }
+    private void ToggleDialogPrimaryActionButton(bool enable)
+    {
+        Dialog!.TogglePrimaryActionButton(enable);
+    }
+
+	private async Task SaveAsync()
+    {
+		if (_shortUrl.Validate())
+		{
+			await Dialog!.CloseAsync(_shortUrl);
+		}
+    }
+
+    private async Task CancelAsync()
+    {
+        await Dialog!.CancelAsync();
+    }
+}

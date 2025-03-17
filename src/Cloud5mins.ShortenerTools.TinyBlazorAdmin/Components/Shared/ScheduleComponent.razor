@@ -1,0 +1,87 @@
+@inherits LayoutComponentBase
+@using Cloud5mins.ShortenerTools.Core.Domain
+
+@rendermode InteractiveServer
+
+<FluentStack Orientation="Orientation.Vertical" VerticalGapGap="10" Width="100%">
+    <FluentStack Orientation="Orientation.Horizontal" HorizontalGapGapGap="10" Width="100%">
+        <div Width="50%">
+            <FluentDatePicker Label="Starting From" Value="@startDate" ValueChanged="@( e => StartDateTimeReconcile(DateTimeSection.Date, e!.Value) )" />
+            <FluentTimePicker Value="@startTime" ValueChanged="@( e => StartDateTimeReconcile(DateTimeSection.Time, e!.Value) )" />
+        </div>
+        <div Width="50%">
+            <FluentDatePicker Label="Ending at" Value="@endDate" ValueChanged="@( e => EndDateTimeReconcile(DateTimeSection.Date, e!.Value) )" />
+            <FluentTimePicker Value="@endTime" ValueChanged="@( e => EndDateTimeReconcile(DateTimeSection.Time, e!.Value) )" />
+        </div>
+    </FluentStack>  
+    <div style="width: 100%;">
+        <FluentTextField Label="Alternative URL" Name="AlternativeUrl" Placeholder="https://..." @bind-Value="schedule.AlternativeUrl" style="width: 90%;"/>
+    </div>
+    <div>
+        <FluentStack Orientation="Orientation.Horizontal" HorizontalGapGapGap="10" >
+            <FluentTextField Name="Cron" Label="Cron expression" Placeholder="* * * * * " @bind-Value="schedule.Cron" />
+            <span>Tool: <a href="https://crontab.guru/" target="blank">https://crontab.guru/</a> </span>
+        </FluentStack>
+        
+    </div>  
+    <div>
+        <FluentNumberField Name="DurationMinutes" Label="Duration (in minutes)" @bind-Value="schedule.DurationMinutes" Min="0" Step="5" />
+    </div>  
+</FluentStack> 
+
+
+@code {
+
+    [Parameter]
+    public Schedule? schedule { get; set; }
+
+    private DateTime startDate;
+    private DateTime startTime;
+    private DateTime endDate;
+    private DateTime endTime;
+
+    private enum DateTimeSection
+    {
+        Date,
+        Time
+    }
+
+    protected override void OnInitialized()
+    {
+        startDate = schedule.Start;
+        startTime = schedule.Start;
+        
+        endDate = schedule.End;
+        endTime = schedule.End;
+    }
+ 
+    private void StartDateTimeReconcile(DateTimeSection section, DateTime value)
+    {
+        if (section == DateTimeSection.Date)
+        {
+            startDate = value;
+        }
+        else
+        {
+            startTime = value;
+        }
+
+        var dateReconciled = new DateTime(startDate.Year, startDate.Month, startDate.Day, startTime.Hour, startTime.Minute, 0);
+        schedule.Start = dateReconciled;
+    }
+
+    private void EndDateTimeReconcile(DateTimeSection section, DateTime value)
+    {
+        if (section == DateTimeSection.Date)
+        {
+            endDate = value;
+        }
+        else
+        {
+            endTime = value;
+        }
+
+        var dateReconciled = new DateTime(endDate.Year, endDate.Month, endDate.Day, endTime.Hour, endTime.Minute, 0);
+        schedule.End = dateReconciled;
+    }
+}
