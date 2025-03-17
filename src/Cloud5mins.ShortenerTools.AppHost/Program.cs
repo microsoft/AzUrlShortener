@@ -18,6 +18,7 @@ var strTables = urlStorage.AddTables("strTables");
 var azFuncLight = builder.AddAzureFunctionsProject<Projects.Cloud5mins_ShortenerTools_FunctionsLight>("azfunc-light")
 							.WithReference(strTables)
 							.WaitFor(strTables)
+							.WithEnvironment("DefaultRedirectUrl",defaultRedirectUrl)
 							.WithExternalHttpEndpoints();
 
 var manAPI = builder.AddProject<Projects.Cloud5mins_ShortenerTools_Api>("api")

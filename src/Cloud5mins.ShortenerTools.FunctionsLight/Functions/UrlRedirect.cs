@@ -19,26 +19,26 @@ namespace Cloud5mins.ShortenerTools.Functions
         public UrlRedirect(ILoggerFactory loggerFactory, TableServiceClient tblClient)
         {
             _logger = loggerFactory.CreateLogger<UrlRedirect>();
-            _logger.LogInformation("UrlRedirect in constructor");
+            // _logger.LogDebug("UrlRedirect in constructor");
             _tblClient = tblClient;
         }
 
         [Function("UrlRedirect")]
         public async Task<HttpResponseData> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{shortUrl}")]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{shortUrl?}")]
             HttpRequestData req,
-            string shortUrl,
+            string? shortUrl,
             ExecutionContext context)
         {
-            _logger.LogInformation("Function reached");
+            _logger.LogDebug("Function reached");
             UrlServices UrlServices = new UrlServices(_logger, new AzStrorageTablesService(_tblClient));
-            _logger.LogInformation("Services created");
-            _logger.LogInformation($"Redirecting {shortUrl}");
+            _logger.LogDebug("Services created");
+            _logger.LogDebug($"Redirecting {shortUrl}");
             string redirectUrl = await UrlServices.Redirect(shortUrl);
-            _logger.LogInformation("got the redirect url");
+            _logger.LogDebug("got the redirect url");
             var res = req.CreateResponse(HttpStatusCode.Redirect);
             res.Headers.Add("Location", redirectUrl);
-            _logger.LogInformation("response created");
+            _logger.LogDebug("response created");
             return res;
 
         }
