@@ -1,11 +1,9 @@
 @page "/statistics"
 @page "/statistics/{vanity}"
 
+@using BlazorBootstrap
 @using Cloud5mins.ShortenerTools.Core.Messages;
 @using Cloud5mins.ShortenerTools.Core.Domain
-@using Syncfusion.Blazor
-@using Syncfusion.Blazor.Charts
-@using Syncfusion.Blazor.Spinner
 @using Microsoft.AspNetCore.Authorization
 @using System.Collections.ObjectModel
 @using System.Text.Json
@@ -20,37 +18,7 @@
 <a href="/UrlManager/"> &lt;&lt; Back</a>
 
 <div id="stats" >
-@if(clicksHistory != null){
-<SfChart Title="Click Stats" Width="900px" >
-    <ChartEvents/>
-    <ChartArea><ChartAreaBorder Width="1"></ChartAreaBorder></ChartArea>
-    <ChartPrimaryXAxis  ValueType="Syncfusion.Blazor.Charts.ValueType.DateTime"  
-                        LabelFormat="y/M/d" 
-                        EdgeLabelPlacement="EdgeLabelPlacement.Shift" RangePadding="ChartRangePadding.Auto">
-        <ChartAxisMajorGridLines Width="1"></ChartAxisMajorGridLines>
-    </ChartPrimaryXAxis>
-
-    <ChartPrimaryYAxis  LabelFormat="{value}" >
-            <ChartAxisLineStyle Width="1"></ChartAxisLineStyle>
-            <ChartAxisMajorTickLines Width="1"></ChartAxisMajorTickLines>
-    </ChartPrimaryYAxis>
-    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
-    
-    <ChartSeriesCollection>
-        <ChartSeries    DataSource="@clicksHistory" 
-                        Name="Click(s) by Day"
-                        XName="DateClicked" 
-                        YName="Count" 
-                        Type="ChartSeriesType.Line">
-            <ChartMarker Visible="true" ></ChartMarker>
-        </ChartSeries>
-    </ChartSeriesCollection>
-    
-</SfChart>
-}
-else{
-    <SfSpinner Size="40" Label="Counting all those clicks..." Type="SpinnerType.Material" Visible="@isLoading"></SfSpinner>
-}
+    <BarChart @ref="barChart" Width="800" Height="400" />
 </div>
 <div>
     <h3>@dayCount</h3>
@@ -62,22 +30,32 @@ else{
 #nullable enable
     public string? vanity { get; set; }
 #nullable disable
-
-    private bool isLoading { get; set; } = true;
     private string subTitle = "";
-
-    private ObservableCollection<ClickDate>? clicksHistory = null;
+    private ChartData chartData = new ChartData();
     private readonly Random _random = new Random(); 
     private string dayCount = string.Empty;
+    private BarChart barChart = default!;
 
-    private async Task<ObservableCollection<ClickDate>> UpdateUIList()
+    private async Task<ChartData> UpdateUIList()
     {
         subTitle = (!String.IsNullOrEmpty(vanity))? $"Clicks for: {vanity}": "All clicks";
         try{
 
             var response = await urlManager.UrlClickStatsByDay( new UrlClickStatsRequest(vanity));
-            if(response != null){            
-                return new ObservableCollection<ClickDate>(response.Items);
+            if(response != null){    
+                var data = new ChartData(){
+                    Labels =  GetDateRange(response.Items.Min(x => x.DateClicked)),
+                    Datasets = new List<IChartDataset>()
+                    {
+                        new BarChartDataset
+                        {
+                            Label = "Click(s) by Day",
+                            Data = response.Items.Select(x => (double?)x.Count).ToList(),
+                            BackgroundColor = new List<string>{ "rgb(150, 91, 227)" },
+                        }
+                    }
+                };
+                return data;
             }
         }
         catch (System.Exception ex)
@@ -86,28 +64,46 @@ else{
         }
         return null;
     }
-
-
-    @* protected override void OnInitialized()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        clicksHistory = UpdateUIList().Result;
-        
-        if(clicksHistory != null){
-            dayCount = "Day(s): " + clicksHistory.Count.ToString();
+        if (firstRender)
+        {
+            await RenderChartAsync();
         }
-        this.isLoading = false;
-        StateHasChanged();
+        await base.OnAfterRenderAsync(firstRender);
+    }
 
-    } *@
-    protected override async Task OnInitializedAsync()
+    private async Task RenderChartAsync()
     {
-        clicksHistory = await UpdateUIList();
+        chartData = await UpdateUIList();
         
-        if(clicksHistory != null){
-            dayCount = "Day(s): " + clicksHistory.Count.ToString();
+        if(chartData.Datasets != null){
+            dayCount = "Day(s): " + chartData.Datasets.Count.ToString();
         }
-        this.isLoading = false;
-        StateHasChanged();
 
+        var options = new BarChartOptions();
+        options.Interaction.Mode = InteractionMode.Index;
+
+        options.Plugins.Title!.Text = "Click Stats";
+        options.Plugins.Title.Display = true;
+        options.Plugins.Title.Font = new ChartFont { Size = 20 };
+
+        options.Responsive = true;
+
+        options.Scales.X!.Title = new ChartAxesTitle { Text = "Date Clicked", Display = true };
+        options.Scales.Y!.Title = new ChartAxesTitle { Text = "Count", Display = true };
+
+        await barChart.InitializeAsync(chartData, options);
+    }
+
+    private List<string> GetDateRange(DateTime startDate)
+    {
+        DateTime endDate = DateTime.Now;
+        List<string> dateRange = new List<string>();
+        for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+        {
+            dateRange.Add(date.ToString("yyyy-MM-dd"));
+        }
+        return dateRange;
     }
 }

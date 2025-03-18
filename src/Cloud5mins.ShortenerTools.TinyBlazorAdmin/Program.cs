@@ -2,7 +2,6 @@ using Microsoft.FluentUI.AspNetCore.Components;
 using Cloud5mins.ShortenerTools.TinyBlazorAdmin.Components;
 using Cloud5mins.ShortenerTools.TinyBlazorAdmin;
 using Microsoft.FluentUI.AspNetCore.Components.Components.Tooltip;
-using Syncfusion.Blazor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,10 +18,8 @@ builder.Services.AddRazorComponents()
 builder.Services.AddFluentUIComponents();
 builder.Services.AddScoped<ITooltipService, TooltipService>();
 
-// regiser fusion blazor service
-// Community Licence for your personal use ONLY. Thank you Syncfusion for this generous offer.
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NHaF5cWWdCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdmWX1fdHVQR2RYVUNxW0c="); 
-builder.Services.AddSyncfusionBlazor();
+//Blazor Bootstrap service
+builder.Services.AddBlazorBootstrap();
 
 var app = builder.Build();
 app.MapDefaultEndpoints();
