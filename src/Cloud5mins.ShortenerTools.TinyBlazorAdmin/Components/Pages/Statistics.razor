@@ -45,14 +45,13 @@
             if(response != null){    
                 var data = new ChartData(){
                     Labels =  GetDateRange(response.Items.Min(x => x.DateClicked)),
-                    //Labels = response.Items.Select(x => x.DateClicked.ToString("yyyy-MM-dd")).ToList(),
                     Datasets = new List<IChartDataset>()
                     {
                         new BarChartDataset
                         {
                             Label = "Click(s) by Day",
                             Data = response.Items.Select(x => (double?)x.Count).ToList(),
-                            BackgroundColor = new List<string>{ "rgb(88, 80, 141)" },
+                            BackgroundColor = new List<string>{ "rgb(150, 91, 227)" },
                         }
                     }
                 };
@@ -64,14 +63,7 @@
             Console.WriteLine(ex.ToString()); 
         }
         return null;
-
     }
-    protected override async Task OnInitializedAsync()
-    {
-
-    }
-
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
