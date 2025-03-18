@@ -9,8 +9,7 @@
   <ItemGroup>
 	<PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.*-* " />
     <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.*-* " />
-    <PackageReference Include="Syncfusion.Blazor.Charts" Version="28.2.6" />
-    <PackageReference Include="Syncfusion.Blazor.Spinner" Version="28.2.6" />
+    <PackageReference Include="Blazor.Bootstrap" Version="3.3.1" />
   </ItemGroup>
 
   <ItemGroup>
