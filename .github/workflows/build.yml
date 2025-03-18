@@ -26,7 +26,7 @@ jobs:
       run: dotnet workload update && dotnet workload install aspire
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore src/AzUrlShortener.sln
 
     - name: Build solution
-      run: dotnet build --no-restore --configuration Release
+      run: dotnet build src/AzUrlShortener.sln --no-restore --configuration Release
