@@ -20,18 +20,17 @@ Features:
 - Budget-friendly and 100% open-source.
 - Extensible for more enterprise-friendly configurations
 - Simple step by step deployment. 
+  
 
 ## How To Deploy
 
-👉 **[Step by Step Deployment](https://github.com/microsoft/AzUrlShortener/wiki/How-to-deploy-your-AzUrlShortener)** (wiki pages) 👈 documentation is available here. If you would like to used the TinyBlazorAdmin as frontend (suggested) **you must first** follow the [steps to follow for TinyBlazorAdmin](https://github.com/microsoft/AzUrlShortener/wiki/How-to-deploy-TinyBlazorAdmin).
+👉 **[Step by Step Deployment](doc/how-to-deploy.md)** 👈 documentation is available here.
 
 If you want to **Update** or **Upgrade**, please refer to [this page](https://github.com/microsoft/AzUrlShortener/wiki/How-to-Update---Upgrade) (wiki pages). 
 
 ## How To Use It
 
-AzUrlShortener is an API that doesn't have any admin UI by default. There are many different ways to manage your Short Urls, from a direct HTTP call to a fancy website. 
-
-We suggest [Tiny Blazor Admin](./src/Cloud5mins.ShortenerTools.TinyBlazorAdmin/README.md); it's a static website. 
+Once deployed, use the admin webApp (aka TinyBlazorAdmin) to create new short URLs. 
 
 ![Tiny Blazor Admin looks](/Media/TinyBlazorAdmin.gif)
 
