@@ -34,15 +34,16 @@ Once deployed, use the admin webApp (aka TinyBlazorAdmin) to create new short UR
 
 ![Tiny Blazor Admin looks](/Media/TinyBlazorAdmin.gif)
 
-By default, without any specific Admin tool, you can use an API client like [Postman](https://www.postman.com/) or a plugin to VSCode like [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client). We've included simple API calls via a postman collection and environment [here](./src/tools).
 
-You can also directly update the tables in storage using [Azure Storage Explorer](https://github.com/microsoft/AzUrlShortener/wiki/How-to-Use-Azure-Storage-Explorer-as-Admin-Tools-for-AzUrlShortener). 
+### Alternative Admin Tool
+
+By default, all the required resources are deployed into Azure. However you can decide to run the [API](src/Cloud5mins.ShortenerTools.Api/) locally, in a container or somewhere else. You can than use an API client like [Postman](https://www.postman.com/) or a plugin to VSCode like [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client), to manage your URLs. We've included simple API calls via a postman collection and environment [here](./src/tools/).
+
+You can also directly update the tables in storage using [Azure Storage Explorer](doc/how-to-use-azure-storage-explorer.md). 
 
 ---
 
-## How It Works
-
-If you are interested to learn more about what's under the hood, and get more details on each Azure Function, read the [How it works](https://github.com/microsoft/AzUrlShortener/wiki/how-it-works) page.
+## Videos
 
 There is also a videos that explains a bit how things works and does a quick tour of the project.
 
@@ -58,10 +59,9 @@ There is also a videos that explains a bit how things works and does a quick tou
 
 We are always trying to make it better. See the [AzUrlShortener project](https://github.com/users/FBoucher/projects/6/views/4) page and [issues](https://github.com/microsoft/AzUrlShortener/issues) to see the current progress. 
 
-You are invited to go into the [Discussion](https://github.com/microsoft/AzUrlShortener/discussions) tab to share your feedback, ask question, and suggest new feature!
+You are invited to go into the [Discussion](https://github.com/microsoft/AzUrlShortener/discussions) tab to share your feedback, ask question, and suggest new feature! Or have look at our [faq](doc/faq.md) page for more information.
 
 Current Backlog contains:
-- A deployment option with everything combined into TinyBlazorAdmin
 - More Statistics
 - QR Code
 - More tracking information (like Country)

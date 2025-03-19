@@ -69,4 +69,4 @@ Voila! Your app now has authentication.
 
 Next time you navigate to the app, you will be prompted to log in with your Microsoft account. Notice that your entire app is protected. No page is accessible without authentication.
 
-The first time you log in, you will see a Permissions requested screen. Check the **Consent** checkbox, and click **Accept(()).
+The first time you log in, you will see a Permissions requested screen. Check the **Consent** checkbox, and click **Accept**.
