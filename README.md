@@ -26,13 +26,13 @@ Features:
 
 👉 **[Step by Step Deployment](doc/how-to-deploy.md)** 👈 documentation is available here.
 
-If you want to **Update** or **Upgrade**, please refer to [this page](https://github.com/microsoft/AzUrlShortener/wiki/How-to-Update---Upgrade) (wiki pages). 
+If you want to **Update** or **Upgrade**, please refer to [the faq page](doc/faq.md). 
 
 ## How To Use It
 
 Once deployed, use the admin webApp (aka TinyBlazorAdmin) to create new short URLs. 
 
-![Tiny Blazor Admin looks](/Media/TinyBlazorAdmin.gif)
+![Tiny Blazor Admin looks](images/tinyblazyadmin-tour.gif)
 
 
 ### Alternative Admin Tool

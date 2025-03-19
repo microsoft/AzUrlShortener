@@ -7,7 +7,8 @@
 - [How to deploy your AzUrlShortener](./how-to-deploy.md)
 - [How to run AzUrlShortener locally](#how-to-run-azurlshortener-locally)
 - [How to update/ redeploy AzUrlShortener](#update-redeploy-azurlshortener)
-
+- [How does it work?](./how-it-works.md)
+- [Security Considerations](./security-considerations.md)
 
 
 ## How to run AzUrlShortener locally
