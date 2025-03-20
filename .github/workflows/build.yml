@@ -1,0 +1,33 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+      - v-next
+  pull_request:
+    branches:
+      - main
+      - v-next
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x' # Adjust the version as needed
+
+    - name: Install .NET Aspire workload
+      run: dotnet workload update && dotnet workload install aspire
+
+    - name: Restore dependencies
+      run: dotnet restore src/AzUrlShortener.sln
+
+    - name: Build solution
+      run: dotnet build src/AzUrlShortener.sln --no-restore --configuration Release

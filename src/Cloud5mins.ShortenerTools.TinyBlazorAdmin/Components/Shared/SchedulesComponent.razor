@@ -1,0 +1,53 @@
+@inherits LayoutComponentBase
+@using Cloud5mins.ShortenerTools
+@using Cloud5mins.ShortenerTools.Core.Domain
+
+
+<FluentCard MinimalStyle="true" AreaRestricted="false">
+    <FluentStack Orientation="Orientation.Horizontal" HorizontalGap="8" VerticalAlignment="VerticalAlignment.Center" >
+        <FluentLabel Typo="Typography.H6" Color="Color.FillInverse">Schedules</FluentLabel>
+        <FluentButton OnClick="@(async () => AddScheduleClick())" IconEnd="@(new Icons.Regular.Size16.AddSquare())" />
+    </FluentStack>
+    
+    <FluentAccordion ExpandMode="AccordionExpandMode.Single">
+
+            @foreach(var s in schedules)
+            {
+                <FluentAccordionItem Expanded="true">
+                    <HeadingTemplate>
+                        <FluentStack Orientation="Orientation.Horizontal" HorizontalGap="8" VerticalAlignment="VerticalAlignment.Center" >
+                            <FluentButton OnClick="@( () => DeleteSchedule( s ))" IconEnd="@(new Icons.Regular.Size16.Delete())" />
+                            <FluentLabel Color="Color.Accent">
+                                @s.Start.ToString("yyyy-MM-dd") &lt;                       
+                                @s.GetDisplayableUrl(25) &gt;
+                                @s.End.ToString("yyyy-MM-dd")
+                            </FluentLabel> 
+                        </FluentStack>
+                    </HeadingTemplate>
+                    <ChildContent>
+                        <ScheduleComponent schedule=@s></ScheduleComponent>
+                    </ChildContent>
+                </FluentAccordionItem >
+            } 
+
+    </FluentAccordion >
+
+</FluentCard>
+
+@code {
+
+    [Parameter]
+    public List<Schedule> schedules { get; set; }
+
+
+    private void AddScheduleClick(){
+        schedules.Add(new Schedule());
+        StateHasChanged();
+    }
+
+    private void DeleteSchedule(Schedule schedule){
+        schedules.Remove(schedule);
+        StateHasChanged();
+    }
+
+}

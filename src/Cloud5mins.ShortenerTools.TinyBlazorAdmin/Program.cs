@@ -1,25 +1,44 @@
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Syncfusion.Blazor;
+using Microsoft.FluentUI.AspNetCore.Components;
+using Cloud5mins.ShortenerTools.TinyBlazorAdmin.Components;
 using Cloud5mins.ShortenerTools.TinyBlazorAdmin;
-using AzureStaticWebApps.Blazor.Authentication;
+using Microsoft.FluentUI.AspNetCore.Components.Components.Tooltip;
 
-var builder = WebAssemblyHostBuilder.CreateDefault(args);
-builder.RootComponents.Add<App>("#app");
-builder.RootComponents.Add<HeadOutlet>("head::after");
-var baseAddress = builder.HostEnvironment.BaseAddress;
-builder.Services
-        .AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) })
-        .AddStaticWebAppsAuthentication();
+var builder = WebApplication.CreateBuilder(args);
 
-// builder.Services.AddMsalAuthentication(options =>
-// {
-//     builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
-// });
+builder.AddServiceDefaults();
 
-// regiser fusion blazor service
-// Community Licence for your personal use ONLY. Thank you Syncfusion for this generous offer.
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzYyMzI1QDMyMzAyZTMxMmUzMFY0cEZ3MVozdkwvekVhek8xTWdPMkg2NlhvdVFNR1lvZHdhQWJWUlNjZW89"); 
-builder.Services.AddSyncfusionBlazor();
+builder.Services.AddHttpClient<UrlManagerClient>(client => 
+            {
+                client.BaseAddress = new Uri("https+http://api");
+            });
 
-await builder.Build().RunAsync();
+// Add services to the container.
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
+builder.Services.AddFluentUIComponents();
+builder.Services.AddScoped<ITooltipService, TooltipService>();
+
+//Blazor Bootstrap service
+builder.Services.AddBlazorBootstrap();
+
+var app = builder.Build();
+app.MapDefaultEndpoints();
+
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+
+app.UseStaticFiles();
+app.UseAntiforgery();
+
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
+
+app.Run();
