@@ -179,4 +179,22 @@ public class AzStrorageTablesService(TableServiceClient client) : IAzStrorageTab
 	{
 		var result = await GetStatsTable().UpsertEntityAsync(newStats);
 	}
+
+	public async Task ImportUrlDataAsync(List<ShortUrlEntity> lstShortUrl)
+	{
+		var tblUrls = GetUrlsTable();
+		foreach (var item in lstShortUrl)
+		{
+			await tblUrls.UpsertEntityAsync(item);
+		}
+	}
+
+	public async Task ImportClickStatsAsync(List<ClickStatsEntity> lstClickStats)
+	{
+		var tblStats = GetStatsTable();
+		foreach (var item in lstClickStats)
+		{
+			await tblStats.UpsertEntityAsync(item);
+		}
+	}
 }

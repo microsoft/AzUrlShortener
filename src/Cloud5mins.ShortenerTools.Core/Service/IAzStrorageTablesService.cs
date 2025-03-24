@@ -17,4 +17,6 @@ public interface IAzStrorageTablesService
     Task<ShortUrlEntity> ArchiveShortUrlEntity(ShortUrlEntity urlEntity);
     Task<List<ClickStatsEntity>> GetAllStatsByVanity(string vanity);
     Task SaveClickStatsEntity(ClickStatsEntity newStats);
+    Task ImportUrlDataAsync(List<ShortUrlEntity> lstShortUrl);
+    Task ImportClickStatsAsync(List<ClickStatsEntity> lstClickStats);
 }

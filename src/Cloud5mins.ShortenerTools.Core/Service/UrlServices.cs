@@ -167,7 +167,6 @@ public class UrlServices
 		return result;
 	}
 
-
 	public async Task<ClickDateList> ClickStatsByDay(UrlClickStatsRequest input, string host)
 	{
 		var result = new ClickDateList();
@@ -190,6 +189,34 @@ public class UrlServices
 			throw;
 		}
 		return result;
+	}
+
+	public async Task<bool> ImportUrlDataAsync(List<ShortUrlEntity> lstShortUrl)
+	{
+		try
+		{
+			await _stgHelper.ImportUrlDataAsync(lstShortUrl);
+			return true;
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "An unexpected error was encountered.");
+			throw;
+		}
+	}
+
+	public async Task<bool> ImportClickStatsAsync(List<ClickStatsEntity> lstClickStats)
+	{
+		try
+		{
+			await _stgHelper.ImportClickStatsAsync(lstClickStats);
+			return true;
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "An unexpected error was encountered.");
+			throw;
+		}
 	}
 }
 

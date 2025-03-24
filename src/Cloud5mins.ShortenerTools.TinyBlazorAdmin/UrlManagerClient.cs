@@ -96,4 +96,39 @@ public class UrlManagerClient(HttpClient httpClient)
 
 		return null;
 	}
+
+	public async Task<bool> ImportUrlDataAsync(List<ShortUrlEntity> lstShortUrl)
+	{
+		try
+		{
+			using var response = await httpClient.PostAsJsonAsync("/api/ImportUrlData", lstShortUrl);
+			if (response.IsSuccessStatusCode)
+			{
+				return true;
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+
+		return false;
+	}
+	public async Task<bool> ImportClickStatsAsync(List<ClickStatsEntity> lstClickStats)
+	{
+		try
+		{
+			using var response = await httpClient.PostAsJsonAsync("/api/ImportClickStats", lstClickStats);
+			if (response.IsSuccessStatusCode)
+			{
+				return true;
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+
+		return false;
+	}
 }

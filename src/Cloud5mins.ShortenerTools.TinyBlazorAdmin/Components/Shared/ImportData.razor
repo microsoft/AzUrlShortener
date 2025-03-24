@@ -1,0 +1,93 @@
+﻿@inherits LayoutComponentBase
+@using Cloud5mins.ShortenerTools.Core.Domain
+@using CsvHelper
+@using System.Globalization
+@inject UrlManagerClient urlManager
+@inject IToastService toastService
+
+@rendermode InteractiveServer
+
+<h3>Import Data</h3>
+
+<FluentInputFile @ref="@myFileUploader"
+                 DragDropZoneVisible="false"
+                 Mode="InputFileMode.SaveToTemporaryFolder"
+                 Multiple="true"
+                 AnchorId="MyUploadLoadingButton"
+                 MaximumFileSize="@(100 * 1024 * 1024)"
+                 Accept=".csv"
+                 OnProgressChange="@(e =>
+                     {
+                         _formUploading = true;
+                         progressPercent = e.ProgressPercent;
+                         progressTitle = e.ProgressTitle;
+                     })"
+                 OnCompleted="@OnCompleted" />
+
+<FluentProgress Min="0" Max="100" Visible="@(progressPercent > 0)" Value="@progressPercent" />
+<FluentLabel Alignment="HorizontalAlignment.Center">
+    @progressTitle
+</FluentLabel>
+
+<FluentButton Id="MyUploadLoadingButton" Loading="_formUploading" Appearance="Appearance.Accent">
+    Upload files
+</FluentButton>
+
+@if (Files.Any())
+{
+    <h4>File(s) uploaded:</h4>
+    <ul>
+        @foreach (var file in Files)
+        {
+            <li>
+                <b>@file.Name</b> 🔹
+                @($"{Decimal.Divide(file.Size, 1024):N} KB") 🔹
+                @file.ContentType 🔹
+                @file.LocalFile?.FullName
+                @file.ErrorMessage
+            </li>
+        }
+    </ul>
+
+	
+}
+
+
+@code
+{
+    bool _formUploading;
+    FluentInputFile? myFileUploader = default!;
+    int? progressPercent;
+    string? progressTitle;
+
+	string? SelectedValue;
+
+    FluentInputFileEventArgs[] Files = Array.Empty<FluentInputFileEventArgs>();
+
+    void OnCompleted(IEnumerable<FluentInputFileEventArgs> files)
+    {
+        Files = files.ToArray();
+        progressPercent = myFileUploader!.ProgressPercent;
+        progressTitle = myFileUploader!.ProgressTitle;
+
+        // For the demo, delete these files.
+        foreach (var file in Files)
+        {
+            file.LocalFile?.Delete();
+        }
+        _formUploading = false;
+        StateHasChanged();
+    }
+
+	private async Task ImportUrlData()
+	{
+		var urlDataCSV = Files.FirstOrDefault(f => f.Name == SelectedValue);
+		
+		using var reader = new StreamReader(urlDataCSV.LocalFile!.FullName);
+		using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+		var records = csv.GetRecords<ShortUrlEntity>().ToList();
+		var result = await urlManager.   (records);
+		
+		//toastService.ShowSuccess("Data imported successfully.");
+	}
+}
