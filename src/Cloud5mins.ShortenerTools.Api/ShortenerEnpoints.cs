@@ -198,14 +198,14 @@ public static class ShortenerEnpoints
 	static private async Task<Results<
 									Ok,
 									InternalServerError<DetailedBadRequest>>>
-									UrlDataImport(List<ShortUrlEntity> lstShortUrl,
-												TableServiceClient tblClient,
-												ILogger logger)
+									UrlDataImport(UrlDetails data,
+													TableServiceClient tblClient,
+													ILogger logger)
 	{
 		try
 		{
 			var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient));
-			await urlServices.ImportUrlDataAsync(lstShortUrl);
+			await urlServices.ImportUrlDataAsync(data);
 			return TypedResults.Ok();
 		}
 		catch (Exception ex)

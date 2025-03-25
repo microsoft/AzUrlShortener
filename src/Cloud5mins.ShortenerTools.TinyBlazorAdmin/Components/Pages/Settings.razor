@@ -1,6 +1,7 @@
 ﻿@page "/settings"
 
 @using Microsoft.FluentUI.AspNetCore.Components.Extensions
+@using Cloud5mins.ShortenerTools.TinyBlazorAdmin.Components.Shared
 @inject ILogger<Settings> Logger
 
 @rendermode InteractiveServer
@@ -29,6 +30,11 @@
 		</FluentSelect>
 	</FluentStack>
 </div>
+
+<div style="padding:50px;">
+    <ImportData />
+</div>
+
 
 @code {
     public DesignThemeModes Mode { get; set; }

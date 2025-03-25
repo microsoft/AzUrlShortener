@@ -4,6 +4,7 @@ using Cloud5mins.ShortenerTools.Core.Messages;
 using Cloud5mins.ShortenerTools.Core.Service;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Cloud5mins.ShortenerTools.Core.Services;
 
@@ -191,17 +192,17 @@ public class UrlServices
 		return result;
 	}
 
-	public async Task<bool> ImportUrlDataAsync(List<ShortUrlEntity> lstShortUrl)
+	public async Task<bool> ImportUrlDataAsync(UrlDetails urlData)
 	{
 		try
 		{
-			await _stgHelper.ImportUrlDataAsync(lstShortUrl);
+			await _stgHelper.ImportUrlDataAsync(urlData);
 			return true;
 		}
 		catch (Exception ex)
 		{
-			_logger.LogError(ex, "An unexpected error was encountered.");
-			throw;
+            _logger.LogError(ex, "An unexpected error was encountered.");
+            throw;
 		}
 	}
 

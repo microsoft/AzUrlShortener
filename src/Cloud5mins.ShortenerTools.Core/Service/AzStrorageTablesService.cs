@@ -1,8 +1,9 @@
-using System;
-using System.Text.Json;
 using Azure;
 using Azure.Data.Tables;
 using Cloud5mins.ShortenerTools.Core.Domain;
+using System;
+using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Cloud5mins.ShortenerTools.Core.Service;
 
@@ -180,12 +181,27 @@ public class AzStrorageTablesService(TableServiceClient client) : IAzStrorageTab
 		var result = await GetStatsTable().UpsertEntityAsync(newStats);
 	}
 
-	public async Task ImportUrlDataAsync(List<ShortUrlEntity> lstShortUrl)
+	public async Task ImportUrlDataAsync(UrlDetails urlData)
 	{
-		var tblUrls = GetUrlsTable();
-		foreach (var item in lstShortUrl)
+		try
 		{
-			await tblUrls.UpsertEntityAsync(item);
+			var tblUrls = GetUrlsTable();
+			var lstUrl = urlData.LstShortUrlEntity;
+
+            foreach (var item in lstUrl)
+			{
+				await tblUrls.UpsertEntityAsync(item);
+            }
+
+			if (urlData.NextId != null) {
+                await tblUrls.UpsertEntityAsync(urlData.NextId);
+            }
+
+        }
+		catch (Exception ex)
+		{
+			var temp = ex.Message;
+			throw;
 		}
 	}
 
