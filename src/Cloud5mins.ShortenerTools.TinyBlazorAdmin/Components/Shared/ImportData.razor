@@ -61,7 +61,7 @@
                 <FluentButton   OnClick="@(async () => await ImportUrlDetails())"
                               IconEnd="@(new Icons.Regular.Size16.ArrowImport())"
                                 Title="Import"
-                                Disabled=@(_importing && String.IsNullOrEmpty(selectedUrlDetailValue)) >Import</FluentButton>
+                                Disabled=@(_importing || String.IsNullOrEmpty(selectedUrlDetailValue)) >Import</FluentButton>
         </FluentStack>
     </FluentCard>
 
@@ -75,7 +75,7 @@
             <FluentButton OnClick="@(async () => await ImportClickStats())"
                               IconEnd="@(new Icons.Regular.Size16.ArrowImport())"
                           Title="Import"
-                              Disabled=@(_importing && String.IsNullOrEmpty(selectedClickStatsValue))>Import</FluentButton>
+                              Disabled=@(_importing || String.IsNullOrEmpty(selectedClickStatsValue))>Import</FluentButton>
         </FluentStack>
     </FluentCard>
 
