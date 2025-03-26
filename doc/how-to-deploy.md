@@ -45,6 +45,10 @@ After a few seconds, you should now be in your version of the AzUrlShortener pro
 	azd up
 	```
 
+	You will be asked where to deploy Azure Subscription and location select what make sense for you. You will be asked two more information:
+	- **The Custom domain**: This should be the complete (including the https part) domain name for your short URLs ex: https://c5m.ca.
+	- **Default Redirect Url**: This is the URL used if the vanity doesn't exist, or if no vanity is used. It must include the https part.
+
 1. Get the application URL
 
 After the deployment is complete, you will see the URLs of your applications in the terminal; the one starting by `https://admin` is the admin tools (aka TinyBlazorAdmin), and the one starting with `https://azfunc-light` is the redicrect service. There is also many details about the resources created in Azure, and a link to the .NET Aspire dashboard.

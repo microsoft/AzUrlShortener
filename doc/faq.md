@@ -9,6 +9,7 @@
 - [How to update/ redeploy AzUrlShortener](#update-redeploy-azurlshortener)
 - [How does it work?](./how-it-works.md)
 - [Security Considerations](./security-considerations.md)
+- [How to make the api public](./how-to-set-api-public.md)
 
 
 ## How to run AzUrlShortener locally
