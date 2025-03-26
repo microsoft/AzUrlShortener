@@ -5,7 +5,7 @@ When the solution is running locally the API is accessible so you can call it fr
 > **Note:** The API is not password protected, so anyone with the URL can use it.
 
 ## Before deployment
-In the `src\Cloud5mins.ShortenerTools.AppHost` project open the `program.cs` file and uncomment the line 
+In the `src\AppHost` project open the `program.cs` file and uncomment the line 
 
 ![Uncomment this line](../images/uncomment-public-endpoints.png)
 
