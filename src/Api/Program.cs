@@ -1,6 +1,3 @@
-using Cloud5mins.ShortenerTools.Core.Domain;
-using Cloud5mins.ShortenerTools.Core.Service;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
@@ -11,7 +8,7 @@ builder.Services.AddOpenApi();
 
 builder.AddAzureTableClient("strTables");
 
-builder.Services.AddTransient<ILogger>(sp => 
+builder.Services.AddTransient<ILogger>(sp =>
 {
     var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
     return loggerFactory.CreateLogger("shortenerLogger");
