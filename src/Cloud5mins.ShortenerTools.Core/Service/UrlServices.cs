@@ -4,6 +4,7 @@ using Cloud5mins.ShortenerTools.Core.Messages;
 using Cloud5mins.ShortenerTools.Core.Service;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Cloud5mins.ShortenerTools.Core.Services;
 
@@ -167,7 +168,6 @@ public class UrlServices
 		return result;
 	}
 
-
 	public async Task<ClickDateList> ClickStatsByDay(UrlClickStatsRequest input, string host)
 	{
 		var result = new ClickDateList();
@@ -190,6 +190,34 @@ public class UrlServices
 			throw;
 		}
 		return result;
+	}
+
+	public async Task<bool> ImportUrlDataAsync(UrlDetails urlData)
+	{
+		try
+		{
+			await _stgHelper.ImportUrlDataAsync(urlData);
+			return true;
+		}
+		catch (Exception ex)
+		{
+            _logger.LogError(ex, "An unexpected error was encountered.");
+            throw;
+		}
+	}
+
+	public async Task<bool> ImportClickStatsAsync(List<ClickStatsEntity> lstClickStats)
+	{
+		try
+		{
+			await _stgHelper.ImportClickStatsAsync(lstClickStats);
+			return true;
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "An unexpected error was encountered.");
+			throw;
+		}
 	}
 }
 

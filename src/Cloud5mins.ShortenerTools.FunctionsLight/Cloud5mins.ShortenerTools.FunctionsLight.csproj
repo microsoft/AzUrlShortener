@@ -17,7 +17,7 @@
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="2.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Cloud5mins.ShortenerTools.ServiceDefaults\Cloud5mins.ShortenerTools.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\Cloud5mins.ShortenerTools.ServiceDefaults\Cloud5mins.ShortenerTools.ServiceDefaults.csproj" />
     <ProjectReference Include="..\Cloud5mins.ShortenerTools.Core\Cloud5mins.ShortenerTools.Core.csproj" />
   </ItemGroup>
   <ItemGroup>

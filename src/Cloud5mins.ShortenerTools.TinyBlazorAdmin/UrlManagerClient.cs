@@ -1,6 +1,7 @@
-using System;
 using Cloud5mins.ShortenerTools.Core.Domain;
 using Cloud5mins.ShortenerTools.Core.Messages;
+using System;
+using System.Collections.Generic;
 
 namespace Cloud5mins.ShortenerTools.TinyBlazorAdmin;
 
@@ -95,5 +96,40 @@ public class UrlManagerClient(HttpClient httpClient)
 		}
 
 		return null;
+	}
+
+	public async Task<bool> ImportUrlDataAsync(UrlDetails urlData)
+	{
+		try
+		{
+			using var response = await httpClient.PostAsJsonAsync("/api/UrlDataImport", urlData);
+			if (response.IsSuccessStatusCode)
+			{
+				return true;
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+
+		return false;
+	}
+	public async Task<bool> ImportClickStatsAsync(List<ClickStatsEntity> lstClickStats)
+	{
+		try
+		{
+			using var response = await httpClient.PostAsJsonAsync("/api/UrlClickStatsImport", lstClickStats);
+			if (response.IsSuccessStatusCode)
+			{
+				return true;
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+
+		return false;
 	}
 }
