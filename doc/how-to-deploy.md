@@ -27,11 +27,21 @@ After a few seconds, you should now be in your version of the AzUrlShortener pro
 
 ## Deploying to Azure
 
+1. Make sure Docker (or Podman) is currently started. It will be used to package the Apps into containers before being 
 1. In a terminal, navigate to the `src` directory of your project.
 
 	```bash
 	cd src
 	```
+1. Let's initialize your environment with the following command:
+
+	```bash
+	azd init
+	```
+
+	- You will be asked "How do you want to initialize your app?" Select  **Use code in the current directory**.
+	- azd will says it will generates files for using "Azure Container Apps". Select **Confirm and continue initializing my app**
+	- Give a name to your environment (ex: azUrlShortener-prod). This will be used as Azure resource group name.
 1. If you haven't already, log in to your Azure account with `azd auth login`.
 1. To avoid affecting custom domains when deploying Azure Container Apps use the following command. This mostly useful if you are re-deploying, or updating an existing application. If you don't have any custom domain assign to the Azure Container Apps, you can still execute the command, but it's optional.
    
