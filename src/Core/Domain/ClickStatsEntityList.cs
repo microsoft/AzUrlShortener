@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Cloud5mins.ShortenerTools.Core.Domain
 {
     public class ClickStatsEntityList

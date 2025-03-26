@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Cloud5mins.ShortenerTools.Core.Domain;
 
 namespace Cloud5mins.ShortenerTools.Core.Service;

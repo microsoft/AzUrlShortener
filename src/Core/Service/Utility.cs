@@ -1,13 +1,5 @@
-using Cloud5mins.ShortenerTools.Core.Domain;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System;
-using System.Linq;
-using System.Net;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
 using Cloud5mins.ShortenerTools.Core.Service;
+using System.Security.Cryptography;
 
 
 

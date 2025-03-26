@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text.Json;
 using Azure;
 using Azure.Data.Tables;
+using System.Runtime.Serialization;
+using System.Text.Json;
 
 namespace Cloud5mins.ShortenerTools.Core.Domain
 {
-    public class ShortUrlEntity: ITableEntity
+    public class ShortUrlEntity : ITableEntity
     {
         public string Url { get; set; }
         private string _activeUrl { get; set; }
@@ -92,7 +89,7 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
             Clicks = 0;
             IsArchived = false;
 
-            if(schedules?.Length>0)
+            if (schedules?.Length > 0)
             {
                 Schedules = schedules.ToList<Schedule>();
                 SchedulesPropertyRaw = JsonSerializer.Serialize<List<Schedule>>(Schedules);
