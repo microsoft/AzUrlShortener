@@ -49,7 +49,7 @@ There is also a videos that explains a bit how things works and does a quick tou
 
 | Cloud 5 Mins | Azure Friday |
 | ---          | --- |
-| [![Tiny Blazor Admin looks](/Media/AzUrlShortener_preview.gif)](https://youtu.be/fzXy2D77WMM) | [![Azure Friday](/Media/AzureFriday_preview.gif)](https://learn.microsoft.com/en-us/shows/azure-friday/azurlshortener-an-open-source-budget-friendly-url-shortener)  |
+| [![Tiny Blazor Admin looks](images/AzUrlShortener_preview.gif)](https://youtu.be/fzXy2D77WMM) | [![Azure Friday](/images/AzureFriday_preview.gif)](https://learn.microsoft.com/en-us/shows/azure-friday/azurlshortener-an-open-source-budget-friendly-url-shortener)  |
 
 
 ---
@@ -132,9 +132,4 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 > This project was inspired by a project created by [Jeremy Likness](https://github.com/JeremyLikness) that you can find here [jlik.me](https://github.com/JeremyLikness/jlik.me).
 
 
-[UrlShortener]: https://github.com/microsoft/AzUrlShortener/raw/main/Media/UrlShortener_600.png
-[ThumbnailYTAzUrlShortener_EN]: https://github.com/microsoft/AzUrlShortener/raw/main/Media/ThumbnailYTAzUrlShortener_EN.png
-[glo]: https://github.com/microsoft/AzUrlShortener/raw/main/Media/glo-board_screenshot.png
-[AzFunctionGitSync]: https://github.com/microsoft/AzUrlShortener/raw/main/Media/AzFunctionGitSync.png
-
-
+[UrlShortener]: images/UrlShortener_600.png

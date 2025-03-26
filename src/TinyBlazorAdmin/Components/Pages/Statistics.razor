@@ -1,0 +1,109 @@
+@page "/statistics"
+@page "/statistics/{vanity}"
+
+@using BlazorBootstrap
+@using Cloud5mins.ShortenerTools.Core.Messages;
+@using Cloud5mins.ShortenerTools.Core.Domain
+@using Microsoft.AspNetCore.Authorization
+@using System.Collections.ObjectModel
+@using System.Text.Json
+@using System.Net
+@inject IJSRuntime JSRuntime
+@inject UrlManagerClient urlManager
+
+@rendermode InteractiveServer
+
+<h1>Click Statistics</h1>
+<h3>@subTitle</h3>
+<a href="/UrlManager/"> &lt;&lt; Back</a>
+
+<div id="stats" >
+    <BarChart @ref="barChart" Width="800" Height="400" />
+</div>
+<div>
+    <h3>@dayCount</h3>
+</div>
+
+@code {
+
+    [Parameter]
+#nullable enable
+    public string? vanity { get; set; }
+#nullable disable
+    private string subTitle = "";
+    private ChartData chartData = new ChartData();
+    private readonly Random _random = new Random(); 
+    private string dayCount = string.Empty;
+    private BarChart barChart = default!;
+
+    private async Task<ChartData> UpdateUIList()
+    {
+        subTitle = (!String.IsNullOrEmpty(vanity))? $"Clicks for: {vanity}": "All clicks";
+        try{
+
+            var response = await urlManager.UrlClickStatsByDay( new UrlClickStatsRequest(vanity));
+            if(response != null){    
+                var data = new ChartData(){
+                    Labels =  GetDateRange(response.Items.Min(x => x.DateClicked)),
+                    Datasets = new List<IChartDataset>()
+                    {
+                        new BarChartDataset
+                        {
+                            Label = "Click(s) by Day",
+                            Data = response.Items.Select(x => (double?)x.Count).ToList(),
+                            BackgroundColor = new List<string>{ "rgb(150, 91, 227)" },
+                        }
+                    }
+                };
+                return data;
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Console.WriteLine(ex.ToString()); 
+        }
+        return null;
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await RenderChartAsync();
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task RenderChartAsync()
+    {
+        chartData = await UpdateUIList();
+        
+        if (chartData != null && chartData.Datasets != null){
+            dayCount = "Day(s): " + chartData.Datasets.Count.ToString();
+        }
+
+        var options = new BarChartOptions();
+        options.Interaction.Mode = InteractionMode.Index;
+
+        options.Plugins.Title!.Text = "Click Stats";
+        options.Plugins.Title.Display = true;
+        options.Plugins.Title.Font = new ChartFont { Size = 20 };
+
+        options.Responsive = true;
+
+        options.Scales.X!.Title = new ChartAxesTitle { Text = "Date Clicked", Display = true };
+        options.Scales.Y!.Title = new ChartAxesTitle { Text = "Count", Display = true };
+
+        await barChart.InitializeAsync(chartData, options);
+    }
+
+    private List<string> GetDateRange(DateTime startDate)
+    {
+        DateTime endDate = DateTime.Now;
+        List<string> dateRange = new List<string>();
+        for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+        {
+            dateRange.Add(date.ToString("yyyy-MM-dd"));
+        }
+        return dateRange;
+    }
+}
