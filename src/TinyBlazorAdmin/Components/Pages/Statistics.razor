@@ -77,7 +77,7 @@
     {
         chartData = await UpdateUIList();
         
-        if(chartData.Datasets != null){
+        if (chartData != null && chartData.Datasets != null){
             dayCount = "Day(s): " + chartData.Datasets.Count.ToString();
         }
 
