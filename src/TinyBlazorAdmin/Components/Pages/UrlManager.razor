@@ -1,0 +1,186 @@
+@page "/urlmanager"
+
+@using System.Net
+@using Cloud5mins.ShortenerTools.Core.Domain
+@using Cloud5mins.ShortenerTools.Core.Messages;
+@using Cloud5mins.ShortenerTools.TinyBlazorAdmin.Components.Dialogues
+@inject UrlManagerClient urlManager
+@inject IJSRuntime JSRuntime
+@inject IDialogService DialogService
+@inject IToastService toastService
+@inject NavigationManager NavigationManager
+
+@rendermode InteractiveServer
+
+<PageTitle>Url Manager</PageTitle>
+
+<h1>Urls Manager</h1>
+<h3>Create, Edit, Archive your URLs</h3>
+
+<FluentButton OnClick="@(CreateShortUrl)" Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size16.Add())">Add New Url</FluentButton>
+
+<div style="height: 400px; overflow-x:auto; display:flex;">
+    <FluentDataGrid Id="grdUrls" 
+                    Items="@urlList"
+                    ResizableColumns=true
+                    AllowSorting=true
+                    Pagination="@pagination"
+                    RowSize="DataGridRowSize.Medium"
+                    ShowHover=true>
+        <ChildContent>
+            <TemplateColumn Width="70px" Sortable="false">
+                <FluentButton OnClick="@(async () => await CopyToClipboardAsync(context!.ShortUrl))" IconEnd="@(new Icons.Regular.Size16.Copy())" Title="Copy" />
+            </TemplateColumn>
+            <TemplateColumn Width="115px" Title="Schedule(s)" Sortable="true" SortBy="@sortBySchedules">
+                @(context!.Schedules?.Count ?? 0)
+            </TemplateColumn>
+            <TemplateColumn Title="Vanity" Width="150px" Sortable="true" SortBy="@sortByVanities">
+                <FluentAnchor Href="@context!.ShortUrl" Target="_blank" Appearance="Appearance.Hypertext">@context!.RowKey</FluentAnchor>
+            </TemplateColumn>
+            <PropertyColumn Title="Title" Property="@(c => c!.Title)" Sortable="true"/>
+            <PropertyColumn Title="Url" Property="@(c => c!.Url)" Sortable="true"/>
+            <TemplateColumn Title="Clicks" Width="110px" Align="Align.End" Sortable="true" SortBy="@sortByClicks">
+                <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center">
+                    @context.Clicks
+                    <FluentButton OnClick="@(() => NavigateToStats(context.RowKey))" IconEnd="@(new Icons.Regular.Size16.ChartMultiple())" />
+                </FluentStack>
+            </TemplateColumn>
+            <TemplateColumn Width="100px" Sortable="false">
+                <FluentButton OnClick="@(() => EditShortUrl(context))" IconEnd="@(new Icons.Regular.Size16.Edit())" Title="Edit" />
+                <FluentButton OnClick="@(async () => await ArchiveShortUrl(context))" IconEnd="@(new Icons.Regular.Size16.Archive())" Title="Archive" />
+            </TemplateColumn>
+        </ChildContent>
+        <EmptyContent>
+            <FluentIcon Value="@(new Icons.Filled.Size16.Crown())" Color="@Color.Accent" />&nbsp; Nothing to see here. Carry on!
+        </EmptyContent>
+    </FluentDataGrid>
+</div>
+<FluentPaginator State="@pagination" />
+
+
+
+@code {
+
+    private ListResponse urls = new ListResponse();
+
+    IQueryable<ShortUrlEntity>? urlList;
+    PaginationState pagination = new PaginationState { ItemsPerPage = 20 };
+    ShortUrlRequest shortUrlRequest;
+    ShortUrlEntity editedUrl;
+    public List<ShortUrlEntity> gridData { get; set; }
+
+    GridSort<ShortUrlEntity> sortByClicks = GridSort<ShortUrlEntity>.ByDescending(p => p.Clicks);
+    GridSort<ShortUrlEntity> sortBySchedules = GridSort<ShortUrlEntity>.ByDescending(p => p.Schedules.Count);
+    GridSort<ShortUrlEntity> sortByVanities = GridSort<ShortUrlEntity>.ByAscending(p => p.RowKey);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshGrid();
+    }
+
+    private async Task RefreshGrid()
+    {
+        try
+        {
+            urlList = await urlManager.GetUrls();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
+    }
+
+    private async Task UpdateUIList()
+    {
+        await RefreshGrid();
+        StateHasChanged();
+    }
+
+    private async Task CreateShortUrl()
+    {
+        shortUrlRequest = new ShortUrlRequest();
+        var dialog = await DialogService.ShowDialogAsync<NewUrlDialog>(shortUrlRequest, new DialogParameters()
+            {
+                Title = "Create a new Short Url",
+                PreventDismissOnOverlayClick = true,
+                PreventScroll = true,
+                Width = "600px"
+            });
+        
+        var result = await dialog.Result;
+        if (!result.Cancelled && result.Data != null)
+        {
+            var dialogData = (ShortUrlRequest)result.Data;
+            var urlRequest = new ShortRequest
+            {
+                Title = dialogData.Title ?? string.Empty,
+                Url = dialogData.Url,
+                Vanity = dialogData.Vanity,
+                Schedules = dialogData.Schedules.ToArray()
+            };
+            try{
+                var response = await urlManager.UrlCreate(urlRequest);
+                if (response.Item1)
+                {
+                    await UpdateUIList();
+                    toastService.ShowSuccess("Short URL created successfully");
+                }
+                else
+                {
+                    toastService.ShowError(response.Item2);
+                }
+            }
+            catch (Exception ex)
+            {
+                toastService.ShowError(ex.Message);
+            }
+        }
+    }
+
+    [Inject] public IJSRuntime JsRuntime { get; set; }
+    public async Task CopyToClipboardAsync(string url)
+    {
+        await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", url);
+    }
+
+
+    private async Task EditShortUrl(ShortUrlEntity urlEntity)
+    {
+        var dialog = await DialogService.ShowDialogAsync<UpdateUrlDialog>(urlEntity, new DialogParameters()
+            {
+                Title = $"Update Url: {urlEntity.RowKey}",
+                PreventDismissOnOverlayClick = true,
+                PreventScroll = true,
+                Width = "600px"
+            });
+        
+        var result = await dialog.Result;
+        if (!result.Cancelled && result.Data != null)
+        {
+            var dialogData = (ShortUrlEntity)result.Data;
+
+            var response = await urlManager.UrlUpdate(urlEntity);
+            if (response != null)
+            {
+                await UpdateUIList();
+                toastService.ShowSuccess("Short URL updated successfully");
+            }
+        }
+    }
+
+
+    private void NavigateToStats(string vanity){
+        NavigationManager.NavigateTo("/Statistics/" + vanity);
+    }
+
+    public async Task ArchiveShortUrl(ShortUrlEntity urlEntity)
+    {
+        var result = await urlManager.UrlArchive(urlEntity);
+        if (result)
+        {
+            await UpdateUIList();
+            toastService.ShowSuccess("Short URL archived successfully");
+        }
+    }
+
+}

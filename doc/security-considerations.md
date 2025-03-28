@@ -4,7 +4,7 @@ This is open-source software and delivered as a Proof-of-concept. Please conside
 
 ## Current Implementation 
 
-The [TinyBlazorAdmin](../src/Cloud5mins.ShortenerTools.TinyBlazorAdmin/) is secured using the built-in authentication feature of Azure Container Apps (ACA) is a simple and powerful way to add authentication your applications with minimal effort. Here are some key points to remember:
+The [TinyBlazorAdmin](../src/TinyBlazorAdmin/) is secured using the built-in authentication feature of Azure Container Apps (ACA) is a simple and powerful way to add authentication your applications with minimal effort. Here are some key points to remember:
 
 - You don't need to change the existing app code to add this authentication feature.
 - This built-in authentication feature of ACA protects your entire application, not individual pages.

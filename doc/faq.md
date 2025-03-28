@@ -9,11 +9,12 @@
 - [How to update/ redeploy AzUrlShortener](#update-redeploy-azurlshortener)
 - [How does it work?](./how-it-works.md)
 - [Security Considerations](./security-considerations.md)
+- [How to make the api public](./how-to-set-api-public.md)
 
 
 ## How to run AzUrlShortener locally
 
-You will need .NET 9, Docker or Podman installed on your machine. From the `scr` directory, run the following command `dotnet run --project Cloud5mins.ShortenerTools.AppHost`. You can also open the solution in Visual Studio or Visual studio Code and use F5, make sure the `Cloud5mins.ShortenerTools.AppHost` project is set as starting project.
+You will need .NET 9, Docker or Podman installed on your machine. From the `scr` directory, run the following command `dotnet run --project AppHost`. You can also open the solution in Visual Studio or Visual studio Code and use F5, make sure the `Cloud5mins.ShortenerTools.AppHost` project is set as starting project.
 
 
 ## Update/ redeploy AzUrlShortener
