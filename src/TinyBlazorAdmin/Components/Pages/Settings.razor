@@ -1,0 +1,47 @@
+﻿@page "/settings"
+
+@using Microsoft.FluentUI.AspNetCore.Components.Extensions
+@inject ILogger<Settings> Logger
+
+@rendermode InteractiveServer
+
+<FluentDesignTheme @bind-Mode="@Mode"
+				   @bind-OfficeColor="@OfficeColor"
+				   StorageName="theme" />
+
+<h3>Settings</h3>
+
+<div>
+	<FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Vertical">
+		<FluentSelect   Label="Theme" Width="150px"
+						Items="@(Enum.GetValues<DesignThemeModes>())"
+						@bind-SelectedOption="@Mode" />
+		<FluentSelect   Label="Color"
+						Items="@(Enum.GetValues<OfficeColor>().Select(i => (OfficeColor?)i))"
+			Height="200px" Width="250px" @bind-SelectedOption="@OfficeColor">
+			<OptionTemplate>
+				<FluentStack>
+					<FluentIcon Value="@(new Icons.Filled.Size20.RectangleLandscape())" Color="Color.Custom"
+						CustomColor="@(@context.ToAttributeValue() != "default" ? context.ToAttributeValue() : "#036ac4" )" />
+					<FluentLabel>@context</FluentLabel>
+				</FluentStack>
+			</OptionTemplate>
+		</FluentSelect>
+	</FluentStack>
+</div>
+
+@code {
+    public DesignThemeModes Mode { get; set; }
+    public OfficeColor? OfficeColor { get; set; }
+
+	void OnLoaded(Microsoft.FluentUI.AspNetCore.Components.LoadedEventArgs e)
+    {
+        Logger.LogInformation($"Loaded: {(e.Mode == DesignThemeModes.System ? "System" : "")} {(e.IsDark ? "Dark" : "Light")}");
+    }
+
+    void OnLuminanceChanged(Microsoft.FluentUI.AspNetCore.Components.LuminanceChangedEventArgs e)
+    {
+        Logger.LogInformation($"Changed: {(e.Mode == DesignThemeModes.System ? "System" : "")} {(e.IsDark ? "Dark" : "Light")}");
+    }
+
+}
