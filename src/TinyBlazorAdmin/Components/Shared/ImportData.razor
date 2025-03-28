@@ -1,0 +1,159 @@
+﻿@inherits LayoutComponentBase
+@using Cloud5mins.ShortenerTools.Core.Domain
+@using System.Globalization
+@inject UrlManagerClient urlManager
+@inject IToastService toastService
+
+@rendermode InteractiveServer
+
+<h3>Import Data</h3>
+
+<FluentStack Orientation="Orientation.Vertical" VerticalGap="30">
+    <div>
+        <FluentInputFile @ref="@myFileUploader"
+                         DragDropZoneVisible="false"
+                         Mode="InputFileMode.SaveToTemporaryFolder"
+                         Multiple="true"
+                         AnchorId="MyUploadLoadingButton"
+                         MaximumFileSize="@(100 * 1024 * 1024)"
+                         Accept=".csv"
+                         OnProgressChange="@(e =>
+                                                               {
+                             _formUploading = true;
+                             progressPercent = e.ProgressPercent;
+                             progressTitle = e.ProgressTitle;
+                         })"
+                         OnCompleted="@OnCompleted" />
+
+        <FluentProgress Min="0" Max="100" Visible="@(progressPercent > 0)" Value="@progressPercent" />
+        <FluentLabel Alignment="HorizontalAlignment.Center">
+            @progressTitle
+        </FluentLabel>
+
+        <FluentButton Id="MyUploadLoadingButton" Loading="_formUploading" Appearance="Appearance.Accent">
+            Upload files
+        </FluentButton>
+    </div>
+@if (Files.Any())
+{
+    <div>
+        <h4>File(s) uploaded:</h4>
+        <ul>
+            @foreach (var file in Files)
+            {
+                <li>
+                    <b>@file.Name</b> 🔹
+                    @($"{Decimal.Divide(file.Size, 1024):N} KB") 🔹
+                    @file.ContentType 
+                    @file.ErrorMessage
+                </li>
+            }
+        </ul>
+    </div>
+
+    <FluentCard AreaRestricted="false">
+        <h4>Table: UrlDetails</h4>
+        <FluentStack Orientation="Orientation.Horizontal" HorizontalGap="10">
+            <FluentSelect Label="Use the file name to import UrlDetails: "
+                          Width="300px"
+                          Items="@(Files.Select(f => f.Name))"
+                              @bind-Value="@selectedUrlDetailValue" />
+                <FluentButton   OnClick="@(async () => await ImportUrlDetails())"
+                              IconEnd="@(new Icons.Regular.Size16.ArrowImport())"
+                                Title="Import"
+                                Disabled=@(_importing || String.IsNullOrEmpty(selectedUrlDetailValue)) >Import</FluentButton>
+        </FluentStack>
+    </FluentCard>
+
+    <FluentCard AreaRestricted="false">
+        <h4>Table: ClickStats</h4>
+        <FluentStack Orientation="Orientation.Horizontal" HorizontalGap="10">
+            <FluentSelect Label="Use the file name to import ClickStats: "
+                          Width="300px"
+                          Items="@(Files.Select(f => f.Name))"
+                              @bind-Value="@selectedClickStatsValue" />
+            <FluentButton OnClick="@(async () => await ImportClickStats())"
+                              IconEnd="@(new Icons.Regular.Size16.ArrowImport())"
+                          Title="Import"
+                              Disabled=@(_importing || String.IsNullOrEmpty(selectedClickStatsValue))>Import</FluentButton>
+        </FluentStack>
+    </FluentCard>
+
+}
+</FluentStack>
+
+@code
+{
+    bool _formUploading;
+    bool _importing = false;
+    FluentInputFile? myFileUploader = default!;
+    int? progressPercent;
+    string? progressTitle;
+
+    string? selectedUrlDetailValue;
+    string? selectedClickStatsValue;
+
+    FluentInputFileEventArgs[] Files = Array.Empty<FluentInputFileEventArgs>();
+
+    private void OnCompleted(IEnumerable<FluentInputFileEventArgs> files)
+    {
+        Files = files.ToArray();
+        progressPercent = myFileUploader!.ProgressPercent;
+        progressTitle = myFileUploader!.ProgressTitle;
+
+        _formUploading = false;
+        StateHasChanged();
+    }
+
+    private async Task ImportUrlDetails()
+    {
+        bool result = false;
+        
+        if (!String.IsNullOrEmpty(selectedUrlDetailValue))
+        {
+            var dataFile = Files.FirstOrDefault(f => f.Name == selectedUrlDetailValue);
+
+            if (dataFile?.LocalFile != null)
+            {
+                _importing = true;
+                UrlDetails urlData = await Utility.ExtractUrlsDataFromCSV(dataFile.LocalFile.FullName);
+                result = await urlManager.ImportUrlDataAsync(urlData);
+
+                ShowImportStatus(result);
+            }
+        }
+        _importing = false;
+    }
+
+    private async Task ImportClickStats()
+    {
+        bool result = false;
+
+        if (!String.IsNullOrEmpty(selectedClickStatsValue))
+        {
+            var dataFile = Files.FirstOrDefault(f => f.Name == selectedClickStatsValue);
+
+            if (dataFile?.LocalFile != null)
+            {
+                _importing = true;
+                var clickStats = await Utility.ExtractClickStatsFromCSV(dataFile.LocalFile.FullName);
+                result = await urlManager.ImportClickStatsAsync(clickStats);
+
+                ShowImportStatus(result);
+            }
+        }
+        _importing = false;
+    }
+
+    private void ShowImportStatus(bool importStatus)
+    {
+        if (importStatus)
+        {
+            toastService.ShowSuccess("Data imported successfully.");
+        }
+        else
+        {
+            toastService.ShowError("Data import failed.");
+        }
+    }
+}

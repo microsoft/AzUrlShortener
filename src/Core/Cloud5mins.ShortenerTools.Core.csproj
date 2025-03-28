@@ -8,5 +8,6 @@
     <PackageReference Include="Aspire.Azure.Data.Tables" Version="9.1.0" />
     <PackageReference Include="cronos" Version="0.9.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.3" />
+    <PackageReference Include="CsvHelper" Version="33.0.1" />
   </ItemGroup>
 </Project>
