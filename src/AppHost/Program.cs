@@ -32,4 +32,8 @@ builder.AddProject<Projects.Cloud5mins_ShortenerTools_TinyBlazorAdmin>("admin")
 		.WithExternalHttpEndpoints()
 		.WithReference(manAPI);
 
+builder.AddProject<Projects.Cloud5mins_ShortenerTools_MCPServer>("mcp")
+		.WithReference(manAPI)
+		.WithExternalHttpEndpoints();
+
 builder.Build().Run();
