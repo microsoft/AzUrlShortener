@@ -21,7 +21,8 @@
 
 <div style="height: 400px; overflow-x:auto; display:flex;">
     <FluentDataGrid Id="grdUrls" 
-                    Items="@urlList"
+                    Items="@filteredUrlList"
+                    
                     ResizableColumns=true
                     AllowSorting=true
                     Pagination="@pagination"
@@ -34,11 +35,18 @@
             <TemplateColumn Width="115px" Title="Schedule(s)" Sortable="true" SortBy="@sortBySchedules">
                 @(context!.Schedules?.Count ?? 0)
             </TemplateColumn>
-            <TemplateColumn Title="Vanity" Width="150px" Sortable="true" SortBy="@sortByVanities">
-                <FluentAnchor Href="@context!.ShortUrl" Target="_blank" Appearance="Appearance.Hypertext">@context!.RowKey</FluentAnchor>
+            <TemplateColumn Title="Vanity" Width="150px" Sortable="true" SortBy="@sortByVanities" Filtered="!string.IsNullOrWhiteSpace(vanityFilter)"  >
+                <ColumnOptions>
+                    <div class="search-box">
+                        <FluentSearch type="search" Autofocus=true @bind-Value=vanityFilter @oninput="HandleVanityFilter" @bind-Value:after="HandleClear" Placeholder="contains..." />
+                    </div>
+                </ColumnOptions>
+                <ChildContent>
+                    <FluentAnchor Href="@context!.ShortUrl" Target="_blank" Appearance="Appearance.Hypertext">@context!.RowKey</FluentAnchor>
+                </ChildContent>
             </TemplateColumn>
-            <PropertyColumn Title="Title" Property="@(c => c!.Title)" Sortable="true"/>
-            <PropertyColumn Title="Url" Property="@(c => c!.Url)" Sortable="true"/>
+            <PropertyColumn Title="Title" Property="@(c => c!.Title)" Sortable="true" />
+            <PropertyColumn Title="Url" Property="@(c => c!.Url)" Sortable="true" />
             <TemplateColumn Title="Clicks" Width="110px" Align="Align.End" Sortable="true" SortBy="@sortByClicks">
                 <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center">
                     @context.Clicks
@@ -63,7 +71,12 @@
 
     private ListResponse urls = new ListResponse();
 
+    string vanityFilter = string.Empty;
+
     IQueryable<ShortUrlEntity>? urlList;
+    IQueryable<ShortUrlEntity>? filteredUrlList => urlList?.Where(x => x.RowKey.Contains(vanityFilter, StringComparison.CurrentCultureIgnoreCase));
+
+
     PaginationState pagination = new PaginationState { ItemsPerPage = 20 };
     ShortUrlRequest shortUrlRequest;
     ShortUrlEntity editedUrl;
@@ -183,4 +196,20 @@
         }
     }
 
+
+    private void HandleVanityFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            vanityFilter = value;
+        }
+    }
+
+    private void HandleClear()
+    {
+        if (string.IsNullOrWhiteSpace(vanityFilter))
+        {
+            vanityFilter = string.Empty;
+        }
+    }
 }
