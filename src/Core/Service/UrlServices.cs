@@ -37,6 +37,13 @@ public class UrlServices
 				if (newUrl != null)
 				{
 					_logger.LogInformation($"Found it: {newUrl.Url}");
+
+					if (newUrl.IsArchived ?? false)
+					{
+						_logger.LogInformation($"This URL is archived.");
+						return redirectUrl;
+					}
+					
 					newUrl.Clicks++;
 					await _stgHelper.SaveClickStatsEntity(new ClickStatsEntity(newUrl.RowKey));
 					await _stgHelper.SaveShortUrlEntity(newUrl);
