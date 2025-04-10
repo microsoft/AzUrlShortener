@@ -3,6 +3,7 @@ using Cloud5mins.ShortenerTools.Core.Messages;
 using Cloud5mins.ShortenerTools.Core.Service;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using Azure.Storage.Blobs;
 
 namespace Cloud5mins.ShortenerTools.Core.Services;
 
@@ -105,9 +106,10 @@ public class UrlServices
 
             ShortUrlEntity newRow;
 
+            var qrCodeUrl = await GetQRCode(longUrl);
             if (!string.IsNullOrEmpty(vanity))
             {
-                newRow = new ShortUrlEntity(longUrl, vanity, title, input.Schedules);
+                newRow = new ShortUrlEntity(longUrl, vanity, title, input.Schedules, qrCodeUrl);
 
                 if (await _stgHelper.IfShortUrlEntityExist(newRow))
                 {
@@ -117,12 +119,12 @@ public class UrlServices
             else
             {
                 var generatedVanity = await Utility.GetValidEndUrl(vanity, _stgHelper);
-                newRow = new ShortUrlEntity(longUrl, generatedVanity, title, input.Schedules);
+                newRow = new ShortUrlEntity(longUrl, generatedVanity, title, input.Schedules, qrCodeUrl);
             }
 
             await _stgHelper.SaveShortUrlEntity(newRow);
 
-            result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
+            result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title, newRow.QrCodeUrl);
 
             _logger.LogInformation("Short Url created.");
         }
@@ -133,6 +135,67 @@ public class UrlServices
         }
 
         return result;
+    }
+
+    private async Task<string> GetQRCode(string shortUrl)
+    {
+        string qrCodeUrl = "";
+
+        try
+        {
+            // Create the QR Code
+            string qrServerUrl = Environment.GetEnvironmentVariable("QRServerUrl") ?? "https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data={shortenerUrl}&qzone=0&margin=0&size=250x250&ecc=L";
+            if (string.IsNullOrEmpty(qrServerUrl))
+            {
+                throw new ShortenerToolException(HttpStatusCode.InternalServerError, "QRServerUrl is not set.");
+            }
+            _logger.LogInformation($"qrServerUrl: {qrServerUrl}");
+
+            string redirectUrl = qrServerUrl.Replace("{shortenerUrl}", WebUtility.UrlEncode(shortUrl));
+            _logger.LogInformation($"redirectUrl: {redirectUrl}");
+
+            HttpClient client = new HttpClient();
+            var response = await client.GetAsync(redirectUrl);
+
+            if (response != null && response.StatusCode == HttpStatusCode.OK)
+            {
+                _logger.LogInformation($"response status: {response.StatusCode}");
+
+                using (var stream = await response.Content.ReadAsStreamAsync())
+                {
+                    _logger.LogInformation($"ReadAsStreamAsync successful");
+
+                    var memStream = new MemoryStream();
+                    await stream.CopyToAsync(memStream);
+                    memStream.Position = 0;
+
+                    // Save file as image on Azure blob storage
+                    var blobStorageConnectionString = Environment.GetEnvironmentVariable("BlobStorageConnectionString");
+                    if (string.IsNullOrEmpty(blobStorageConnectionString))
+                    {
+                        throw new ShortenerToolException(HttpStatusCode.InternalServerError, "BlobStorageConnectionString is not set.");
+                    }
+
+                    var blobServiceClient = new BlobServiceClient(blobStorageConnectionString);
+                    string blobStorageContainer = Environment.GetEnvironmentVariable("BlobStorageContainer") ?? "qr-code-images";
+                    var containerClient = blobServiceClient.GetBlobContainerClient(blobStorageContainer);
+                    var blobClient = containerClient.GetBlobClient($"{Guid.NewGuid()}.png");
+
+                    await blobClient.UploadAsync(memStream, true);
+
+                    // Return the URL to the image
+                    qrCodeUrl = blobClient.Uri.ToString();
+                    _logger.LogInformation($"qrCodeUrl: {qrCodeUrl}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An unexpected error was encountered.");
+            _logger.LogError($"error message: {ex.Message} - {ex.StackTrace}");
+        }
+
+        return qrCodeUrl;
     }
 
     public async Task<ShortUrlEntity> Update(ShortUrlEntity input, string host)

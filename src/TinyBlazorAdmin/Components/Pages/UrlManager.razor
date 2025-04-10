@@ -17,41 +17,53 @@
 <h1>Urls Manager</h1>
 <h3>Create, Edit, Archive your URLs</h3>
 
-<FluentButton OnClick="@(CreateShortUrl)" Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size16.Add())">Add New Url</FluentButton>
+<FluentButton OnClick="@(CreateShortUrl)" Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size16.Add())">
+    Add New Url</FluentButton>
 
 <div style="height: 400px; overflow-x:auto; display:flex;">
-    <FluentDataGrid Id="grdUrls" 
-                    Items="@urlList"
-                    ResizableColumns=true
-                    AllowSorting=true
-                    Pagination="@pagination"
-                    RowSize="DataGridRowSize.Medium"
-                    ShowHover=true>
+    <FluentDataGrid Id="grdUrls" Items="@urlList" ResizableColumns=true AllowSorting=true Pagination="@pagination"
+        RowSize="DataGridRowSize.Medium" ShowHover=true>
         <ChildContent>
             <TemplateColumn Width="70px" Sortable="false">
-                <FluentButton OnClick="@(async () => await CopyToClipboardAsync(context!.ShortUrl))" IconEnd="@(new Icons.Regular.Size16.Copy())" Title="Copy" />
+                <FluentButton OnClick="@(async () => await CopyToClipboardAsync(context!.ShortUrl))"
+                    IconEnd="@(new Icons.Regular.Size16.Copy())" Title="Copy" />
             </TemplateColumn>
             <TemplateColumn Width="115px" Title="Schedule(s)" Sortable="true" SortBy="@sortBySchedules">
                 @(context!.Schedules?.Count ?? 0)
             </TemplateColumn>
             <TemplateColumn Title="Vanity" Width="150px" Sortable="true" SortBy="@sortByVanities">
-                <FluentAnchor Href="@context!.ShortUrl" Target="_blank" Appearance="Appearance.Hypertext">@context!.RowKey</FluentAnchor>
+                <FluentAnchor Href="@context!.ShortUrl" Target="_blank" Appearance="Appearance.Hypertext">
+                    @context!.RowKey</FluentAnchor>
             </TemplateColumn>
-            <PropertyColumn Title="Title" Property="@(c => c!.Title)" Sortable="true"/>
-            <PropertyColumn Title="Url" Property="@(c => c!.Url)" Sortable="true"/>
+            <PropertyColumn Title="Title" Property="@(c => c!.Title)" Sortable="true" />
+            <PropertyColumn Title="Url" Property="@(c => c!.Url)" Sortable="true" />
+            <TemplateColumn Title="QR Code" Sortable="false">
+                @if (!string.IsNullOrEmpty(@context!.QrCodeUrl))
+                {
+                    <img src="@context!.QrCodeUrl" alt="QR Code" width="50" height="50" />
+                }
+                else
+                {
+                    <div />
+                }
+            </TemplateColumn>
             <TemplateColumn Title="Clicks" Width="110px" Align="Align.End" Sortable="true" SortBy="@sortByClicks">
                 <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center">
                     @context.Clicks
-                    <FluentButton OnClick="@(() => NavigateToStats(context.RowKey))" IconEnd="@(new Icons.Regular.Size16.ChartMultiple())" />
+                    <FluentButton OnClick="@(() => NavigateToStats(context.RowKey))"
+                        IconEnd="@(new Icons.Regular.Size16.ChartMultiple())" />
                 </FluentStack>
             </TemplateColumn>
             <TemplateColumn Width="100px" Sortable="false">
-                <FluentButton OnClick="@(() => EditShortUrl(context))" IconEnd="@(new Icons.Regular.Size16.Edit())" Title="Edit" />
-                <FluentButton OnClick="@(async () => await ArchiveShortUrl(context))" IconEnd="@(new Icons.Regular.Size16.Archive())" Title="Archive" />
+                <FluentButton OnClick="@(() => EditShortUrl(context))" IconEnd="@(new Icons.Regular.Size16.Edit())"
+                    Title="Edit" />
+                <FluentButton OnClick="@(async () => await ArchiveShortUrl(context))"
+                    IconEnd="@(new Icons.Regular.Size16.Archive())" Title="Archive" />
             </TemplateColumn>
         </ChildContent>
         <EmptyContent>
-            <FluentIcon Value="@(new Icons.Filled.Size16.Crown())" Color="@Color.Accent" />&nbsp; Nothing to see here. Carry on!
+            <FluentIcon Value="@(new Icons.Filled.Size16.Crown())" Color="@Color.Accent" />&nbsp; Nothing to see here.
+            Carry on!
         </EmptyContent>
     </FluentDataGrid>
 </div>
@@ -100,13 +112,13 @@
     {
         shortUrlRequest = new ShortUrlRequest();
         var dialog = await DialogService.ShowDialogAsync<NewUrlDialog>(shortUrlRequest, new DialogParameters()
-            {
-                Title = "Create a new Short Url",
-                PreventDismissOnOverlayClick = true,
-                PreventScroll = true,
-                Width = "600px"
-            });
-        
+        {
+            Title = "Create a new Short Url",
+            PreventDismissOnOverlayClick = true,
+            PreventScroll = true,
+            Width = "600px"
+        });
+
         var result = await dialog.Result;
         if (!result.Cancelled && result.Data != null)
         {
@@ -118,7 +130,8 @@
                 Vanity = dialogData.Vanity,
                 Schedules = dialogData.Schedules.ToArray()
             };
-            try{
+            try
+            {
                 var response = await urlManager.UrlCreate(urlRequest);
                 if (response.Item1)
                 {
@@ -147,13 +160,13 @@
     private async Task EditShortUrl(ShortUrlEntity urlEntity)
     {
         var dialog = await DialogService.ShowDialogAsync<UpdateUrlDialog>(urlEntity, new DialogParameters()
-            {
-                Title = $"Update Url: {urlEntity.RowKey}",
-                PreventDismissOnOverlayClick = true,
-                PreventScroll = true,
-                Width = "600px"
-            });
-        
+        {
+            Title = $"Update Url: {urlEntity.RowKey}",
+            PreventDismissOnOverlayClick = true,
+            PreventScroll = true,
+            Width = "600px"
+        });
+
         var result = await dialog.Result;
         if (!result.Cancelled && result.Data != null)
         {
@@ -169,7 +182,8 @@
     }
 
 
-    private void NavigateToStats(string vanity){
+    private void NavigateToStats(string vanity)
+    {
         NavigationManager.NavigateTo("/Statistics/" + vanity);
     }
 

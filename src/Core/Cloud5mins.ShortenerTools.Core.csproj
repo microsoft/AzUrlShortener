@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.23.0" />
     <PackageReference Include="Aspire.Azure.Data.Tables" Version="9.1.0" />
     <PackageReference Include="cronos" Version="0.9.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.3" />

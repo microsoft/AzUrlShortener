@@ -25,11 +25,12 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
 
         public string ShortUrl { get; set; }
 
+        public string QrCodeUrl { get; set; }
+
         public int Clicks { get; set; }
 
         public bool? IsArchived { get; set; }
         public string SchedulesPropertyRaw { get; set; }
-
         private List<Schedule> _schedules { get; set; }
 
         //[IgnoreProperty]
@@ -67,24 +68,25 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
 
         public ShortUrlEntity(string longUrl, string endUrl)
         {
-            Initialize(longUrl, endUrl, string.Empty, null);
+            Initialize(longUrl, endUrl, string.Empty, null, string.Empty);
         }
 
         public ShortUrlEntity(string longUrl, string endUrl, Schedule[] schedules)
         {
-            Initialize(longUrl, endUrl, string.Empty, schedules);
+            Initialize(longUrl, endUrl, string.Empty, schedules, string.Empty);
         }
 
-        public ShortUrlEntity(string longUrl, string endUrl, string title, Schedule[] schedules)
+        public ShortUrlEntity(string longUrl, string endUrl, string title, Schedule[] schedules, string qrCodeUrl)
         {
-            Initialize(longUrl, endUrl, title, schedules);
+            Initialize(longUrl, endUrl, title, schedules, qrCodeUrl);
         }
 
-        private void Initialize(string longUrl, string endUrl, string title, Schedule[] schedules)
+        private void Initialize(string longUrl, string endUrl, string title, Schedule[] schedules, string qrCodeUrl)
         {
             PartitionKey = endUrl.First().ToString();
             RowKey = endUrl;
             Url = longUrl;
+            QrCodeUrl = qrCodeUrl;
             Title = title;
             Clicks = 0;
             IsArchived = false;
@@ -96,13 +98,14 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
             }
         }
 
-        public static ShortUrlEntity GetEntity(string longUrl, string endUrl, string title, Schedule[] schedules)
+        public static ShortUrlEntity GetEntity(string longUrl, string endUrl, string title, Schedule[] schedules, string qrCodeUrl)
         {
             return new ShortUrlEntity
             {
                 PartitionKey = endUrl.First().ToString(),
                 RowKey = endUrl,
                 Url = longUrl,
+                QrCodeUrl = qrCodeUrl,
                 Title = title,
                 Schedules = schedules.ToList<Schedule>()
             };
