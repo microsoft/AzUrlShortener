@@ -42,13 +42,12 @@ public static class ShortenerEnpoints
             .WithDisplayName("Url Click Statistics By Day");
 
         endpoints.MapPost("/UrlDataImport", UrlDataImport)
-			.WithDescription("Import Urls from a CSV file")
-			.WithDisplayName("Url Data Import");
+            .WithDescription("Import Urls from a CSV file")
+            .WithDisplayName("Url Data Import");
 
-		endpoints.MapPost("/UrlClickStatsImport", UrlClickStatsImport)
-			.WithDescription("Import Click Statistics from a CSV file")
-			.WithDisplayName("Url Click Statistics Import");
-			.WithDisplayName("Url Click Statistics Import");
+        endpoints.MapPost("/UrlClickStatsImport", UrlClickStatsImport)
+            .WithDescription("Import Click Statistics from a CSV file")
+            .WithDisplayName("Url Click Statistics Import");
 
     }
 
@@ -194,43 +193,43 @@ public static class ShortenerEnpoints
 
 
     static private async Task<Results<
-									Ok,
-									InternalServerError<DetailedBadRequest>>>
-									UrlDataImport(UrlDetails data,
-													TableServiceClient tblClient,
-													ILogger logger)
-	{
-		try
-		{
-			var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient));
-			await urlServices.ImportUrlDataAsync(data);
-			return TypedResults.Ok();
-		}
-		catch (Exception ex)
-		{
-			logger.LogError(ex.Message);
-			return TypedResults.InternalServerError<DetailedBadRequest>(new DetailedBadRequest { Message = ex.Message });
-		}
-	}
+                                    Ok,
+                                    InternalServerError<DetailedBadRequest>>>
+                                    UrlDataImport(UrlDetails data,
+                                                    TableServiceClient tblClient,
+                                                    ILogger logger)
+    {
+        try
+        {
+            var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient));
+            await urlServices.ImportUrlDataAsync(data);
+            return TypedResults.Ok();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex.Message);
+            return TypedResults.InternalServerError<DetailedBadRequest>(new DetailedBadRequest { Message = ex.Message });
+        }
+    }
 
-	static private async Task<Results<
-									Ok,
-									InternalServerError<DetailedBadRequest>>>
-									UrlClickStatsImport(List<ClickStatsEntity> lstClickStats,
-												TableServiceClient tblClient,
-												ILogger logger)
-	{
-		try
-		{
-			var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient));
-			await urlServices.ImportClickStatsAsync(lstClickStats);
-			return TypedResults.Ok();
-		}
-		catch (Exception ex)
-		{
-			logger.LogError(ex.Message);
-			return TypedResults.InternalServerError<DetailedBadRequest>(new DetailedBadRequest { Message = ex.Message });
-		}
-	}
+    static private async Task<Results<
+                                    Ok,
+                                    InternalServerError<DetailedBadRequest>>>
+                                    UrlClickStatsImport(List<ClickStatsEntity> lstClickStats,
+                                                TableServiceClient tblClient,
+                                                ILogger logger)
+    {
+        try
+        {
+            var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient));
+            await urlServices.ImportClickStatsAsync(lstClickStats);
+            return TypedResults.Ok();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex.Message);
+            return TypedResults.InternalServerError<DetailedBadRequest>(new DetailedBadRequest { Message = ex.Message });
+        }
+    }
 
 }
