@@ -1,7 +1,7 @@
-using System.Runtime.Serialization;
-using System.Text.Json;
 using Azure;
 using Azure.Data.Tables;
+using System.Runtime.Serialization;
+using System.Text.Json;
 
 namespace Cloud5mins.ShortenerTools.Core.Domain
 {
@@ -26,7 +26,6 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
         public string ShortUrl { get; set; }
 
         public string QrCodeUrl { get; set; }
-
         public int Clicks { get; set; }
 
         public bool? IsArchived { get; set; }
