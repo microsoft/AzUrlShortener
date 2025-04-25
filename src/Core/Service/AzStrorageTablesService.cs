@@ -65,6 +65,10 @@ public class AzStrorageTablesService(TableServiceClient client) : IAzStrorageTab
         {
             foreach (var item in emp.Values)
             {
+                if(item.CreatedDate == null)
+                {
+                    item.CreatedDate = item.Timestamp!.Value.UtcDateTime.ToString("yyyy-MM-dd") ?? string.Empty;
+                }
                 lstShortUrl.Add(item);
             }
         }

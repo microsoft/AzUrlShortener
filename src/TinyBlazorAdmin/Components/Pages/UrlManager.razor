@@ -59,6 +59,7 @@
                     <FluentButton OnClick="@(() => NavigateToStats(context.RowKey))" IconEnd="@(new Icons.Regular.Size16.ChartMultiple())" />
                 </FluentStack>
             </TemplateColumn>
+            <PropertyColumn Title="Created" Property="@(c => c!.CreatedDate)" Sortable="true" />
             <TemplateColumn Width="100px" Sortable="false">
                 <FluentButton OnClick="@(() => EditShortUrl(context))" IconEnd="@(new Icons.Regular.Size16.Edit())" Title="Edit" />
                 <FluentButton OnClick="@(async () => await ArchiveShortUrl(context))" IconEnd="@(new Icons.Regular.Size16.Archive())" Title="Archive" />
