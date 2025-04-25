@@ -3,226 +3,289 @@ using Cloud5mins.ShortenerTools.Core.Messages;
 using Cloud5mins.ShortenerTools.Core.Service;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using Azure.Storage.Blobs;
 
 namespace Cloud5mins.ShortenerTools.Core.Services;
 
 public class UrlServices
 {
-	private readonly ILogger _logger;
-	private readonly IAzStrorageTablesService _stgHelper;
 
-	public UrlServices(ILogger logger, IAzStrorageTablesService stgHelper)
-	{
-		_logger = logger;
-		_stgHelper = stgHelper;
-	}
+    private readonly ILogger _logger;
+    private readonly IAzStrorageTablesService _stgHelper;
 
-	public async Task<ShortUrlEntity> Archive(ShortUrlEntity input)
-	{
-		ShortUrlEntity result = await _stgHelper.ArchiveShortUrlEntity(input);
-		return result;
-	}
-	public async Task<string> Redirect(string? shortUrl)
-	{
-		string redirectUrl = "https://azure.com";
-		try
-		{
-			redirectUrl = Environment.GetEnvironmentVariable("DefaultRedirectUrl") ?? redirectUrl;
+    public UrlServices(ILogger logger, IAzStrorageTablesService stgHelper)
+    {
+        _logger = logger;
+        _stgHelper = stgHelper;
+    }
 
-			if (!string.IsNullOrWhiteSpace(shortUrl))
-			{
-				var tempUrl = new ShortUrlEntity(string.Empty, shortUrl);
-				var newUrl = await _stgHelper.GetShortUrlEntity(tempUrl);
+    public async Task<ShortUrlEntity> Archive(ShortUrlEntity input)
+    {
+        ShortUrlEntity result = await _stgHelper.ArchiveShortUrlEntity(input);
+        return result;
+    }
+    public async Task<string> Redirect(string? shortUrl)
+    {
+        string redirectUrl = "https://azure.com";
+        try
+        {
+            redirectUrl = Environment.GetEnvironmentVariable("DefaultRedirectUrl") ?? redirectUrl;
 
-				if (newUrl != null)
-				{
-					_logger.LogInformation($"Found it: {newUrl.Url}");
+            if (!string.IsNullOrWhiteSpace(shortUrl))
+            {
+                var tempUrl = new ShortUrlEntity(string.Empty, shortUrl);
+                var newUrl = await _stgHelper.GetShortUrlEntity(tempUrl);
 
-					if (newUrl.IsArchived ?? false)
-					{
-						_logger.LogInformation($"This URL is archived.");
-						return redirectUrl;
-					}
-					
-					newUrl.Clicks++;
-					await _stgHelper.SaveClickStatsEntity(new ClickStatsEntity(newUrl.RowKey));
-					await _stgHelper.SaveShortUrlEntity(newUrl);
-					redirectUrl = WebUtility.UrlDecode(newUrl.ActiveUrl);
-				}
-				else
-				{
-					_logger.LogInformation("Bad Link, resorting to fallback.");
-				}
-			}
-		}
-		catch (Exception ex)
-		{
-			_logger.LogInformation($"Problem accessing storage: {ex.Message}");
-		}
-		return redirectUrl;
-	}
+                if (newUrl != null)
+                {
+                    _logger.LogInformation($"Found it: {newUrl.Url}");
 
-	public async Task<ListResponse> List(string host)
-	{
-		_logger.LogInformation($"Starting UrlList...");
+                    if (newUrl.IsArchived ?? false)
+                    {
+                        _logger.LogInformation($"This URL is archived.");
+                        return redirectUrl;
+                    }
 
-		var result = new ListResponse();
-		string userId = string.Empty;
+                    newUrl.Clicks++;
+                    await _stgHelper.SaveClickStatsEntity(new ClickStatsEntity(newUrl.RowKey));
+                    await _stgHelper.SaveShortUrlEntity(newUrl);
+                    redirectUrl = WebUtility.UrlDecode(newUrl.ActiveUrl);
+                }
+                else
+                {
+                    _logger.LogInformation("Bad Link, resorting to fallback.");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogInformation($"Problem accessing storage: {ex.Message}");
+        }
+        return redirectUrl;
+    }
 
-		try
-		{
-			result.UrlList = await _stgHelper.GetAllShortUrlEntities();
-			result.UrlList = result.UrlList.Where(p => !(p.IsArchived ?? false)).ToList();
-			foreach (ShortUrlEntity url in result.UrlList)
-			{
-				url.ShortUrl = Utility.GetShortUrl(host, url.RowKey);
-			}
-		}
-		catch (Exception ex)
-		{
-			_logger.LogError(ex, "An unexpected error was encountered.");
-			throw;
-		}
+    public async Task<ListResponse> List(string host)
+    {
+        _logger.LogInformation($"Starting UrlList...");
 
-		return result;
-	}
+        var result = new ListResponse();
+        string userId = string.Empty;
 
-	public async Task<ShortResponse> Create(ShortRequest input, string host)
-	{
-		ShortResponse result;
-
-		try
-		{
-
-			// If the Url parameter only contains whitespaces or is empty return with BadRequest.
-			if (string.IsNullOrWhiteSpace(input.Url))
-			{
-				throw new ShortenerToolException(HttpStatusCode.BadRequest, "The url parameter can not be empty.");
-			}
-
-			// Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
-			if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
-			{
-				throw new ShortenerToolException(HttpStatusCode.BadRequest, $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
-			}
-
-			string longUrl = input.Url.Trim();
-			string vanity = string.IsNullOrWhiteSpace(input.Vanity) ? "" : input.Vanity.Trim();
-			string title = string.IsNullOrWhiteSpace(input.Title) ? "" : input.Title.Trim();
-
-			ShortUrlEntity newRow;
-
-			if (!string.IsNullOrEmpty(vanity))
-			{
-				newRow = new ShortUrlEntity(longUrl, vanity, title, input.Schedules);
-
-				if (await _stgHelper.IfShortUrlEntityExist(newRow))
-				{
-					throw new ShortenerToolException(HttpStatusCode.Conflict, "This Short URL already exist.");
-				}
-			}
-			else
-			{
-				var generatedVanity = await Utility.GetValidEndUrl(vanity, _stgHelper);
-				newRow = new ShortUrlEntity(longUrl, generatedVanity, title, input.Schedules);
-			}
-
-			await _stgHelper.SaveShortUrlEntity(newRow);
-
-			result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
-
-			_logger.LogInformation("Short Url created.");
-		}
-		catch (Exception ex)
-		{
-			_logger.LogError(ex, ex.Message);
-			throw;
-		}
-
-		return result;
-	}
-
-	public async Task<ShortUrlEntity> Update(ShortUrlEntity input, string host)
-	{
-		ShortUrlEntity result;
-
-		try
-		{
-			// If the Url parameter only contains whitespaces or is empty return with BadRequest.
-			if (string.IsNullOrWhiteSpace(input.Url))
-			{
-				throw new ShortenerToolException(HttpStatusCode.BadRequest, "The url parameter can not be empty.");
-			}
-
-			// Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
-			if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
-			{
-				throw new ShortenerToolException(HttpStatusCode.BadRequest, $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
-			}
-
-			result = await _stgHelper.UpdateShortUrlEntity(input);
-			result.ShortUrl = Utility.GetShortUrl(host, result.RowKey);
-
-		}
-		catch (Exception ex)
-		{
-			_logger.LogError(ex, "An unexpected error was encountered.");
-			throw;
-		}
-
-		return result;
-	}
-
-	public async Task<ClickDateList> ClickStatsByDay(UrlClickStatsRequest input, string host)
-	{
-		var result = new ClickDateList();
-		try
-		{
-			var rawStats = await _stgHelper.GetAllStatsByVanity(input.Vanity);
-
-			result.Items = rawStats.GroupBy(s => DateTime.Parse(s.Datetime).Date)
-										.Select(stat => new ClickDate
-										{
-											DateClicked = DateTime.Parse( stat.Key.ToString("yyyy-MM-dd")),
-											Count = stat.Count()
-										}).OrderBy(s => s.DateClicked).ToList<ClickDate>();
-
-			result.Url = Utility.GetShortUrl(host, input.Vanity);
-		}
-		catch (Exception ex)
-		{
-			_logger.LogError(ex, "An unexpected error was encountered.");
-			throw;
-		}
-		return result;
-	}
-
-	public async Task<bool> ImportUrlDataAsync(UrlDetails urlData)
-	{
-		try
-		{
-			await _stgHelper.ImportUrlDataAsync(urlData);
-			return true;
-		}
-		catch (Exception ex)
-		{
+        try
+        {
+            result.UrlList = await _stgHelper.GetAllShortUrlEntities();
+            result.UrlList = result.UrlList.Where(p => !(p.IsArchived ?? false)).ToList();
+            foreach (ShortUrlEntity url in result.UrlList)
+            {
+                url.ShortUrl = Utility.GetShortUrl(host, url.RowKey);
+            }
+        }
+        catch (Exception ex)
+        {
             _logger.LogError(ex, "An unexpected error was encountered.");
             throw;
-		}
-	}
+        }
 
-	public async Task<bool> ImportClickStatsAsync(List<ClickStatsEntity> lstClickStats)
-	{
-		try
-		{
-			await _stgHelper.ImportClickStatsAsync(lstClickStats);
-			return true;
-		}
-		catch (Exception ex)
-		{
-			_logger.LogError(ex, "An unexpected error was encountered.");
-			throw;
-		}
-	}
+        return result;
+    }
+
+    public async Task<ShortResponse> Create(ShortRequest input, string host)
+    {
+        ShortResponse result;
+
+        try
+        {
+
+            // If the Url parameter only contains whitespaces or is empty return with BadRequest.
+            if (string.IsNullOrWhiteSpace(input.Url))
+            {
+                throw new ShortenerToolException(HttpStatusCode.BadRequest, "The url parameter can not be empty.");
+            }
+
+            // Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
+            if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
+            {
+                throw new ShortenerToolException(HttpStatusCode.BadRequest, $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
+            }
+
+            string longUrl = input.Url.Trim();
+            string vanity = string.IsNullOrWhiteSpace(input.Vanity) ? "" : input.Vanity.Trim();
+            string title = string.IsNullOrWhiteSpace(input.Title) ? "" : input.Title.Trim();
+
+            ShortUrlEntity newRow;
+
+            var qrCodeUrl = await GetQRCode(longUrl);
+            if (!string.IsNullOrEmpty(vanity))
+            {
+                newRow = new ShortUrlEntity(longUrl, vanity, title, input.Schedules, qrCodeUrl);
+
+                if (await _stgHelper.IfShortUrlEntityExist(newRow))
+                {
+                    throw new ShortenerToolException(HttpStatusCode.Conflict, "This Short URL already exist.");
+                }
+            }
+            else
+            {
+                var generatedVanity = await Utility.GetValidEndUrl(vanity, _stgHelper);
+                newRow = new ShortUrlEntity(longUrl, generatedVanity, title, input.Schedules, qrCodeUrl);
+            }
+
+            await _stgHelper.SaveShortUrlEntity(newRow);
+
+            result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title, newRow.QrCodeUrl);
+
+            _logger.LogInformation("Short Url created.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            throw;
+        }
+
+        return result;
+    }
+
+    private async Task<string> GetQRCode(string shortUrl)
+    {
+        string qrCodeUrl = "";
+
+        try
+        {
+            // Create the QR Code
+            string qrServerUrl = Environment.GetEnvironmentVariable("QRServerUrl") ?? "https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data={shortenerUrl}&qzone=0&margin=0&size=250x250&ecc=L";
+            if (string.IsNullOrEmpty(qrServerUrl))
+            {
+                throw new ShortenerToolException(HttpStatusCode.InternalServerError, "QRServerUrl is not set.");
+            }
+            _logger.LogInformation($"qrServerUrl: {qrServerUrl}");
+
+            string redirectUrl = qrServerUrl.Replace("{shortenerUrl}", WebUtility.UrlEncode(shortUrl));
+            _logger.LogInformation($"redirectUrl: {redirectUrl}");
+
+            HttpClient client = new HttpClient();
+            var response = await client.GetAsync(redirectUrl);
+
+            if (response != null && response.StatusCode == HttpStatusCode.OK)
+            {
+                _logger.LogInformation($"response status: {response.StatusCode}");
+
+                using (var stream = await response.Content.ReadAsStreamAsync())
+                {
+                    _logger.LogInformation($"ReadAsStreamAsync successful");
+
+                    var memStream = new MemoryStream();
+                    await stream.CopyToAsync(memStream);
+                    memStream.Position = 0;
+
+                    // Save file as image on Azure blob storage
+                    var blobStorageConnectionString = Environment.GetEnvironmentVariable("BlobStorageConnectionString");
+                    if (string.IsNullOrEmpty(blobStorageConnectionString))
+                    {
+                        throw new ShortenerToolException(HttpStatusCode.InternalServerError, "BlobStorageConnectionString is not set.");
+                    }
+
+                    var blobServiceClient = new BlobServiceClient(blobStorageConnectionString);
+                    string blobStorageContainer = Environment.GetEnvironmentVariable("BlobStorageContainer") ?? "qr-code-images";
+                    var containerClient = blobServiceClient.GetBlobContainerClient(blobStorageContainer);
+                    var blobClient = containerClient.GetBlobClient($"{Guid.NewGuid()}.png");
+
+                    await blobClient.UploadAsync(memStream, true);
+
+                    // Return the URL to the image
+                    qrCodeUrl = blobClient.Uri.ToString();
+                    _logger.LogInformation($"qrCodeUrl: {qrCodeUrl}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An unexpected error was encountered.");
+            _logger.LogError($"error message: {ex.Message} - {ex.StackTrace}");
+        }
+
+        return qrCodeUrl;
+    }
+
+    public async Task<ShortUrlEntity> Update(ShortUrlEntity input, string host)
+    {
+        ShortUrlEntity result;
+
+        try
+        {
+            // If the Url parameter only contains whitespaces or is empty return with BadRequest.
+            if (string.IsNullOrWhiteSpace(input.Url))
+            {
+                throw new ShortenerToolException(HttpStatusCode.BadRequest, "The url parameter can not be empty.");
+            }
+
+            // Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
+            if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
+            {
+                throw new ShortenerToolException(HttpStatusCode.BadRequest, $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'.");
+            }
+
+            result = await _stgHelper.UpdateShortUrlEntity(input);
+            result.ShortUrl = Utility.GetShortUrl(host, result.RowKey);
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An unexpected error was encountered.");
+            throw;
+        }
+
+        return result;
+    }
+
+    public async Task<ClickDateList> ClickStatsByDay(UrlClickStatsRequest input, string host)
+    {
+        var result = new ClickDateList();
+        try
+        {
+            var rawStats = await _stgHelper.GetAllStatsByVanity(input.Vanity);
+
+            result.Items = rawStats.GroupBy(s => DateTime.Parse(s.Datetime).Date)
+                                        .Select(stat => new ClickDate
+                                        {
+                                            DateClicked = DateTime.Parse(stat.Key.ToString("yyyy-MM-dd")),
+                                            Count = stat.Count()
+                                        }).OrderBy(s => s.DateClicked).ToList<ClickDate>();
+
+            result.Url = Utility.GetShortUrl(host, input.Vanity);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An unexpected error was encountered.");
+            throw;
+        }
+        return result;
+    }
+
+    public async Task<bool> ImportUrlDataAsync(UrlDetails urlData)
+    {
+        try
+        {
+            await _stgHelper.ImportUrlDataAsync(urlData);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An unexpected error was encountered.");
+            throw;
+        }
+    }
+
+    public async Task<bool> ImportClickStatsAsync(List<ClickStatsEntity> lstClickStats)
+    {
+        try
+        {
+            await _stgHelper.ImportClickStatsAsync(lstClickStats);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An unexpected error was encountered.");
+            throw;
+        }
+    }
 }
-

@@ -197,6 +197,7 @@ public class AzStrorageTablesService(TableServiceClient client) : IAzStrorageTab
             }
 
         }
+
 		catch (Exception ex)
 		{
 			var temp = ex.Message;

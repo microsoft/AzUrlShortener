@@ -17,6 +17,7 @@ public class UrlManagerClient(HttpClient httpClient)
 				urlList = urls!.UrlList.AsQueryable<ShortUrlEntity>();
 			}
 		}
+
 		catch(Exception ex){
 			Console.WriteLine(ex.Message);
 		}
