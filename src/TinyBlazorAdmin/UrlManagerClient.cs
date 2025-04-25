@@ -8,36 +8,43 @@ public class UrlManagerClient(HttpClient httpClient)
 {
 
 	public async Task<IQueryable<ShortUrlEntity>?> GetUrls()
-    {
+	{
 		IQueryable<ShortUrlEntity> urlList = null;
-		try{
+		try
+		{
 			using var response = await httpClient.GetAsync("/api/UrlList");
-			if(response.IsSuccessStatusCode){
+			if (response.IsSuccessStatusCode)
+			{
 				var urls = await response.Content.ReadFromJsonAsync<ListResponse>();
 				urlList = urls!.UrlList.AsQueryable<ShortUrlEntity>();
 			}
 		}
-		catch(Exception ex){
+		catch (Exception ex)
+		{
 			Console.WriteLine(ex.Message);
 		}
-        
-		return urlList;
-    }
 
-	public async Task<(bool , string)> UrlCreate(ShortRequest url)
+		return urlList;
+	}
+
+	public async Task<(bool, string)> UrlCreate(ShortRequest url)
 	{
-		(bool , string) result = (false, "Failed");
-		try{
+		(bool, string) result = (false, "Failed");
+		try
+		{
 			using var response = await httpClient.PostAsJsonAsync<ShortRequest>("/api/UrlCreate", url);
-			if(response.IsSuccessStatusCode){
+			if (response.IsSuccessStatusCode)
+			{
 				result = (true, "Success");
 			}
-			else{
+			else
+			{
 				var errorDetails = await response.Content.ReadFromJsonAsync<DetailedBadRequest>();
 				result = (false, errorDetails!.Message);
 			}
 		}
-		catch(Exception ex){
+		catch (Exception ex)
+		{
 			Console.WriteLine(ex.Message);
 			result = (false, ex.Message);
 		}
@@ -46,16 +53,19 @@ public class UrlManagerClient(HttpClient httpClient)
 
 	public async Task<bool> UrlArchive(ShortUrlEntity shortUrl)
 	{
-		try{
+		try
+		{
 			using var response = await httpClient.PostAsJsonAsync("/api/UrlArchive", shortUrl);
-			if(response.IsSuccessStatusCode){
+			if (response.IsSuccessStatusCode)
+			{
 				return true;
 			}
 		}
-		catch(Exception ex){
+		catch (Exception ex)
+		{
 			Console.WriteLine(ex.Message);
 		}
-		
+
 		return false;
 	}
 
@@ -95,5 +105,40 @@ public class UrlManagerClient(HttpClient httpClient)
 		}
 
 		return null;
+	}
+
+	public async Task<bool> ImportUrlDataAsync(UrlDetails urlData)
+	{
+		try
+		{
+			using var response = await httpClient.PostAsJsonAsync("/api/UrlDataImport", urlData);
+			if (response.IsSuccessStatusCode)
+			{
+				return true;
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+
+		return false;
+	}
+	public async Task<bool> ImportClickStatsAsync(List<ClickStatsEntity> lstClickStats)
+	{
+		try
+		{
+			using var response = await httpClient.PostAsJsonAsync("/api/UrlClickStatsImport", lstClickStats);
+			if (response.IsSuccessStatusCode)
+			{
+				return true;
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+
+		return false;
 	}
 }

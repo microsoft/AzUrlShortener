@@ -21,8 +21,8 @@
     Add New Url</FluentButton>
 
 <div style="height: 400px; overflow-x:auto; display:flex;">
-    <FluentDataGrid Id="grdUrls" Items="@urlList" ResizableColumns=true AllowSorting=true Pagination="@pagination"
-        RowSize="DataGridRowSize.Medium" ShowHover=true>
+    <FluentDataGrid Id="grdUrls" Items="@filteredUrlList" ResizableColumns=true AllowSorting=true
+        Pagination="@pagination" RowSize="DataGridRowSize.Medium" ShowHover=true>
         <ChildContent>
             <TemplateColumn Width="70px" Sortable="false">
                 <FluentButton OnClick="@(async () => await CopyToClipboardAsync(context!.ShortUrl))"
@@ -31,11 +31,30 @@
             <TemplateColumn Width="115px" Title="Schedule(s)" Sortable="true" SortBy="@sortBySchedules">
                 @(context!.Schedules?.Count ?? 0)
             </TemplateColumn>
-            <TemplateColumn Title="Vanity" Width="150px" Sortable="true" SortBy="@sortByVanities">
-                <FluentAnchor Href="@context!.ShortUrl" Target="_blank" Appearance="Appearance.Hypertext">
-                    @context!.RowKey</FluentAnchor>
+
+            <TemplateColumn Title="Vanity" Width="150px" Sortable="true" SortBy="@sortByVanities"
+                Filtered="!string.IsNullOrWhiteSpace(vanityFilter)">
+                <ColumnOptions>
+                    <div class="search-box">
+                        <FluentSearch type="search" Autofocus=true @bind-Value=vanityFilter
+                            @oninput="HandleVanityFilter" @bind-Value:after="HandleClearVanityFilter"
+                            Placeholder="contains..." />
+                    </div>
+                </ColumnOptions>
+                <ChildContent>
+                    <FluentAnchor Href="@context!.ShortUrl" Target="_blank" Appearance="Appearance.Hypertext">
+                        @context!.RowKey</FluentAnchor>
+                </ChildContent>
             </TemplateColumn>
-            <PropertyColumn Title="Title" Property="@(c => c!.Title)" Sortable="true" />
+            <PropertyColumn Title="Title" Property="@(c => c!.Title)" Sortable="true"
+                Filtered="!string.IsNullOrWhiteSpace(titleFilter)">
+                <ColumnOptions>
+                    <div class="search-box">
+                        <FluentSearch type="search" Autofocus=true @bind-Value=titleFilter @oninput="HandleTitleFilter"
+                            @bind-Value:after="HandleClearTitleFilter" Placeholder="contains..." />
+                    </div>
+                </ColumnOptions>
+            </PropertyColumn>
             <PropertyColumn Title="Url" Property="@(c => c!.Url)" Sortable="true" />
             <TemplateColumn Title="QR Code" Sortable="false">
                 @if (!string.IsNullOrEmpty(@context!.QrCodeUrl))
@@ -75,7 +94,13 @@
 
     private ListResponse urls = new ListResponse();
 
+    string vanityFilter = string.Empty;
+    string titleFilter = string.Empty;
+
     IQueryable<ShortUrlEntity>? urlList;
+    IQueryable<ShortUrlEntity>? filteredUrlList => urlList?.Where(x => x.RowKey.Contains(vanityFilter,
+    StringComparison.CurrentCultureIgnoreCase) && x.Title.Contains(titleFilter, StringComparison.CurrentCultureIgnoreCase));
+
     PaginationState pagination = new PaginationState { ItemsPerPage = 20 };
     ShortUrlRequest shortUrlRequest;
     ShortUrlEntity editedUrl;
@@ -197,4 +222,35 @@
         }
     }
 
+    private void HandleVanityFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            vanityFilter = value;
+        }
+    }
+
+    private void HandleTitleFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            titleFilter = value;
+        }
+    }
+
+    private void HandleClearVanityFilter()
+    {
+        if (string.IsNullOrWhiteSpace(vanityFilter))
+        {
+            vanityFilter = string.Empty;
+        }
+    }
+
+    private void HandleClearTitleFilter()
+    {
+        if (string.IsNullOrWhiteSpace(titleFilter))
+        {
+            titleFilter = string.Empty;
+        }
+    }
 }

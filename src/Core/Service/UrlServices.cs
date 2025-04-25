@@ -9,6 +9,7 @@ namespace Cloud5mins.ShortenerTools.Core.Services;
 
 public class UrlServices
 {
+
     private readonly ILogger _logger;
     private readonly IAzStrorageTablesService _stgHelper;
 
@@ -38,6 +39,13 @@ public class UrlServices
                 if (newUrl != null)
                 {
                     _logger.LogInformation($"Found it: {newUrl.Url}");
+
+                    if (newUrl.IsArchived ?? false)
+                    {
+                        _logger.LogInformation($"This URL is archived.");
+                        return redirectUrl;
+                    }
+
                     newUrl.Clicks++;
                     await _stgHelper.SaveClickStatsEntity(new ClickStatsEntity(newUrl.RowKey));
                     await _stgHelper.SaveShortUrlEntity(newUrl);
@@ -229,7 +237,6 @@ public class UrlServices
         return result;
     }
 
-
     public async Task<ClickDateList> ClickStatsByDay(UrlClickStatsRequest input, string host)
     {
         var result = new ClickDateList();
@@ -253,5 +260,32 @@ public class UrlServices
         }
         return result;
     }
-}
 
+    public async Task<bool> ImportUrlDataAsync(UrlDetails urlData)
+    {
+        try
+        {
+            await _stgHelper.ImportUrlDataAsync(urlData);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An unexpected error was encountered.");
+            throw;
+        }
+    }
+
+    public async Task<bool> ImportClickStatsAsync(List<ClickStatsEntity> lstClickStats)
+    {
+        try
+        {
+            await _stgHelper.ImportClickStatsAsync(lstClickStats);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An unexpected error was encountered.");
+            throw;
+        }
+    }
+}
