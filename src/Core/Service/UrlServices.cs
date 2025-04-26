@@ -178,12 +178,12 @@ public class UrlServices
 		var result = new ClickDateList();
 		try
 		{
-			var rawStats = await _stgHelper.GetAllStatsByVanity(input.Vanity);
+			var rawStats = await _stgHelper.GetAllStatsByVanity(input.Vanity, input.StartDate, input.EndDate);
 
 			result.Items = rawStats.GroupBy(s => DateTime.Parse(s.Datetime).Date)
 										.Select(stat => new ClickDate
 										{
-											DateClicked = DateTime.Parse( stat.Key.ToString("yyyy-MM-dd")),
+											DateClicked = DateTime.Parse(stat.Key.ToString("yyyy-MM-dd")),
 											Count = stat.Count()
 										}).OrderBy(s => s.DateClicked).ToList<ClickDate>();
 
