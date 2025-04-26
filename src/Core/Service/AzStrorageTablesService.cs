@@ -175,9 +175,9 @@ public class AzStrorageTablesService(TableServiceClient client) : IAzStrorageTab
         {
             foreach (var item in emp.Values)
             {
-                var clickDate = DateOnly.ParseExact(item.Datetime, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                var clickDate = DateOnly.ParseExact(item.Datetime, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
 
-                Console.WriteLine($"Dates: {sDate} <= {clickDate} <= {eDate}");
+                Console.WriteLine($"Dates: {sDate.ToString()} <= {clickDate.ToString()} <= {eDate.ToString()}");
 
                 if (clickDate >= sDate && clickDate <= eDate)
                 {
