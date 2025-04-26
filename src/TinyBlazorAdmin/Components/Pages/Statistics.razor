@@ -16,12 +16,12 @@
 <h1>Click Statistics</h1>
 <h3>@subTitle</h3>
 <a href="/UrlManager/"> &lt;&lt; Back</a>
-@* <FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Horizontal" VerticalAlignment="Microsoft.FluentUI.AspNetCore.Components.VerticalAlignment.Bottom">
+<FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Horizontal" VerticalAlignment="Microsoft.FluentUI.AspNetCore.Components.VerticalAlignment.Bottom">
     <FluentDatePicker Label="From Date" @bind-Value="@selectedStartDate" />
     <FluentDatePicker Label="To Date" @bind-Value="@selectedEndDate" />
 
     <FluentButton OnClick="@(() => ReadyForChart())" IconEnd="@(new Icons.Regular.Size16.CalendarDataBar())" Title="Edit" />
-</FluentStack> *@
+</FluentStack>
 
 
 
