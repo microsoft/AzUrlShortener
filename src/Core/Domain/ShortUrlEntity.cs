@@ -5,6 +5,7 @@ using System.Text.Json;
 using Azure;
 using Azure.Data.Tables;
 
+
 namespace Cloud5mins.ShortenerTools.Core.Domain
 {
     public class ShortUrlEntity : ITableEntity
@@ -63,7 +64,9 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
         public string RowKey { get; set; }
         public DateTimeOffset? Timestamp { get; set; }
         public ETag ETag { get; set; }
+
         public string CreatedDate { get; set; }
+
 
 
         public ShortUrlEntity() { }
@@ -100,6 +103,7 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
             }
         }
 
+
         // public static ShortUrlEntity GetEntity(string longUrl, string endUrl, string title, Schedule[] schedules)
         // {
         //     return new ShortUrlEntity
@@ -111,6 +115,7 @@ namespace Cloud5mins.ShortenerTools.Core.Domain
         //         Schedules = schedules.ToList<Schedule>()
         //     };
         // }
+
 
         private string GetActiveUrl()
         {

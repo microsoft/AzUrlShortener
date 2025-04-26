@@ -42,12 +42,12 @@ public static class ShortenerEnpoints
             .WithDisplayName("Url Click Statistics By Day");
 
         endpoints.MapPost("/UrlDataImport", UrlDataImport)
-			.WithDescription("Import Urls from a CSV file")
-			.WithDisplayName("Url Data Import");
+            .WithDescription("Import Urls from a CSV file")
+            .WithDisplayName("Url Data Import");
 
-		endpoints.MapPost("/UrlClickStatsImport", UrlClickStatsImport)
-			.WithDescription("Import Click Statistics from a CSV file")
-			.WithDisplayName("Url Click Statistics Import");
+        endpoints.MapPost("/UrlClickStatsImport", UrlClickStatsImport)
+            .WithDescription("Import Click Statistics from a CSV file")
+            .WithDisplayName("Url Click Statistics Import");
 
     }
 

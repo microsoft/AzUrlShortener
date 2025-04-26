@@ -2,6 +2,7 @@ using Azure;
 using Azure.Data.Tables;
 using Cloud5mins.ShortenerTools.Core.Domain;
 using System.Globalization;
+
 using System.Text.Json;
 
 namespace Cloud5mins.ShortenerTools.Core.Service;
@@ -153,6 +154,7 @@ public class AzStrorageTablesService(TableServiceClient client) : IAzStrorageTab
     }
 
 
+
     public async Task<List<ClickStatsEntity>> GetAllStatsByVanity(string vanity, string startDate, string endDate)
     {
         var tblStats = GetStatsTable();
@@ -195,6 +197,7 @@ public class AzStrorageTablesService(TableServiceClient client) : IAzStrorageTab
     {
         var result = await GetStatsTable().UpsertEntityAsync(newStats);
     }
+
 
     public async Task ImportUrlDataAsync(UrlDetails urlData)
     {

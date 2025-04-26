@@ -16,15 +16,13 @@
 <h1>Click Statistics</h1>
 <h3>@subTitle</h3>
 <a href="/UrlManager/"> &lt;&lt; Back</a>
+
 <FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Horizontal" VerticalAlignment="Microsoft.FluentUI.AspNetCore.Components.VerticalAlignment.Bottom">
     <FluentDatePicker Label="From Date" @bind-Value="@selectedStartDate" />
     <FluentDatePicker Label="To Date" @bind-Value="@selectedEndDate" />
 
     <FluentButton OnClick="@(() => ReadyForChart())" IconEnd="@(new Icons.Regular.Size16.CalendarDataBar())" Title="Edit" />
 </FluentStack>
-
-
-
 
 <div id="stats" >
     <BarChart @ref="barChart" Width="800" Height="400" />
@@ -44,7 +42,6 @@
     private readonly Random _random = new Random(); 
     private string dayCount = string.Empty;
     private BarChart barChart = default!;
-
     private DateTime? selectedStartDate = DateTime.Today.AddDays(-7);
     private DateTime? selectedEndDate = DateTime.Today;
 
@@ -55,6 +52,7 @@
         try{
 
             var response = await urlManager.UrlClickStatsByDay( new UrlClickStatsRequest(vanity, startDate.Value.ToString("yyyy-MM-dd"), endDate.Value.ToString("yyyy-MM-dd")));
+
             if(response != null){    
                 var data = new ChartData(){
                     Labels =  GetDateRange(response.Items.Min(x => x.DateClicked)),
@@ -86,6 +84,7 @@
         await base.OnAfterRenderAsync(firstRender);
     }
 
+
     protected async Task ReadyForChart()
     {
         await RenderChartAsync();
@@ -93,7 +92,6 @@
 
     private async Task RenderChartAsync()
     {
-
         chartData = await UpdateUIList(selectedStartDate, selectedEndDate);
         
         if (chartData != null && chartData.Datasets != null){
