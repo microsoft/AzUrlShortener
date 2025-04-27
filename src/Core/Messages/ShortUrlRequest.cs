@@ -1,4 +1,6 @@
 using Cloud5mins.ShortenerTools.Core.Domain;
+using System.ComponentModel;
+
 using System.ComponentModel.DataAnnotations;
 
 namespace Cloud5mins.ShortenerTools.Core.Messages

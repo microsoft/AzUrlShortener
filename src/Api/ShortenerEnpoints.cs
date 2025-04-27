@@ -41,6 +41,14 @@ public static class ShortenerEnpoints
             .WithDescription("Provide Click Statistics by Day")
             .WithDisplayName("Url Click Statistics By Day");
 
+        endpoints.MapPost("/UrlDataImport", UrlDataImport)
+            .WithDescription("Import Urls from a CSV file")
+            .WithDisplayName("Url Data Import");
+
+        endpoints.MapPost("/UrlClickStatsImport", UrlClickStatsImport)
+            .WithDescription("Import Click Statistics from a CSV file")
+            .WithDisplayName("Url Click Statistics Import");
+
     }
 
     static private string GetWelcomeMessage()
@@ -181,6 +189,47 @@ public static class ShortenerEnpoints
         var host = string.IsNullOrEmpty(customDomain) ? context.Request.Host.Value : customDomain;
         return host ?? string.Empty;
     }
+
+
+    static private async Task<Results<
+									Ok,
+									InternalServerError<DetailedBadRequest>>>
+									UrlDataImport(UrlDetails data,
+													TableServiceClient tblClient,
+													ILogger logger)
+	{
+		try
+		{
+			var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient));
+			await urlServices.ImportUrlDataAsync(data);
+			return TypedResults.Ok();
+		}
+		catch (Exception ex)
+		{
+			logger.LogError(ex.Message);
+			return TypedResults.InternalServerError<DetailedBadRequest>(new DetailedBadRequest { Message = ex.Message });
+		}
+	}
+
+	static private async Task<Results<
+									Ok,
+									InternalServerError<DetailedBadRequest>>>
+									UrlClickStatsImport(List<ClickStatsEntity> lstClickStats,
+												TableServiceClient tblClient,
+												ILogger logger)
+	{
+		try
+		{
+			var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient));
+			await urlServices.ImportClickStatsAsync(lstClickStats);
+			return TypedResults.Ok();
+		}
+		catch (Exception ex)
+		{
+			logger.LogError(ex.Message);
+			return TypedResults.InternalServerError<DetailedBadRequest>(new DetailedBadRequest { Message = ex.Message });
+		}
+	}
 
 }
 

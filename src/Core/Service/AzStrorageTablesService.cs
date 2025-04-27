@@ -1,6 +1,8 @@
 using Azure;
 using Azure.Data.Tables;
 using Cloud5mins.ShortenerTools.Core.Domain;
+using System.Globalization;
+
 using System.Text.Json;
 
 namespace Cloud5mins.ShortenerTools.Core.Service;
@@ -65,6 +67,10 @@ public class AzStrorageTablesService(TableServiceClient client) : IAzStrorageTab
         {
             foreach (var item in emp.Values)
             {
+                if (item.CreatedDate == null)
+                {
+                    item.CreatedDate = item.Timestamp!.Value.UtcDateTime.ToString("yyyy-MM-dd") ?? string.Empty;
+                }
                 lstShortUrl.Add(item);
             }
         }
@@ -148,9 +154,12 @@ public class AzStrorageTablesService(TableServiceClient client) : IAzStrorageTab
     }
 
 
-    public async Task<List<ClickStatsEntity>> GetAllStatsByVanity(string vanity)
+
+    public async Task<List<ClickStatsEntity>> GetAllStatsByVanity(string vanity, string startDate, string endDate)
     {
         var tblStats = GetStatsTable();
+        var sDate = DateOnly.ParseExact(startDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+        var eDate = DateOnly.ParseExact(endDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
         var lstUrlStats = new List<ClickStatsEntity>();
         AsyncPageable<ClickStatsEntity> queryResult;
@@ -168,15 +177,59 @@ public class AzStrorageTablesService(TableServiceClient client) : IAzStrorageTab
         {
             foreach (var item in emp.Values)
             {
-                lstUrlStats.Add(item);
+                var clickDate = DateOnly.ParseExact(item.Datetime, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+
+                Console.WriteLine($"Dates: {sDate.ToString()} <= {clickDate.ToString()} <= {eDate.ToString()}");
+
+                if (clickDate >= sDate && clickDate <= eDate)
+                {
+                    Console.WriteLine($"ClickDate: {item.Datetime}");
+                    lstUrlStats.Add(item);
+                }
+                    
             }
         }
-
+        Console.WriteLine($"Count: {lstUrlStats.Count}");
         return lstUrlStats;
     }
 
     public async Task SaveClickStatsEntity(ClickStatsEntity newStats)
     {
         var result = await GetStatsTable().UpsertEntityAsync(newStats);
+    }
+
+
+    public async Task ImportUrlDataAsync(UrlDetails urlData)
+    {
+        try
+        {
+            var tblUrls = GetUrlsTable();
+            var lstUrl = urlData.LstShortUrlEntity;
+
+            foreach (var item in lstUrl)
+            {
+                await tblUrls.UpsertEntityAsync(item);
+            }
+
+            if (urlData.NextId != null)
+            {
+                await tblUrls.UpsertEntityAsync(urlData.NextId);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            var temp = ex.Message;
+            throw;
+        }
+    }
+
+    public async Task ImportClickStatsAsync(List<ClickStatsEntity> lstClickStats)
+    {
+        var tblStats = GetStatsTable();
+        foreach (var item in lstClickStats)
+        {
+            await tblStats.UpsertEntityAsync(item);
+        }
     }
 }
