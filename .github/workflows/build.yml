@@ -23,6 +23,9 @@ jobs:
       with:
         dotnet-version: '9.0.x' # Adjust the version as needed
 
+    - name: Clean up previous builds
+      run: dotnet clean src/AzUrlShortener.sln
+
     - name: Install .NET Aspire workload
       run: dotnet workload update && dotnet workload install aspire
 
