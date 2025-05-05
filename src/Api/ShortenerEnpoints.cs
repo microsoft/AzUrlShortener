@@ -1,4 +1,5 @@
 using Azure.Data.Tables;
+using Azure.Storage.Blobs;
 using Cloud5mins.ShortenerTools.Core.Domain;
 using Cloud5mins.ShortenerTools.Core.Messages;
 using Cloud5mins.ShortenerTools.Core.Service;
@@ -64,12 +65,13 @@ public static class ShortenerEnpoints
                                 InternalServerError<DetailedBadRequest>
                                 >> UrlCreate(ShortRequest request,
                                                 TableServiceClient tblClient,
+                                                BlobServiceClient blbClient,
                                                 HttpContext context,
                                                 ILogger logger)
     {
         try
         {
-            var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient));
+            var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient), new AzStorageBlobsService(blbClient));
             var host = GetHost(context);
             ShortResponse result = await urlServices.Create(request, host);
             return TypedResults.Created($"/api/UrlCreate/{result.ShortUrl}", result);
@@ -104,7 +106,7 @@ public static class ShortenerEnpoints
     {
         try
         {
-            var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient));
+            var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient), null);
             var result = await urlServices.Archive(shortUrl);
             return TypedResults.Ok();
         }
@@ -125,7 +127,7 @@ public static class ShortenerEnpoints
     {
         try
         {
-            var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient));
+            var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient), null);
             var host = GetHost(context);
             var result = await urlServices.Update(shortUrl, host);
             return TypedResults.Ok(result);
@@ -149,7 +151,7 @@ public static class ShortenerEnpoints
     {
         try
         {
-            var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient));
+            var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient), null);
             var host = GetHost(context);
             var result = await urlServices.ClickStatsByDay(statsRequest, host);
             return TypedResults.Ok(result);
@@ -171,7 +173,7 @@ public static class ShortenerEnpoints
     {
         try
         {
-            var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient));
+            var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient), null);
             var host = GetHost(context);
             ListResponse Urls = await urlServices.List(host);
             return TypedResults.Ok(Urls);
@@ -201,7 +203,7 @@ public static class ShortenerEnpoints
     {
         try
         {
-            var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient));
+            var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient), null);
             await urlServices.ImportUrlDataAsync(data);
             return TypedResults.Ok();
         }
@@ -221,7 +223,7 @@ public static class ShortenerEnpoints
     {
         try
         {
-            var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient));
+            var urlServices = new UrlServices(logger, new AzStrorageTablesService(tblClient), null);
             await urlServices.ImportClickStatsAsync(lstClickStats);
             return TypedResults.Ok();
         }

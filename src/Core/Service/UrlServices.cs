@@ -3,7 +3,6 @@ using Cloud5mins.ShortenerTools.Core.Messages;
 using Cloud5mins.ShortenerTools.Core.Service;
 using Microsoft.Extensions.Logging;
 using System.Net;
-using Azure.Storage.Blobs;
 
 namespace Cloud5mins.ShortenerTools.Core.Services;
 
@@ -12,11 +11,13 @@ public class UrlServices
 
     private readonly ILogger _logger;
     private readonly IAzStrorageTablesService _stgHelper;
+    private readonly IAzStorageBlobsService? _stgBlbHelper;
 
-    public UrlServices(ILogger logger, IAzStrorageTablesService stgHelper)
+    public UrlServices(ILogger logger, IAzStrorageTablesService stgHelper, IAzStorageBlobsService? stgBlbHelper)
     {
         _logger = logger;
         _stgHelper = stgHelper;
+        _stgBlbHelper = stgBlbHelper;
     }
 
     public async Task<ShortUrlEntity> Archive(ShortUrlEntity input)
@@ -114,7 +115,7 @@ public class UrlServices
 
             ShortUrlEntity newRow;
 
-            var qrCodeUrl = await GetQRCode(longUrl);
+            var qrCodeUrl = _stgBlbHelper != null ? await GetQRCode(_stgBlbHelper, longUrl) : string.Empty;
             if (!string.IsNullOrEmpty(vanity))
             {
                 newRow = new ShortUrlEntity(longUrl, vanity, title, input.Schedules, qrCodeUrl);
@@ -145,7 +146,7 @@ public class UrlServices
         return result;
     }
 
-    private async Task<string> GetQRCode(string shortUrl)
+    private async Task<string> GetQRCode(IAzStorageBlobsService _stgBlbHelper, string shortUrl)
     {
         string qrCodeUrl = "";
 
@@ -177,22 +178,10 @@ public class UrlServices
                     await stream.CopyToAsync(memStream);
                     memStream.Position = 0;
 
-                    // Save file as image on Azure blob storage
-                    var blobStorageConnectionString = Environment.GetEnvironmentVariable("BlobStorageConnectionString");
-                    if (string.IsNullOrEmpty(blobStorageConnectionString))
-                    {
-                        throw new ShortenerToolException(HttpStatusCode.InternalServerError, "BlobStorageConnectionString is not set.");
-                    }
-
-                    var blobServiceClient = new BlobServiceClient(blobStorageConnectionString);
                     string blobStorageContainer = Environment.GetEnvironmentVariable("BlobStorageContainer") ?? "qr-code-images";
-                    var containerClient = blobServiceClient.GetBlobContainerClient(blobStorageContainer);
-                    var blobClient = containerClient.GetBlobClient($"{Guid.NewGuid()}.png");
 
-                    await blobClient.UploadAsync(memStream, true);
+                    qrCodeUrl = await _stgBlbHelper.UploadBlobAsync(blobStorageContainer, $"{Guid.NewGuid()}.png", memStream, "image/png");
 
-                    // Return the URL to the image
-                    qrCodeUrl = blobClient.Uri.ToString();
                     _logger.LogInformation($"qrCodeUrl: {qrCodeUrl}");
                 }
             }

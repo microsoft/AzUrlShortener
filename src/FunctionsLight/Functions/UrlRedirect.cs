@@ -31,7 +31,7 @@ namespace Cloud5mins.ShortenerTools.Functions
             ExecutionContext context)
         {
             _logger.LogDebug("Function reached");
-            UrlServices UrlServices = new UrlServices(_logger, new AzStrorageTablesService(_tblClient));
+            UrlServices UrlServices = new UrlServices(_logger, new AzStrorageTablesService(_tblClient), null);
             _logger.LogDebug("Services created");
             _logger.LogDebug($"Redirecting {shortUrl}");
             string redirectUrl = await UrlServices.Redirect(shortUrl);

@@ -1,8 +1,8 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
 
 name: src
-services:  
+services:
   app:
     language: dotnet
-    project: ./Cloud5mins.ShortenerTools.AppHost/Cloud5mins.ShortenerTools.AppHost.csproj
+    project: ./AppHost/Cloud5mins.ShortenerTools.AppHost.csproj
     host: containerapp

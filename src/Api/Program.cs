@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Azure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
@@ -7,6 +9,7 @@ builder.AddServiceDefaults();
 builder.Services.AddOpenApi();
 
 builder.AddAzureTableClient("strTables");
+builder.AddAzureBlobClient("strBlobs");
 
 builder.Services.AddTransient<ILogger>(sp =>
 {
