@@ -4,7 +4,6 @@ In the resources deployed to Azure, there will be 2 storage accounts. One for th
 
 The easiest way to migrate your data between accounts or from an earlier version of AzUrlShortener is to use the **Azure Storage Explorer** to export the data as CSV files and use the TinyBlazorAdmin to import the files.
 
-
 Azure Storage Explorer is a free tool to manage your Azure cloud storage resources (aka your short URLs) from your desktop. It’s a cross-platform and can be downloaded [here](https://azure.microsoft.com/en-us/products/storage/storage-explorer/). 
 
 In the resources deployed to Azure there will be 2 storage accounts. One for the redirect service (azfunc-light) and one acting as the data store. That last one is the one you want to use for the data migration. The name of that storage account should start wirh `urldata`. 
@@ -27,4 +26,3 @@ Here are the settings to use when importing using Azure Storage Explorer:
 - Uncheck the checkbox *Ignore empty string values*.
 
 ![Import settings when using Azure Storage Explorer](../images/import_using_azStorage-explorer.png)
-

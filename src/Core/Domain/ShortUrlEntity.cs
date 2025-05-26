@@ -2,6 +2,9 @@ using Azure;
 using Azure.Data.Tables;
 using System.Runtime.Serialization;
 using System.Text.Json;
+using Azure;
+using Azure.Data.Tables;
+
 
 namespace Cloud5mins.ShortenerTools.Core.Domain
 {
