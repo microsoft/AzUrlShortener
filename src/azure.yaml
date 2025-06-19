@@ -4,5 +4,5 @@ name: src
 services:  
   app:
     language: dotnet
-    project: ./Cloud5mins.ShortenerTools.AppHost/Cloud5mins.ShortenerTools.AppHost.csproj
+    project: ./AppHost/Cloud5mins.ShortenerTools.AppHost.csproj
     host: containerapp
