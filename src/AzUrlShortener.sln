@@ -1,0 +1,52 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloud5mins.ShortenerTools.Core", "Core\Cloud5mins.ShortenerTools.Core.csproj", "{99DF620C-9FF5-4233-B556-E5E9E143AB60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloud5mins.ShortenerTools.FunctionsLight", "FunctionsLight\Cloud5mins.ShortenerTools.FunctionsLight.csproj", "{1C59956F-01A4-4F22-8B75-39CC48A8290C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloud5mins.ShortenerTools.AppHost", "AppHost\Cloud5mins.ShortenerTools.AppHost.csproj", "{3DC7E590-FE84-4D0B-B989-9CD6B31B325A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloud5mins.ShortenerTools.ServiceDefaults", "ServiceDefaults\Cloud5mins.ShortenerTools.ServiceDefaults.csproj", "{6567F739-8BCC-4B4B-8CCC-EEEB9B28465F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloud5mins.ShortenerTools.Api", "Api\Cloud5mins.ShortenerTools.Api.csproj", "{85C6D9A8-EB37-4FA3-9E83-7178825C9EA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloud5mins.ShortenerTools.TinyBlazorAdmin", "TinyBlazorAdmin\Cloud5mins.ShortenerTools.TinyBlazorAdmin.csproj", "{88EAB6E9-CD20-4A6B-86A0-38CACA87FC7E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{99DF620C-9FF5-4233-B556-E5E9E143AB60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99DF620C-9FF5-4233-B556-E5E9E143AB60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99DF620C-9FF5-4233-B556-E5E9E143AB60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99DF620C-9FF5-4233-B556-E5E9E143AB60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C59956F-01A4-4F22-8B75-39CC48A8290C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C59956F-01A4-4F22-8B75-39CC48A8290C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C59956F-01A4-4F22-8B75-39CC48A8290C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C59956F-01A4-4F22-8B75-39CC48A8290C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DC7E590-FE84-4D0B-B989-9CD6B31B325A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DC7E590-FE84-4D0B-B989-9CD6B31B325A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DC7E590-FE84-4D0B-B989-9CD6B31B325A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DC7E590-FE84-4D0B-B989-9CD6B31B325A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6567F739-8BCC-4B4B-8CCC-EEEB9B28465F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6567F739-8BCC-4B4B-8CCC-EEEB9B28465F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6567F739-8BCC-4B4B-8CCC-EEEB9B28465F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6567F739-8BCC-4B4B-8CCC-EEEB9B28465F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85C6D9A8-EB37-4FA3-9E83-7178825C9EA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85C6D9A8-EB37-4FA3-9E83-7178825C9EA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85C6D9A8-EB37-4FA3-9E83-7178825C9EA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85C6D9A8-EB37-4FA3-9E83-7178825C9EA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88EAB6E9-CD20-4A6B-86A0-38CACA87FC7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88EAB6E9-CD20-4A6B-86A0-38CACA87FC7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88EAB6E9-CD20-4A6B-86A0-38CACA87FC7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88EAB6E9-CD20-4A6B-86A0-38CACA87FC7E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

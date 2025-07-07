@@ -1,0 +1,89 @@
+﻿@using Cloud5mins.ShortenerTools.Core.Messages
+@using Cloud5mins.ShortenerTools.TinyBlazorAdmin.Components.Shared
+@implements IDialogContentComponent<ShortUrlRequest>
+
+@rendermode InteractiveServer
+
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Dialog!.Instance.Parameters.Title
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+<FluentDialogBody>
+	<EditForm Model="@_shortUrl" FormName="new_note">
+        <DataAnnotationsValidator />
+		
+        <FluentStack Orientation="Orientation.Vertical" VerticalGapGap="10"  Width="100%">
+
+            <div style="width: 100%;">
+                <FluentTextField Name="Title" Label="Title" @bind-Value="_shortUrl.Title" Required="false" style="width: 100%;" />
+                <FluentValidationMessage For="@(() => _shortUrl.Title)" />
+            </div>
+
+            <div style="width: 100%;">
+                <FluentTextField Name="Url" Label="Url" @bind-Value="_shortUrl.Url" Required="true" style="width: 100%;" />
+                <FluentValidationMessage For="@(() => _shortUrl.Url)" />
+            </div>
+
+            <div style="width: 100%;">
+                <FluentTextField Name="Vanity" Label="Vanity" @bind-Value="_shortUrl.Vanity" Required="false" style="width: 100%;" />
+                <FluentValidationMessage For="@(() => _shortUrl.Vanity)" />
+            </div>
+
+            <div style="width: 100%;">
+                <SchedulesComponent Schedules="_shortUrl.Schedules"></SchedulesComponent>
+            </div>
+
+        </FluentStack>
+
+	</EditForm>
+	
+</FluentDialogBody>
+
+
+
+<FluentDialogFooter>
+    <FluentButton Appearance="Appearance.Accent"
+                  Disabled="@(!_shortUrl.Validate())" 
+                  OnClick="@SaveAsync">Save</FluentButton>
+    <FluentButton Appearance="Appearance.Neutral"
+                  OnClick="@CancelAsync">Cancel</FluentButton>
+</FluentDialogFooter>
+
+
+@code {
+	[Parameter]
+    public ShortUrlRequest Content { get; set; } = default!;
+
+    [CascadingParameter]
+    public FluentDialog? Dialog { get; set; } = default!;
+
+	private ShortUrlRequest _shortUrl = new ShortUrlRequest();
+
+
+    protected override void OnInitialized()
+    {
+        _shortUrl = Content;
+    }
+    private void ToggleDialogPrimaryActionButton(bool enable)
+    {
+        Dialog!.TogglePrimaryActionButton(enable);
+    }
+
+	private async Task SaveAsync()
+    {
+		if (_shortUrl.Validate())
+		{
+			await Dialog!.CloseAsync(_shortUrl);
+		}
+    }
+
+    private async Task CancelAsync()
+    {
+        await Dialog!.CancelAsync();
+    }
+}

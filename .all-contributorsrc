@@ -6,7 +6,7 @@
   "contributorsPerLine": 7,
   "skipCi": true,
   "projectName": "AzUrlShortener",
-  "projectOwner": "FBoucher",
+  "projectOwner": "microsoft",
   "repoType": "github",
   "repoHost": "https://github.com",
   "contributors": [
@@ -132,6 +132,100 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "arglgruml",
+      "name": "arglgruml",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3940298?v=4",
+      "profile": "https://github.com/arglgruml",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "DavidTCarpenters",
+      "name": "DavidTCarpenters",
+      "avatar_url": "https://avatars.githubusercontent.com/u/50587918?v=4",
+      "profile": "https://github.com/DavidTCarpenters",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "solvaholic",
+      "name": "Roger D. Winans",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14636658?v=4",
+      "profile": "https://github.com/solvaholic",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "fatpacket",
+      "name": "fatpacket",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5621063?v=4",
+      "profile": "https://github.com/fatpacket",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ch-rob",
+      "name": "Chad Voelker",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14352153?v=4",
+      "profile": "https://github.com/ch-rob",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "davidmginn",
+      "name": "David Ginn",
+      "avatar_url": "https://avatars.githubusercontent.com/u/831166?v=4",
+      "profile": "https://github.com/davidmginn",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "catcherwong",
+      "name": "Catcher Wong",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8394988?v=4",
+      "profile": "http://www.c-sharpcorner.com/members/catcher-wong",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "stulzq",
+      "name": "Zhiqiang Li",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13200155?v=4",
+      "profile": "https://github.com/stulzq",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ddematheu2",
+      "name": "ddematheu2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43075365?v=4",
+      "profile": "https://github.com/ddematheu2",
+      "contributions": [
+        "bug",
+        "code"
+      ]
+    },
+    {
+      "login": "davidop",
+      "name": "David Oliva Paredes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7433346?v=4",
+      "profile": "https://davidop.code.blog/",
+      "contributions": [
+        "code"
+      ]
     }
-  ]
+  ],
+  "commitConvention": "angular",
+  "commitType": "docs"
 }

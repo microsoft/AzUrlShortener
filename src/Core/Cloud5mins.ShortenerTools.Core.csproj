@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Aspire.Azure.Data.Tables" Version="9.3.0" />
+    <PackageReference Include="cronos" Version="0.11.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.5" />
+
+    <PackageReference Include="CsvHelper" Version="33.0.1" />
+  </ItemGroup>
+</Project>
