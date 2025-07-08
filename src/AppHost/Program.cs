@@ -1,4 +1,5 @@
 
+using Aspire.Hosting;
 using Microsoft.Extensions.Hosting;
 
 var builder = DistributedApplication.CreateBuilder(args);
@@ -7,13 +8,12 @@ var customDomain = builder.AddParameter("CustomDomain");
 var defaultRedirectUrl = builder.AddParameter("DefaultRedirectUrl");
 
 var urlStorage = builder.AddAzureStorage("url-data");
+var strTables = urlStorage.AddTables("strTables");
 
 if (builder.Environment.IsDevelopment())
 {
     urlStorage.RunAsEmulator();
 }
-
-var strTables = urlStorage.AddTables("strTables");
 
 var azFuncLight = builder.AddAzureFunctionsProject<Projects.Cloud5mins_ShortenerTools_FunctionsLight>("azfunc-light")
 							.WithReference(strTables)
@@ -31,5 +31,8 @@ var manAPI = builder.AddProject<Projects.Cloud5mins_ShortenerTools_Api>("api")
 builder.AddProject<Projects.Cloud5mins_ShortenerTools_TinyBlazorAdmin>("admin")
 		.WithExternalHttpEndpoints()
 		.WithReference(manAPI);
+
+var batchShortenerFunction = builder.AddAzureFunctionsProject<Projects.Cloud5mins_ShortenerTools_BatchShortener>("batch-shortener")
+							  .WithReference(manAPI);
 
 builder.Build().Run();

@@ -9,8 +9,9 @@
 		"ghcr.io/devcontainers/features/dotnet:2": {},
 		"ghcr.io/devcontainers/features/github-cli:1": {},
 		"ghcr.io/azure/azure-dev/azd:0": {},
-		"ghcr.io/dotnet/aspire-devcontainer-feature/dotnetaspire:1": {}
-	}
+		"ghcr.io/dotnet/aspire-devcontainer-feature/dotnetaspire:1": {},
+		"ghcr.io/jlaundry/devcontainer-features/azure-functions-core-tools": {}
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -27,7 +28,13 @@
 	// "postCreateCommand": "dotnet restore",
 
 	// Configure tool-specific properties.
-	// "customizations": {},
+	"customizations": {
+			"vscode": {
+				"extensions": [
+					"ms-azuretools.vscode-azurefunctions"
+				]
+			}
+		}
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"

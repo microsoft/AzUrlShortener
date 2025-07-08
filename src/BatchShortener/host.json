@@ -1,0 +1,15 @@
+{
+  "version": "2.0",
+  "logging": {
+    "logLevel": {
+      "System.Net.Http.HttpClient": "Trace",
+      "Microsoft.Extensions.Http": "Trace"
+    },
+    "applicationInsights": {
+      "samplingSettings": {
+        "isEnabled": true,
+        "excludedTypes": "Request"
+      }
+    }
+  }
+}
