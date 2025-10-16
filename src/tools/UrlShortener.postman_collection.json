@@ -1,18 +1,18 @@
 {
-	"info": {
-		"_postman_id": "b7f7653d-7a2c-463f-823c-8d8cc36000fc",
-		"name": "UrlShortener",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "5423981"
-	},
-	"item": [
-		{
-			"name": "URL List",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{BaseUrl}}/api/UrlList",
+  "info": {
+    "_postman_id": "b7f7653d-7a2c-463f-823c-8d8cc36000fc",
+    "name": "UrlShortener",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "5423981"
+  },
+  "item": [
+    {
+      "name": "URL List",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BaseUrl}}/api/UrlList",
 					"host": [
 						"{{BaseUrl}}"
 					],
@@ -20,21 +20,26 @@
 						"api",
 						"UrlList"
 					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Click Stats",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"vanity\": \"b\"\r\n}"
-				},
-				"url": {
-					"raw": "{{BaseUrl}}/api/UrlClickStatsByDay",
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Click Stats",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"vanity\": \"b\"\r\n}"
+        },
+        "url": {
+          "raw": "{{BaseUrl}}/api/UrlClickStatsByDay",
 					"host": [
 						"{{BaseUrl}}"
 					],
@@ -42,21 +47,26 @@
 						"api",
 						"UrlClickStatsByDay"
 					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Archive",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "    {\r\n        \"PartitionKey\": \"g\",\r\n        \"RowKey\": \"goo2\"\r\n    }"
-				},
-				"url": {
-					"raw": "{{BaseUrl}}/api/UrlArchive",
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Archive",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "    {\r\n        \"PartitionKey\": \"g\",\r\n        \"RowKey\": \"goo2\"\r\n    }"
+        },
+        "url": {
+          "raw": "{{BaseUrl}}/api/UrlArchive",
 					"host": [
 						"{{BaseUrl}}"
 					],
@@ -64,55 +74,60 @@
 						"api",
 						"UrlArchive"
 					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create / Update Url",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"Vanity\": \"goo2\",\r\n    \"Title\": \"Google\",\r\n    \"Url\": \"https://www.google.com\",\r\n    \"Schedules\": []\r\n}"
-				},
-				"url": {
-					"raw": "{{BaseUrl}}/api/UrlUpsert",
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create / Update Url",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"Vanity\": \"goo2\",\r\n    \"Title\": \"Google\",\r\n    \"Url\": \"https://www.google.com\",\r\n    \"Schedules\": []\r\n}"
+        },
+        "url": {
+					"raw": "{{BaseUrl}}/api/UrlCreate",
 					"host": [
 						"{{BaseUrl}}"
 					],
 					"path": [
 						"api",
-						"UrlUpsert"
+						"UrlCreate"
 					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Redirect",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"Vanity\": \"b\"\r\n}"
-				},
-				"url": {
-					"raw": "{{BaseUrl}}/b",
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Redirect",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"Vanity\": \"b\"\r\n}"
+        },
+        "url": {
+          "raw": "{{BaseUrl}}/b",
 					"host": [
 						"{{BaseUrl}}"
 					],
 					"path": [
 						"b"
 					]
-				}
-			},
-			"response": []
-		}
-	]
+        }
+      },
+      "response": []
+    }
+  ]
 }
